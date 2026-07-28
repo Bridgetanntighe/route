@@ -744,6 +744,43 @@ a {
   background: #fff8e8;
 }
 
+.notes-block {
+  margin: 8px 0;
+}
+
+.notes-block strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.notes-body,
+.notes-history-body {
+  white-space: pre-wrap;
+  word-break: break-word;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #3a3632;
+}
+
+.notes-history {
+  margin-bottom: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f7f3ea;
+  border: 1px solid var(--border);
+}
+
+.notes-history .field-label {
+  margin-bottom: 6px;
+}
+
+.field-hint {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
 .visit-summary h3 {
   margin: 0 0 8px;
   font-size: 13px;

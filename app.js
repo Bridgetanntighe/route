@@ -1253,6 +1253,30 @@
     return bits.join("");
   }
 
+  function formatNoteStamp() {
+    var now = new Date();
+    try {
+      return now.toLocaleString("en-GB", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    } catch (err) {
+      return now.toDateString();
+    }
+  }
+
+  function mergeNotes(existing, addition) {
+    var prev = String(existing || "").trim();
+    var next = String(addition || "").trim();
+    if (!next) return prev;
+    var entry = "[" + formatNoteStamp() + "] " + next;
+    if (!prev) return entry;
+    return prev + "\n\n" + entry;
+  }
+
   function summaryHtml(venue, visit) {
     if (!hasSavedVisit(visit) || !isVisited(visit)) return "";
     var classes = "visit-summary" + (visit.followUp ? " has-followup" : "");
@@ -1275,7 +1299,10 @@
       html += "<p><strong>Email:</strong> " + escapeHtml(visit.email) + "</p>";
     }
     if (visit.notes) {
-      html += "<p><strong>Notes:</strong> " + escapeHtml(visit.notes) + "</p>";
+      html +=
+        '<div class="notes-block"><strong>Notes:</strong><div class="notes-body">' +
+        escapeHtml(visit.notes) +
+        "</div></div>";
     }
     if (visit.followUp) {
       html += '<p><span class="tag tag-followup">Follow-up required</span></p>';
@@ -1293,6 +1320,35 @@
   function formHtml(venue, visit) {
     var saved = hasSavedVisit(visit) && isVisited(visit);
     var title = saved ? "Update visit" : "Log visit";
+    var notesFields = "";
+
+    if (visit.notes) {
+      notesFields =
+        '<div class="notes-history">' +
+        '<p class="field-label">Previous notes</p>' +
+        '<div class="notes-history-body">' +
+        escapeHtml(visit.notes) +
+        "</div></div>" +
+        '<div class="field">' +
+        '<label class="field-label" for="add-notes-' +
+        escapeHtml(venue.id) +
+        '">Add more notes</label>' +
+        '<textarea id="add-notes-' +
+        escapeHtml(venue.id) +
+        '" name="addNotes" rows="3" placeholder="Add another detail without deleting what’s already saved…"></textarea>' +
+        '<p class="field-hint">New notes are added underneath with the date. Previous notes stay saved.</p>' +
+        "</div>";
+    } else {
+      notesFields =
+        '<div class="field">' +
+        '<label class="field-label" for="notes-' +
+        escapeHtml(venue.id) +
+        '">Quick notes</label>' +
+        '<textarea id="notes-' +
+        escapeHtml(venue.id) +
+        '" name="notes" rows="3" placeholder="What they said, catering used, upcoming meeting, best follow-up time…"></textarea>' +
+        "</div>";
+    }
 
     return (
       '<div class="visit-panel" data-visit-panel="' +
@@ -1343,15 +1399,7 @@
       escapeHtml(visit.email) +
       '">' +
       "</div>" +
-      '<div class="field">' +
-      '<label class="field-label" for="notes-' +
-      escapeHtml(venue.id) +
-      '">Quick notes</label>' +
-      '<textarea id="notes-' +
-      escapeHtml(venue.id) +
-      '" name="notes" rows="3" placeholder="What they said, catering used, upcoming meeting, best follow-up time…">' +
-      escapeHtml(visit.notes) +
-      "</textarea></div>" +
+      notesFields +
       '<label class="check"><input type="checkbox" name="warm"' +
       (visit.warm ? " checked" : "") +
       '><span>Warm lead / worth returning to</span></label>' +
@@ -1494,12 +1542,23 @@
 
   function readVisitForm(form) {
     var data = new FormData(form);
+    var id = form.getAttribute("data-visit-form");
+    var existing = id ? getVisit(id).notes : "";
+    var addition = String(data.get("addNotes") || "").trim();
+    var firstNotes = String(data.get("notes") || "").trim();
+    var notes = existing;
+    if (form.querySelector('[name="addNotes"]')) {
+      notes = mergeNotes(existing, addition);
+    } else if (form.querySelector('[name="notes"]')) {
+      notes = firstNotes;
+    }
+
     return {
       outcome: String(data.get("outcome") || "not_visited"),
       person: String(data.get("person") || "").trim(),
       role: String(data.get("role") || "").trim(),
       email: String(data.get("email") || "").trim(),
-      notes: String(data.get("notes") || "").trim(),
+      notes: notes,
       warm: !!form.querySelector('[name="warm"]').checked,
       followUp: !!form.querySelector('[name="followUp"]').checked,
       savedAt: new Date().toISOString()
