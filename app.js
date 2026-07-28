@@ -22,12 +22,6 @@
     radiusNote: "Within the normal delivery radius and subject to availability."
   };
 
-  var RECEPTION_INTRO_MAIN =
-    "Hi, we're Covent Garden Catering, based just nearby in the Market. We provide office breakfasts, meeting platters and team lunches. We're introducing ourselves to a few local offices today and I wanted to leave a leaflet — who would be the best person to pass it on to?";
-
-  var RECEPTION_INTRO_STAGE_TWO =
-    "Perfect, thank you. We're also offering complimentary delivery on a first platter order over £100 for local offices we're visiting. Could I take their full name and a suitable email address so we can follow up with them directly?";
-
   var DECISION_MAKER_INTRO_BASE =
     "Hi, we're Covent Garden Catering, based just nearby in the Market. We provide office breakfasts, meeting platters and team lunches. I wanted to introduce us and leave our leaflet with you.";
 
