@@ -11,9 +11,95 @@
   var sb = null;
   var cloudReady = false;
 
-  var RECEPTION_INTRO =
-    "Hi, we're Covent Garden Catering from The Market nearby. We deliver breakfast, working lunches and grazing boards to local offices. I'm dropping off our menu — who usually organises catering for meetings or team days? Could I take their first name and email so I can send the digital menu too?";
+  /** Change offer wording, deadline or active status here — used across the UI and scripts. */
+  var CURRENT_OFFER = {
+    active: true,
+    title: "Local office welcome",
+    minimumSpend: 100,
+    bookingDeadline: "2026-08-14",
+    deliveryPeriod: "any available August delivery date",
+    wording: "Complimentary delivery on your first platter order of £100+",
+    radiusNote: "Within the normal delivery radius and subject to availability."
+  };
 
+  var RECEPTION_INTRO_MAIN =
+    "Hi, we're Covent Garden Catering, based just nearby in the Market. We provide office breakfasts, meeting platters and team lunches. We're introducing ourselves to a few local offices today and I wanted to leave a leaflet — who would be the best person to pass it on to?";
+
+  var RECEPTION_INTRO_STAGE_TWO =
+    "Perfect, thank you. We're also offering complimentary delivery on a first platter order over £100 for local offices we're visiting. Could I take their full name and a suitable email address so we can follow up with them directly?";
+
+  var DECISION_MAKER_INTRO_BASE =
+    "Hi, we're Covent Garden Catering, based just nearby in the Market. We provide office breakfasts, meeting platters and team lunches. I wanted to introduce us and leave our leaflet with you.";
+
+  function isOfferActive() {
+    if (!CURRENT_OFFER || !CURRENT_OFFER.active) return false;
+    if (!CURRENT_OFFER.bookingDeadline) return true;
+    var end = new Date(CURRENT_OFFER.bookingDeadline + "T23:59:59");
+    if (isNaN(end.getTime())) return !!CURRENT_OFFER.active;
+    return new Date() <= end;
+  }
+
+  function formatOfferDeadline(isoDate) {
+    var parts = String(isoDate || "").split("-");
+    if (parts.length !== 3) return String(isoDate || "");
+    var months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    var day = String(parseInt(parts[2], 10));
+    var month = months[parseInt(parts[1], 10) - 1] || parts[1];
+    return day + " " + month + " " + parts[0];
+  }
+
+  function getFullScript() {
+    var script = RECEPTION_INTRO_MAIN + "\n\n" + RECEPTION_INTRO_STAGE_TWO;
+    return script;
+  }
+
+  function getDecisionMakerScript() {
+    var text = DECISION_MAKER_INTRO_BASE;
+    if (isOfferActive()) {
+      text +=
+        " As part of our local office welcome, we're offering complimentary delivery on your first platter order over £" +
+        CURRENT_OFFER.minimumSpend +
+        " when booked by " +
+        formatOfferDeadline(CURRENT_OFFER.bookingDeadline) +
+        ".";
+    }
+    return text;
+  }
+
+  function renderOfferBox() {
+    var mount = document.getElementById("offer-box");
+    if (!mount) return;
+    if (!isOfferActive()) {
+      mount.hidden = true;
+      mount.innerHTML = "";
+      return;
+    }
+    mount.hidden = false;
+    mount.innerHTML =
+      '<p class="offer-eyebrow">' +
+      escapeHtml(CURRENT_OFFER.title) +
+      "</p>" +
+      '<p class="offer-main">' +
+      escapeHtml(CURRENT_OFFER.wording) +
+      "</p>" +
+      '<p class="offer-detail">Book by ' +
+      escapeHtml(formatOfferDeadline(CURRENT_OFFER.bookingDeadline)) +
+      " for " +
+      escapeHtml(CURRENT_OFFER.deliveryPeriod) +
+      ".</p>" +
+      '<p class="offer-note">' +
+      escapeHtml(CURRENT_OFFER.radiusNote) +
+      "</p>";
+  }
+
+  function renderDecisionMakerCopy() {
+    var el = document.getElementById("decision-maker-script");
+    if (!el) return;
+    el.textContent = getDecisionMakerScript();
+  }
   var OUTCOME_LABELS = {
     not_visited: "Not visited",
     good_conversation: "Good conversation",
@@ -541,7 +627,7 @@
       phoneLabel: "",
       mapsQuery: "74-76 St John Street, London EC1M 4DZ",
       angle:
-        "Small agency — ask for Emma's team / office manager by name if offered. \"Hi — we're Covent Garden Catering from The Market. We do team breakfasts and client meeting boards for creative agencies. Could I leave a menu and take an email for the digital version?\""
+        "Small agency — ask for Emma's team / office manager by name if offered. \"Hi — we're Covent Garden Catering from The Market. We do team breakfasts and client meeting boards for creative agencies. Could I leave a leaflet and take a full name and email so we can follow up directly?\""
     },
     {
       id: "smithfield-agency",
@@ -613,7 +699,7 @@
       phoneLabel: "",
       mapsQuery: "Silverlight House, 6-8 Standard Place, London EC2A 3BE",
       angle:
-        "Ground-floor PR agency — good chance of speaking to someone. \"Hi — Covent Garden Catering from The Market. We do client meeting boards and team lunches for PR agencies. Could I leave a menu and grab an email for the digital version?\""
+        "Ground-floor PR agency — good chance of speaking to someone. \"Hi — Covent Garden Catering from The Market. We do client meeting boards and team lunches for PR agencies. Could I leave a leaflet and grab a full name and email so we can follow up directly?\""
     }
   ];
 
@@ -665,9 +751,21 @@
       "Hi " +
       firstName(personName) +
       ",\n\n" +
-      "It was lovely to meet you earlier today. I wanted to make sure our catering menu reached you.\n\n" +
-      "We deliver office breakfasts, working lunches and grazing boards from The Market in Covent Garden, with next-day options available for local offices.\n\n" +
-      "If you have an upcoming meeting or team day, I'd be happy to recommend a suitable menu.\n\n" +
+      "It was lovely to meet you earlier today. I stopped by and left our leaflet with reception.\n\n" +
+      "We provide office breakfasts, meeting platters and team lunches from The Market in Covent Garden, with next-day options available for local offices.\n\n" +
+      "You can also find us at coventgardencatering.com.\n\n";
+    if (isOfferActive()) {
+      body +=
+        "As a local office welcome, we're offering complimentary delivery on a first platter order over £" +
+        CURRENT_OFFER.minimumSpend +
+        " when booked by " +
+        formatOfferDeadline(CURRENT_OFFER.bookingDeadline) +
+        " for " +
+        CURRENT_OFFER.deliveryPeriod +
+        ".\n\n";
+    }
+    body +=
+      "If you have an upcoming meeting or team day, I'd be happy to recommend a suitable platter.\n\n" +
       "Best,\n" +
       "Covent Garden Catering";
     return (
@@ -1331,7 +1429,7 @@
       '<div class="copy-angle-wrap">' +
       '<button type="button" class="btn btn-secondary btn-small btn-block" data-copy-angle="' +
       escapeHtml(venue.id) +
-      '">Copy introduction + angle</button></div>' +
+      '">Copy full script + angle</button></div>' +
       phoneBlock +
       '<div class="card-actions">' +
       (venue.phoneHref
@@ -1442,13 +1540,13 @@
     }
     if (!venue) return;
     var text =
-      RECEPTION_INTRO +
+      getFullScript() +
       "\n\nTailored angle for " +
       venue.name +
       ":\n" +
       venue.angle;
     copyText(text).then(function (ok) {
-      showToast(ok ? "Introduction and angle copied." : "Could not copy. Please copy manually.");
+      showToast(ok ? "Script and angle copied." : "Could not copy. Please copy manually.");
     });
   }
 
@@ -1772,8 +1870,8 @@
 
   function bind() {
     els.copyIntro.addEventListener("click", function () {
-      copyText(RECEPTION_INTRO).then(function (ok) {
-        showToast(ok ? "Introduction copied." : "Could not copy. Please copy manually.");
+      copyText(getFullScript()).then(function (ok) {
+        showToast(ok ? "Full script copied." : "Could not copy. Please copy manually.");
       });
     });
 
@@ -1840,6 +1938,8 @@
     loadSelectedArea();
     renderAreaTabs();
     populateAddPlaceAreaFields();
+    renderOfferBox();
+    renderDecisionMakerCopy();
     bind();
     render();
     updateSaveNotice();
