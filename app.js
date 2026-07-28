@@ -4,6 +4,12 @@
   var STORAGE_VISITS = "cgc-outreach-v1-visits";
   var STORAGE_PLACES = "cgc-outreach-v1-places";
 
+  var SUPABASE_URL = "https://athqfnbwchxvtozrqfcj.supabase.co";
+  var SUPABASE_PUBLISHABLE_KEY = "sb_publishable_ciawUoKC7kWslcvOtEWS6g_BDhytl9P";
+
+  var sb = null;
+  var cloudReady = false;
+
   var RECEPTION_INTRO =
     "Hi, we're Covent Garden Catering from The Market nearby. We deliver breakfast, working lunches and grazing boards to local offices. I'm dropping off our menu — who usually organises catering for meetings or team days? Could I take their first name and email so I can send the digital menu too?";
 
@@ -409,10 +415,126 @@
     }
   }
 
+  function initSupabase() {
+    try {
+      if (window.supabase && typeof window.supabase.createClient === "function") {
+        sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+      }
+    } catch (err) {
+      sb = null;
+    }
+  }
+
   function loadState() {
     state.visits = loadJson(STORAGE_VISITS, {}) || {};
     state.customPlaces = loadJson(STORAGE_PLACES, []) || [];
     if (!Array.isArray(state.customPlaces)) state.customPlaces = [];
+  }
+
+  function visitFromRow(row) {
+    return {
+      outcome: row.outcome || "not_visited",
+      person: row.person || "",
+      role: row.role || "",
+      email: row.email || "",
+      notes: row.notes || "",
+      warm: !!row.warm,
+      followUp: !!row.follow_up,
+      savedAt: row.saved_at || null
+    };
+  }
+
+  function placeFromRow(row) {
+    return {
+      id: row.id,
+      routeNumber: "+",
+      name: row.name || "",
+      address: row.address || "",
+      type: row.type || "",
+      phone: row.phone || "",
+      warmSeed: !!row.warm_seed
+    };
+  }
+
+  function visitToRow(id, visit) {
+    return {
+      venue_id: id,
+      outcome: visit.outcome || "not_visited",
+      person: visit.person || "",
+      role: visit.role || "",
+      email: visit.email || "",
+      notes: visit.notes || "",
+      warm: !!visit.warm,
+      follow_up: !!visit.followUp,
+      saved_at: visit.savedAt || null,
+      updated_at: new Date().toISOString()
+    };
+  }
+
+  function placeToRow(place) {
+    return {
+      id: place.id,
+      name: place.name || "",
+      address: place.address || "",
+      type: place.type || "",
+      phone: place.phone || "",
+      warm_seed: !!place.warmSeed
+    };
+  }
+
+  async function loadFromCloud() {
+    if (!sb) return false;
+    try {
+      var visitsRes = await sb.from("outreach_visits").select("*");
+      var placesRes = await sb.from("outreach_places").select("*");
+
+      if (visitsRes.error || placesRes.error) {
+        var msg = (visitsRes.error && visitsRes.error.message) || (placesRes.error && placesRes.error.message) || "";
+        if (/schema cache|does not exist|Could not find the table/i.test(msg)) {
+          showToast("Cloud tables not set up yet. Run schema.sql in Supabase.");
+          cloudReady = false;
+          return false;
+        }
+        showToast("Could not load from cloud. Using phone backup.");
+        cloudReady = false;
+        return false;
+      }
+
+      cloudReady = true;
+      var cloudVisits = {};
+      var rows = visitsRes.data || [];
+      for (var i = 0; i < rows.length; i++) {
+        cloudVisits[rows[i].venue_id] = visitFromRow(rows[i]);
+      }
+
+      var cloudPlaces = [];
+      var placeRows = placesRes.data || [];
+      for (var j = 0; j < placeRows.length; j++) {
+        cloudPlaces.push(placeFromRow(placeRows[j]));
+      }
+
+      state.visits = Object.assign({}, state.visits, cloudVisits);
+      if (cloudPlaces.length) {
+        var byId = {};
+        for (var k = 0; k < state.customPlaces.length; k++) {
+          byId[state.customPlaces[k].id] = state.customPlaces[k];
+        }
+        for (var m = 0; m < cloudPlaces.length; m++) {
+          byId[cloudPlaces[m].id] = cloudPlaces[m];
+        }
+        state.customPlaces = Object.keys(byId).map(function (id) {
+          return byId[id];
+        });
+      }
+
+      saveJson(STORAGE_VISITS, state.visits);
+      saveJson(STORAGE_PLACES, state.customPlaces);
+      return true;
+    } catch (err) {
+      cloudReady = false;
+      showToast("Could not reach cloud. Using phone backup.");
+      return false;
+    }
   }
 
   function persistVisits() {
@@ -421,6 +543,71 @@
 
   function persistPlaces() {
     return saveJson(STORAGE_PLACES, state.customPlaces);
+  }
+
+  async function cloudUpsertVisit(id, visit) {
+    if (!sb) return false;
+    try {
+      var res = await sb.from("outreach_visits").upsert(visitToRow(id, visit));
+      if (res.error) {
+        console.warn(res.error);
+        if (/schema cache|does not exist|Could not find the table/i.test(res.error.message || "")) {
+          cloudReady = false;
+          updateSaveNotice();
+        }
+        return false;
+      }
+      cloudReady = true;
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  async function cloudUpsertPlace(place) {
+    if (!sb) return false;
+    try {
+      var res = await sb.from("outreach_places").upsert(placeToRow(place));
+      if (res.error) {
+        console.warn(res.error);
+        if (/schema cache|does not exist|Could not find the table/i.test(res.error.message || "")) {
+          cloudReady = false;
+          updateSaveNotice();
+        }
+        return false;
+      }
+      cloudReady = true;
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  async function cloudDeletePlace(id) {
+    if (!sb) return false;
+    try {
+      var placeRes = await sb.from("outreach_places").delete().eq("id", id);
+      var visitRes = await sb.from("outreach_visits").delete().eq("venue_id", id);
+      if (placeRes.error || visitRes.error) {
+        console.warn(placeRes.error || visitRes.error);
+        return false;
+      }
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  function updateSaveNotice() {
+    var el = document.getElementById("save-notice");
+    if (!el) return;
+    if (cloudReady) {
+      el.textContent =
+        "Saving to the cloud when online. Notes also stay on this phone as a backup.";
+    } else {
+      el.textContent =
+        "Saved on this phone for now. After schema.sql is run in Supabase, notes will sync to the cloud.";
+    }
   }
 
   function emptyVisit() {
@@ -898,7 +1085,7 @@
     };
   }
 
-  function onSaveVisit(form) {
+  async function onSaveVisit(form) {
     var id = form.getAttribute("data-visit-form");
     if (!id) return;
     var visit = readVisitForm(form);
@@ -909,14 +1096,15 @@
       return;
     }
     state.visits[id] = visit;
-    if (persistVisits()) {
-      render();
-      showToast("Visit saved on this phone.");
-      var card = document.querySelector('[data-venue-id="' + id + '"]');
-      if (card) {
-        var summary = card.querySelector(".visit-summary");
-        if (summary) summary.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      }
+    if (!persistVisits()) return;
+
+    var cloudOk = await cloudUpsertVisit(id, visit);
+    render();
+    showToast(cloudOk ? "Visit saved to the cloud." : "Visit saved on this phone.");
+    var card = document.querySelector('[data-venue-id="' + id + '"]');
+    if (card) {
+      var summary = card.querySelector(".visit-summary");
+      if (summary) summary.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   }
 
@@ -956,7 +1144,7 @@
     els.addForm.reset();
   }
 
-  function onAddPlace(event) {
+  async function onAddPlace(event) {
     event.preventDefault();
     var form = els.addForm;
     var name = String(form.name.value || "").trim();
@@ -998,8 +1186,9 @@
     var shouldSaveVisit =
       outcome !== "not_visited" || person || role || email || notes || warm || followUp;
 
+    var visit = null;
     if (shouldSaveVisit) {
-      state.visits[id] = {
+      visit = {
         outcome: outcome,
         person: person,
         role: role,
@@ -1009,20 +1198,25 @@
         followUp: followUp,
         savedAt: new Date().toISOString()
       };
+      state.visits[id] = visit;
     }
 
     var okPlaces = persistPlaces();
     var okVisits = shouldSaveVisit ? persistVisits() : true;
-    if (okPlaces && okVisits) {
-      closeSheet();
-      render();
-      showToast("Place added and saved on this phone.");
-      var card = document.querySelector('[data-venue-id="' + id + '"]');
-      if (card) card.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    if (!(okPlaces && okVisits)) return;
+
+    var cloudPlaceOk = await cloudUpsertPlace(place);
+    var cloudVisitOk = visit ? await cloudUpsertVisit(id, visit) : true;
+    var cloudOk = cloudPlaceOk && cloudVisitOk;
+
+    closeSheet();
+    render();
+    showToast(cloudOk ? "Place saved to the cloud." : "Place added and saved on this phone.");
+    var card = document.querySelector('[data-venue-id="' + id + '"]');
+    if (card) card.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
-  function onRemovePlace(id) {
+  async function onRemovePlace(id) {
     var isCustom = false;
     for (var i = 0; i < state.customPlaces.length; i++) {
       if (state.customPlaces[i].id === id) {
@@ -1034,13 +1228,14 @@
       showToast("Original route venues cannot be removed.");
       return;
     }
-    if (!window.confirm("Remove this added place from this phone?")) return;
+    if (!window.confirm("Remove this added place?")) return;
     state.customPlaces = state.customPlaces.filter(function (p) {
       return p.id !== id;
     });
     delete state.visits[id];
     persistPlaces();
     persistVisits();
+    await cloudDeletePlace(id);
     render();
     showToast("Added place removed.");
   }
@@ -1070,7 +1265,11 @@
     }
 
     if (!count) return null;
-    lines.push("Shared from the Outreach Walk tracker. Data was saved on the device used for the walk.");
+    lines.push(
+      cloudReady
+        ? "Shared from the Outreach Walk tracker. Data is saved in Supabase and on the device used for the walk."
+        : "Shared from the Outreach Walk tracker. Data was saved on the device used for the walk."
+    );
     return lines.join("\n");
   }
 
@@ -1179,12 +1378,20 @@
     els.toast = document.getElementById("toast");
   }
 
-  function init() {
+  async function init() {
     cacheEls();
     setWalkDate();
+    initSupabase();
     loadState();
     bind();
     render();
+    updateSaveNotice();
+    var synced = await loadFromCloud();
+    updateSaveNotice();
+    if (synced) {
+      render();
+      showToast("Cloud notes loaded.");
+    }
   }
 
   if (document.readyState === "loading") {
