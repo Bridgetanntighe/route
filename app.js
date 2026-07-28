@@ -185,6 +185,13 @@
       phoneHref: "+442030266000",
       phoneLabel: "+44 20 3026 6000",
       mapsQuery: "34 Bow St, London WC2E 7AU",
+      askFor: [
+        {
+          name: "Jessica Smith",
+          role: "Executive Assistant",
+          linkedin: "https://www.linkedin.com/in/jessica-smith-7a0a61b6"
+        }
+      ],
       angle:
         "Warm lead — ask for Jessica Smith by name. Mention you are neighbours at The Market (2 mins). Same building as The Gate, so you can cover both after. Focus: agency group boardroom boards and team lunches."
     },
@@ -626,8 +633,15 @@
       phoneHref: "",
       phoneLabel: "",
       mapsQuery: "74-76 St John Street, London EC1M 4DZ",
+      askFor: [
+        {
+          name: "Emma Critchley-Lloyd",
+          role: "Founder",
+          linkedin: "https://www.linkedin.com/in/emmacritchley"
+        }
+      ],
       angle:
-        "Small PR/marketing agency at Abbey House, St John Street — top cultural fit. Ask for the office manager (or Emma’s team if offered). Pitch team breakfasts and client meeting boards for a lean agency."
+        "Small PR/marketing agency at Abbey House, St John Street — top cultural fit. Ask for the office manager (or Emma Critchley-Lloyd’s team if offered). Pitch team breakfasts and client meeting boards for a lean agency."
     },
     {
       id: "smithfield-agency",
@@ -735,9 +749,31 @@
     return "https://maps.google.com/?q=" + encodeURIComponent(q);
   }
 
+  function safeLinkedInHref(url) {
+    var raw = String(url || "").trim();
+    if (!raw) return "";
+    try {
+      var parsed = new URL(raw);
+      var host = String(parsed.hostname || "").toLowerCase();
+      if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return "";
+      if (host !== "linkedin.com" && host !== "www.linkedin.com" && host.slice(-14) !== ".linkedin.com") {
+        return "";
+      }
+      parsed.protocol = "https:";
+      return parsed.toString();
+    } catch (err) {
+      return "";
+    }
+  }
+
   function isValidEmail(email) {
     if (!email) return true;
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function isValidLinkedIn(url) {
+    if (!url) return true;
+    return !!safeLinkedInHref(url);
   }
 
   function firstName(fullName) {
@@ -822,6 +858,7 @@
       person: row.person || "",
       role: row.role || "",
       email: row.email || "",
+      linkedin: row.linkedin || "",
       notes: row.notes || "",
       warm: !!row.warm,
       followUp: !!row.follow_up,
@@ -850,6 +887,7 @@
       person: visit.person || "",
       role: visit.role || "",
       email: visit.email || "",
+      linkedin: visit.linkedin || "",
       notes: visit.notes || "",
       warm: !!visit.warm,
       follow_up: !!visit.followUp,
@@ -1003,6 +1041,7 @@
       person: "",
       role: "",
       email: "",
+      linkedin: "",
       notes: "",
       warm: false,
       followUp: false,
@@ -1018,6 +1057,7 @@
       person: v.person || "",
       role: v.role || "",
       email: v.email || "",
+      linkedin: v.linkedin || "",
       notes: v.notes || "",
       warm: !!v.warm,
       followUp: !!v.followUp,
@@ -1099,14 +1139,57 @@
       venue.cluster,
       areaLabel(venue.area),
       clusterLabel(venue.cluster),
+      askForSearchText(venue),
       visit.person,
       visit.role,
       visit.email,
+      visit.linkedin,
       visit.notes
     ]
       .join(" ")
       .toLowerCase();
     return hay.indexOf(query) !== -1;
+  }
+
+  function askForSearchText(venue) {
+    if (!venue || !venue.askFor || !venue.askFor.length) return "";
+    return venue.askFor
+      .map(function (contact) {
+        return [contact.name, contact.role, contact.linkedin].join(" ");
+      })
+      .join(" ");
+  }
+
+  function askForHtml(venue) {
+    if (!venue || !venue.askFor || !venue.askFor.length) return "";
+    var items = "";
+    for (var i = 0; i < venue.askFor.length; i++) {
+      var contact = venue.askFor[i];
+      var href = safeLinkedInHref(contact.linkedin);
+      items +=
+        '<li class="ask-for-item">' +
+        '<div class="ask-for-meta">' +
+        '<span class="ask-for-name">' +
+        escapeHtml(contact.name) +
+        "</span>" +
+        (contact.role
+          ? '<span class="ask-for-role">' + escapeHtml(contact.role) + "</span>"
+          : "") +
+        "</div>" +
+        (href
+          ? '<a class="ask-for-linkedin" href="' +
+            escapeHtml(href) +
+            '" target="_blank" rel="noopener noreferrer">LinkedIn</a>'
+          : "") +
+        "</li>";
+    }
+    return (
+      '<div class="ask-for">' +
+      '<p class="ask-for-label">Ask for</p>' +
+      "<ul class=\"ask-for-list\">" +
+      items +
+      "</ul></div>"
+    );
   }
 
   function placeMatchesFilter(venue, visit) {
@@ -1298,6 +1381,13 @@
     if (visit.email) {
       html += "<p><strong>Email:</strong> " + escapeHtml(visit.email) + "</p>";
     }
+    var linkedinHref = safeLinkedInHref(visit.linkedin);
+    if (linkedinHref) {
+      html +=
+        '<p><strong>LinkedIn:</strong> <a href="' +
+        escapeHtml(linkedinHref) +
+        '" target="_blank" rel="noopener noreferrer">Open profile</a></p>';
+    }
     if (visit.notes) {
       html +=
         '<div class="notes-block"><strong>Notes:</strong><div class="notes-body">' +
@@ -1399,6 +1489,16 @@
       escapeHtml(visit.email) +
       '">' +
       "</div>" +
+      '<div class="field">' +
+      '<label class="field-label" for="linkedin-' +
+      escapeHtml(venue.id) +
+      '">LinkedIn URL</label>' +
+      '<input type="url" id="linkedin-' +
+      escapeHtml(venue.id) +
+      '" name="linkedin" inputmode="url" placeholder="https://www.linkedin.com/in/…" value="' +
+      escapeHtml(visit.linkedin) +
+      '">' +
+      "</div>" +
       notesFields +
       '<label class="check"><input type="checkbox" name="warm"' +
       (visit.warm ? " checked" : "") +
@@ -1474,6 +1574,7 @@
       '<p class="angle-text">' +
       escapeHtml(venue.angle) +
       "</p></div>" +
+      askForHtml(venue) +
       '<div class="copy-angle-wrap">' +
       '<button type="button" class="btn btn-secondary btn-small btn-block" data-copy-angle="' +
       escapeHtml(venue.id) +
@@ -1558,6 +1659,7 @@
       person: String(data.get("person") || "").trim(),
       role: String(data.get("role") || "").trim(),
       email: String(data.get("email") || "").trim(),
+      linkedin: String(data.get("linkedin") || "").trim(),
       notes: notes,
       warm: !!form.querySelector('[name="warm"]').checked,
       followUp: !!form.querySelector('[name="followUp"]').checked,
@@ -1575,6 +1677,13 @@
       if (emailInput) emailInput.focus();
       return;
     }
+    if (visit.linkedin && !isValidLinkedIn(visit.linkedin)) {
+      showToast("Please enter a valid LinkedIn URL.");
+      var linkedinInput = form.querySelector('[name="linkedin"]');
+      if (linkedinInput) linkedinInput.focus();
+      return;
+    }
+    visit.linkedin = safeLinkedInHref(visit.linkedin) || visit.linkedin;
     state.visits[id] = visit;
     if (!persistVisits()) return;
 
@@ -1604,6 +1713,17 @@
       venue.name +
       ":\n" +
       venue.angle;
+    if (venue.askFor && venue.askFor.length) {
+      text += "\n\nAsk for:";
+      for (var a = 0; a < venue.askFor.length; a++) {
+        var contact = venue.askFor[a];
+        text +=
+          "\n• " +
+          contact.name +
+          (contact.role ? " (" + contact.role + ")" : "");
+        if (contact.linkedin) text += "\n  LinkedIn: " + contact.linkedin;
+      }
+    }
     copyText(text).then(function (ok) {
       showToast(ok ? "Script and angle copied." : "Could not copy. Please copy manually.");
     });
@@ -1763,6 +1883,7 @@
       lines.push("  Contact: " + (visit.person || "—"));
       lines.push("  Role: " + (visit.role || "—"));
       lines.push("  Email: " + (visit.email || "—"));
+      lines.push("  LinkedIn: " + (visit.linkedin || "—"));
       lines.push("  Notes: " + (visit.notes || "—"));
       lines.push("  Follow-up: " + (visit.followUp ? "Yes" : "No"));
       lines.push("");

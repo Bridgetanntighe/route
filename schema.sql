@@ -7,12 +7,17 @@ create table if not exists public.outreach_visits (
   person text not null default '',
   role text not null default '',
   email text not null default '',
+  linkedin text not null default '',
   notes text not null default '',
   warm boolean not null default false,
   follow_up boolean not null default false,
   saved_at timestamptz,
   updated_at timestamptz not null default now()
 );
+
+-- Existing projects: add LinkedIn column if the table already exists
+alter table public.outreach_visits
+  add column if not exists linkedin text not null default '';
 
 create table if not exists public.outreach_places (
   id text primary key,
