@@ -955,9 +955,58 @@ a {
 }
 
 .visit-panel {
-  border-top: 1px solid var(--border);
+  border-top: 1px solid rgba(15, 74, 58, 0.12);
   padding: 12px 14px 14px;
-  background: var(--white);
+  background: #f3faf6;
+}
+
+.visit-collapse {
+  border-top: 1px solid var(--border);
+}
+
+.visit-collapse-summary {
+  min-height: 52px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  list-style: none;
+  background: #0f4a3a;
+  color: #fff;
+}
+
+.visit-collapse-summary::-webkit-details-marker {
+  display: none;
+}
+
+.visit-collapse-summary::after {
+  content: "+";
+  margin-left: auto;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.visit-collapse[open] > .visit-collapse-summary::after {
+  content: "–";
+}
+
+.visit-collapse-title {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.visit-collapse-hint {
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.visit-collapse.is-saved > .visit-collapse-summary {
+  background: #1f6b52;
 }
 
 .visit-panel-title {

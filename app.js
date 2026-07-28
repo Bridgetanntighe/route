@@ -1377,7 +1377,6 @@
 
   function formHtml(venue, visit) {
     var saved = hasSavedVisit(visit) && isVisited(visit);
-    var title = saved ? "Update" : "Log visit";
     var notesFields = "";
 
     if (visit.notes) {
@@ -1408,12 +1407,19 @@
     }
 
     return (
-      '<div class="visit-panel" data-visit-panel="' +
+      '<details class="visit-collapse' +
+      (saved ? " is-saved" : "") +
+      '" data-visit-panel="' +
       escapeHtml(venue.id) +
       '">' +
-      '<h3 class="visit-panel-title">' +
-      escapeHtml(title) +
-      "</h3>" +
+      '<summary class="visit-collapse-summary">' +
+      '<span class="visit-collapse-title">' +
+      escapeHtml(saved ? "Update log" : "Log visit") +
+      "</span>" +
+      '<span class="visit-collapse-hint">' +
+      escapeHtml(saved ? "Tap to edit" : "Tap to open") +
+      "</span></summary>" +
+      '<div class="visit-panel">' +
       '<form class="visit-form" data-visit-form="' +
       escapeHtml(venue.id) +
       '" novalidate>' +
@@ -1464,7 +1470,7 @@
       (visit.followUp ? " checked" : "") +
       '><span>Needs follow-up</span></label>' +
       '<button type="submit" class="btn btn-primary btn-block">Save</button>' +
-      "</form></div>"
+      "</form></div></details>"
     );
   }
 
