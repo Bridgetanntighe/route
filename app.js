@@ -3,6 +3,7 @@
 
   var STORAGE_VISITS = "cgc-outreach-v1-visits";
   var STORAGE_PLACES = "cgc-outreach-v1-places";
+  var STORAGE_AREA = "cgc-outreach-v1-selected-area";
 
   var SUPABASE_URL = "https://athqfnbwchxvtozrqfcj.supabase.co";
   var SUPABASE_PUBLISHABLE_KEY = "sb_publishable_ciawUoKC7kWslcvOtEWS6g_BDhytl9P";
@@ -22,32 +23,69 @@
     not_suitable: "Not suitable"
   };
 
-  var SECTIONS = [
-    { id: "leg-a", area: "covent-garden", label: "Leg A — Bow Street · 9:00am", legClass: "leg-a" },
-    { id: "leg-b", area: "covent-garden", label: "Leg B — Slingsby Place & St Martin's Lane · 9:35am", legClass: "leg-b" },
-    { id: "leg-c", area: "covent-garden", label: "Leg C — Long Acre & Parker Street · 10:25am", legClass: "leg-c" },
-    { id: "leg-d", area: "covent-garden", label: "Leg D — Holborn cluster · 11:05am", legClass: "leg-d" },
-    { id: "leg-e", area: "covent-garden", label: "Leg E — Short's Gardens & Kingsway · 12:00pm", legClass: "leg-e" },
-    { id: "bonus", area: "covent-garden", label: "Bonus — On the way back to base", legClass: "bonus" },
-    { id: "leg-f", area: "st-pauls", label: "Leg F — Fleet Street & Ludgate · start at St Paul's", legClass: "leg-f" },
-    { id: "leg-g", area: "st-pauls", label: "Leg G — St Paul's & Cheapside", legClass: "leg-g" },
-    { id: "leg-h", area: "st-pauls", label: "Leg H — Smithfield & Farringdon", legClass: "leg-h" },
-    { id: "leg-i", area: "st-pauls", label: "Leg I — Clerkenwell bonus", legClass: "leg-i" },
-    { id: "added", area: "all", label: "Added nearby", legClass: "added" }
+  var AREAS = [
+    { id: "covent-garden", label: "Covent Garden" },
+    { id: "st-pauls-cheapside", label: "St Paul's & Cheapside" }
+    // Future: { id: "soho-fitzrovia", label: "Soho & Fitzrovia" },
+    // Future: { id: "holborn", label: "Holborn" },
+    // Future: { id: "bank-monument", label: "Bank & Monument" }
   ];
 
-  var AREA_LABELS = {
-    "covent-garden": "Covent Garden",
-    "st-pauls": "St Paul's / Cheapside",
-    all: "Both walks"
-  };
+  var CLUSTERS = [
+    { id: "bow-street", area: "covent-garden", label: "Bow Street cluster", tone: "leg-a" },
+    { id: "slingsby-st-martins", area: "covent-garden", label: "Slingsby Place & St Martin's Lane cluster", tone: "leg-b" },
+    { id: "long-acre-parker", area: "covent-garden", label: "Long Acre & Parker Street cluster", tone: "leg-c" },
+    { id: "holborn", area: "covent-garden", label: "Holborn cluster", tone: "leg-d" },
+    { id: "shorts-gardens-kingsway", area: "covent-garden", label: "Short's Gardens & Kingsway cluster", tone: "leg-e" },
+    { id: "return-to-base", area: "covent-garden", label: "Near base cluster", tone: "bonus" },
+    { id: "fleet-street-ludgate", area: "st-pauls-cheapside", label: "Fleet Street & Ludgate cluster", tone: "leg-f" },
+    { id: "st-pauls-cheapside", area: "st-pauls-cheapside", label: "St Paul's & Cheapside cluster", tone: "leg-g" },
+    { id: "smithfield-farringdon", area: "st-pauls-cheapside", label: "Smithfield & Farringdon cluster", tone: "leg-h" },
+    { id: "clerkenwell", area: "st-pauls-cheapside", label: "Clerkenwell cluster", tone: "leg-i" },
+    { id: "added-nearby", area: null, label: "Added nearby", tone: "added" }
+  ];
 
-  /** Original route venues — preserve all company, address, phone, maps, and sales-angle data. */
+  
+  function areaLabel(areaId) {
+    if (areaId === "all") return "All areas";
+    for (var i = 0; i < AREAS.length; i++) {
+      if (AREAS[i].id === areaId) return AREAS[i].label;
+    }
+    return areaId || "Unknown area";
+  }
+
+  function normalizeAreaId(areaId) {
+    if (!areaId || areaId === "all") return areaId || "covent-garden";
+    if (areaId === "st-pauls") return "st-pauls-cheapside";
+    return areaId;
+  }
+
+  function clusterMeta(clusterId) {
+    for (var i = 0; i < CLUSTERS.length; i++) {
+      if (CLUSTERS[i].id === clusterId) return CLUSTERS[i];
+    }
+    return { id: clusterId || "added-nearby", label: "Added nearby", tone: "added", area: null };
+  }
+
+  function clusterLabel(clusterId) {
+    return clusterMeta(clusterId).label;
+  }
+
+  function clustersForArea(areaId) {
+    return CLUSTERS.filter(function (c) {
+      if (c.id === "added-nearby") return true;
+      if (areaId === "all") return true;
+      return c.area === areaId;
+    });
+  }
+
+  /** Venue seed data — IDs must stay stable for saved visits. */
   var VENUES = [
     {
       id: "msq-partners",
-      section: "leg-a",
-      routeNumber: 1,
+      area: "covent-garden",
+      cluster: "bow-street",
+      routeOrder: 1,
       name: "MSQ Partners",
       type: "Marketing Agency Group",
       address: "34 Bow St, WC2E 7AU",
@@ -66,8 +104,9 @@
     },
     {
       id: "the-gate-london",
-      section: "leg-a",
-      routeNumber: 2,
+      area: "covent-garden",
+      cluster: "bow-street",
+      routeOrder: 2,
       name: "The Gate London",
       type: "Creative / Integrated Agency",
       address: "34 Bow St, WC2E 7AU",
@@ -83,8 +122,9 @@
     },
     {
       id: "kearney-consulting",
-      section: "leg-a",
-      routeNumber: 3,
+      area: "covent-garden",
+      cluster: "bow-street",
+      routeOrder: 3,
       name: "Kearney Consulting",
       type: "Global Management Consultancy",
       address: "The Adelphi, 1–11 John Adam St, WC2N 6HT",
@@ -100,8 +140,9 @@
     },
     {
       id: "pha-group",
-      section: "leg-b",
-      routeNumber: 4,
+      area: "covent-garden",
+      cluster: "slingsby-st-martins",
+      routeOrder: 1,
       name: "The PHA Group",
       type: "PR & Communications Agency",
       address: "11 Slingsby Pl, WC2E 9AB",
@@ -117,8 +158,9 @@
     },
     {
       id: "rooster-marketing",
-      section: "leg-b",
-      routeNumber: 5,
+      area: "covent-garden",
+      cluster: "slingsby-st-martins",
+      routeOrder: 2,
       name: "Rooster Marketing",
       type: "Boutique Marketing Agency",
       address: "60 St Martin's Ln, WC2N 4JS",
@@ -134,8 +176,9 @@
     },
     {
       id: "carnival-film",
-      section: "leg-b",
-      routeNumber: 6,
+      area: "covent-garden",
+      cluster: "slingsby-st-martins",
+      routeOrder: 3,
       name: "Carnival Film & Television",
       type: "TV / Film Production Company",
       address: "101 St Martin's Ln, WC2N 4AZ",
@@ -151,8 +194,9 @@
     },
     {
       id: "covent-garden-recruitment",
-      section: "leg-b",
-      routeNumber: 7,
+      area: "covent-garden",
+      cluster: "slingsby-st-martins",
+      routeOrder: 4,
       name: "Covent Garden Recruitment",
       type: "Recruitment Agency",
       address: "3rd Floor, 9 Irving St, WC2H 7AH",
@@ -168,8 +212,9 @@
     },
     {
       id: "me-and-you-curious",
-      section: "leg-c",
-      routeNumber: 8,
+      area: "covent-garden",
+      cluster: "long-acre-parker",
+      routeOrder: 1,
       name: "Me and You Productions + Curious PR",
       type: "Production Co + PR Agency",
       address: "39 Long Acre, WC2E 9LG",
@@ -188,8 +233,9 @@
     },
     {
       id: "pb-creative",
-      section: "leg-c",
-      routeNumber: 9,
+      area: "covent-garden",
+      cluster: "long-acre-parker",
+      routeOrder: 2,
       name: "PB Creative",
       type: "Design / Creative Agency",
       address: "40–42 Parker St, WC2B 5PQ",
@@ -205,8 +251,9 @@
     },
     {
       id: "kindred-agency",
-      section: "leg-c",
-      routeNumber: 10,
+      area: "covent-garden",
+      cluster: "long-acre-parker",
+      routeOrder: 3,
       name: "Kindred Agency",
       type: "Creative Agency",
       address: "17 Macklin St, WC2B 5NR",
@@ -222,8 +269,9 @@
     },
     {
       id: "academy-films",
-      section: "leg-d",
-      routeNumber: 11,
+      area: "covent-garden",
+      cluster: "holborn",
+      routeOrder: 1,
       name: "Academy Films",
       type: "Award-Winning Film Production",
       address: "16 W Central St, WC1A 1JJ",
@@ -239,8 +287,9 @@
     },
     {
       id: "blick-rothenberg",
-      section: "leg-d",
-      routeNumber: 12,
+      area: "covent-garden",
+      cluster: "holborn",
+      routeOrder: 2,
       name: "Blick Rothenberg",
       type: "Accountancy & Advisory (100–200 staff)",
       address: "16 Great Queen St, WC2B 5AH",
@@ -256,8 +305,9 @@
     },
     {
       id: "collective-london",
-      section: "leg-d",
-      routeNumber: 13,
+      area: "covent-garden",
+      cluster: "holborn",
+      routeOrder: 3,
       name: "Collective London",
       type: "Creative & Marketing Agency",
       address: "20 Red Lion St, WC1R 4PS",
@@ -273,8 +323,9 @@
     },
     {
       id: "passion-digital",
-      section: "leg-d",
-      routeNumber: 14,
+      area: "covent-garden",
+      cluster: "holborn",
+      routeOrder: 4,
       name: "Passion Digital",
       type: "Digital Marketing Agency",
       address: "4th Floor, 137–144 New Oxford St, WC1V 6PL",
@@ -290,8 +341,9 @@
     },
     {
       id: "karma-live",
-      section: "leg-e",
-      routeNumber: 15,
+      area: "covent-garden",
+      cluster: "shorts-gardens-kingsway",
+      routeOrder: 1,
       name: "Karma (Live Production)",
       type: "Video & Live Events Production",
       address: "56 Short's Gardens, WC2H 9AN",
@@ -307,8 +359,9 @@
     },
     {
       id: "purple-pr",
-      section: "leg-e",
-      routeNumber: 16,
+      area: "covent-garden",
+      cluster: "shorts-gardens-kingsway",
+      routeOrder: 2,
       name: "Purple PR Westminster",
       type: "PR Agency",
       address: "7th Floor, 1 Kingsway, WC2B 4BG",
@@ -324,8 +377,9 @@
     },
     {
       id: "greenwich-consulting",
-      section: "bonus",
-      routeNumber: 17,
+      area: "covent-garden",
+      cluster: "return-to-base",
+      routeOrder: 1,
       name: "Greenwich Consulting",
       type: "Consulting Firm",
       address: "7 Henrietta St, WC2E 8PS",
@@ -344,9 +398,9 @@
     /* Walk B — St Paul's / Cheapside / Farringdon (mid-size, reception-accessible) */
     {
       id: "bell-yard-kysen",
-      section: "leg-f",
-      routeNumber: 1,
-      area: "st-pauls",
+      area: "st-pauls-cheapside",
+      cluster: "fleet-street-ludgate",
+      routeOrder: 1,
       name: "Bell Yard Kysen Communications",
       type: "Legal / Litigation PR Agency",
       address: "21 Fleet Street, EC4Y 1AA",
@@ -362,9 +416,9 @@
     },
     {
       id: "fortis-consulting",
-      section: "leg-f",
-      routeNumber: 2,
-      area: "st-pauls",
+      area: "st-pauls-cheapside",
+      cluster: "fleet-street-ludgate",
+      routeOrder: 2,
       name: "Fortis Consulting London",
       type: "Boutique Business Consultancy",
       address: "Office 7, 35–37 Ludgate Hill, EC4M 7JN",
@@ -380,9 +434,9 @@
     },
     {
       id: "tate-associates",
-      section: "leg-f",
-      routeNumber: 3,
-      area: "st-pauls",
+      area: "st-pauls-cheapside",
+      cluster: "fleet-street-ludgate",
+      routeOrder: 3,
       name: "Tate & Associates",
       type: "Recruitment Consultancy",
       address: "35–37 Ludgate Hill, EC4M 7JN",
@@ -401,9 +455,9 @@
     },
     {
       id: "richard-nelson-llp",
-      section: "leg-f",
-      routeNumber: 4,
-      area: "st-pauls",
+      area: "st-pauls-cheapside",
+      cluster: "fleet-street-ludgate",
+      routeOrder: 4,
       name: "Richard Nelson LLP",
       type: "Law Firm (national, City office)",
       address: "20 Old Bailey, EC4M 1AN",
@@ -419,9 +473,9 @@
     },
     {
       id: "raymond-saul",
-      section: "leg-g",
-      routeNumber: 5,
-      area: "st-pauls",
+      area: "st-pauls-cheapside",
+      cluster: "st-pauls-cheapside",
+      routeOrder: 1,
       name: "Raymond Saul Solicitors",
       type: "Boutique City Law Firm",
       address: "3rd Floor, Mermaid House, 2 Puddle Dock, EC4V 3DS",
@@ -437,9 +491,9 @@
     },
     {
       id: "russell-bedford",
-      section: "leg-g",
-      routeNumber: 6,
-      area: "st-pauls",
+      area: "st-pauls-cheapside",
+      cluster: "st-pauls-cheapside",
+      routeOrder: 2,
       name: "Russell Bedford International",
       type: "Accountancy / Advisory Network HQ",
       address: "Paternoster House, 65 St Paul's Churchyard, EC4M 8AB",
@@ -455,9 +509,9 @@
     },
     {
       id: "proxima-cheapside",
-      section: "leg-g",
-      routeNumber: 7,
-      area: "st-pauls",
+      area: "st-pauls-cheapside",
+      cluster: "st-pauls-cheapside",
+      routeOrder: 3,
       name: "Proxima",
       type: "Procurement & Supply Chain Consultancy",
       address: "107 Cheapside, EC2V 6DN",
@@ -473,9 +527,9 @@
     },
     {
       id: "big-little-ldn",
-      section: "leg-h",
-      routeNumber: 8,
-      area: "st-pauls",
+      area: "st-pauls-cheapside",
+      cluster: "smithfield-farringdon",
+      routeOrder: 1,
       name: "BIG little LDN",
       type: "Boutique PR & Marketing Agency",
       address: "1st Floor, Abbey House, 74–76 St John Street, EC1M 4DZ",
@@ -491,9 +545,9 @@
     },
     {
       id: "smithfield-agency",
-      section: "leg-h",
-      routeNumber: 9,
-      area: "st-pauls",
+      area: "st-pauls-cheapside",
+      cluster: "smithfield-farringdon",
+      routeOrder: 2,
       name: "Smithfield Agency",
       type: "Independent Media Planning Agency",
       address: "22 St James's Walk, EC1R 0AP",
@@ -509,9 +563,9 @@
     },
     {
       id: "sec-newgate",
-      section: "leg-h",
-      routeNumber: 10,
-      area: "st-pauls",
+      area: "st-pauls-cheapside",
+      cluster: "smithfield-farringdon",
+      routeOrder: 3,
       name: "SEC Newgate UK",
       type: "Strategic Communications / Public Affairs",
       address: "14 Greville Street, EC1N 8SB",
@@ -527,9 +581,9 @@
     },
     {
       id: "flame-pr",
-      section: "leg-i",
-      routeNumber: 11,
-      area: "st-pauls",
+      area: "st-pauls-cheapside",
+      cluster: "clerkenwell",
+      routeOrder: 1,
       name: "Flame PR",
       type: "Full-Service Marketing Agency",
       address: "37 Pear Tree Street, EC1V 3AG",
@@ -545,9 +599,9 @@
     },
     {
       id: "words-pixels",
-      section: "leg-i",
-      routeNumber: 12,
-      area: "st-pauls",
+      area: "st-pauls-cheapside",
+      cluster: "clerkenwell",
+      routeOrder: 2,
       name: "Words+Pixels",
       type: "Award-Winning PR Agency (~25 people)",
       address: "Ground Floor, Silverlight House, 6–8 Standard Place, EC2A 3BE",
@@ -680,13 +734,14 @@
   function placeFromRow(row) {
     return {
       id: row.id,
-      routeNumber: "+",
       name: row.name || "",
       address: row.address || "",
       type: row.type || "",
       phone: row.phone || "",
       warmSeed: !!row.warm_seed,
-      area: row.area || "covent-garden"
+      area: normalizeAreaId(row.area || "covent-garden"),
+      cluster: row.cluster || "added-nearby",
+      routeOrder: row.route_order != null ? row.route_order : 999
     };
   }
 
@@ -897,17 +952,20 @@
       var seed = VENUES[v];
       list.push(
         Object.assign({}, seed, {
-          area: seed.area || "covent-garden"
+          area: normalizeAreaId(seed.area || "covent-garden"),
+          cluster: seed.cluster || "added-nearby",
+          routeOrder: seed.routeOrder != null ? seed.routeOrder : 0
         })
       );
     }
     for (var i = 0; i < state.customPlaces.length; i++) {
       var p = state.customPlaces[i];
+      var area = normalizeAreaId(p.area || "covent-garden");
       list.push({
         id: p.id,
-        section: "added",
-        routeNumber: p.routeNumber || "+",
-        area: p.area || state.area || "covent-garden",
+        area: area,
+        cluster: p.cluster || "added-nearby",
+        routeOrder: p.routeOrder != null ? p.routeOrder : 999,
         name: p.name || "Untitled place",
         type: p.type || "",
         address: p.address || "",
@@ -918,7 +976,7 @@
         phoneHref: String(p.phone || "").replace(/[^\d+]/g, ""),
         phoneLabel: p.phone || "",
         mapsQuery: p.address || p.name || "",
-        angle: "Custom stop added during the walk.",
+        angle: "Custom stop added in this area.",
         isCustom: true,
         warmSeed: !!p.warmSeed
       });
@@ -928,8 +986,7 @@
 
   function placeMatchesArea(venue) {
     if (state.area === "all") return true;
-    var area = venue.area || "covent-garden";
-    return area === state.area;
+    return normalizeAreaId(venue.area || "covent-garden") === state.area;
   }
 
   function placeMatchesSearch(venue, visit, query) {
@@ -940,6 +997,10 @@
       venue.address,
       venue.walk,
       venue.angle,
+      venue.area,
+      venue.cluster,
+      areaLabel(venue.area),
+      clusterLabel(venue.cluster),
       visit.person,
       visit.role,
       visit.email,
@@ -1031,12 +1092,12 @@
     els.statToVisit.textContent = String(toVisit);
     els.statGood.textContent = String(good);
     els.statFollowup.textContent = String(followUps);
-    updateWalkLocation();
+    updateAreaLocation();
   }
 
-  function updateWalkLocation() {
-    if (!els.walkLocation) return;
-    els.walkLocation.textContent = AREA_LABELS[state.area] || "Covent Garden";
+  function updateAreaLocation() {
+    if (!els.areaLocation) return;
+    els.areaLocation.textContent = areaLabel(state.area);
   }
 
   function outcomeOptionsHtml(selected) {
@@ -1205,12 +1266,8 @@
   }
 
   function cardHtml(venue, visit) {
-    var sectionMeta = SECTIONS.find
-      ? SECTIONS.find(function (s) {
-          return s.id === venue.section;
-        })
-      : null;
-    var legClass = (sectionMeta && sectionMeta.legClass) || "bonus";
+    var meta = clusterMeta(venue.cluster);
+    var legClass = meta.tone || "added";
     var warm = isWarmPlace(venue, visit);
     var good = visit.outcome === "good_conversation";
     var classes =
@@ -1246,14 +1303,16 @@
       classes +
       '" data-venue-id="' +
       escapeHtml(venue.id) +
-      '" data-section="' +
-      escapeHtml(venue.section) +
+      '" data-area="' +
+      escapeHtml(venue.area) +
+      '" data-cluster="' +
+      escapeHtml(venue.cluster || "") +
       '">' +
       '<div class="venue-head">' +
       '<div class="route-num ' +
       escapeHtml(legClass) +
       '" aria-hidden="true">' +
-      escapeHtml(venue.routeNumber) +
+      escapeHtml(venue.routeOrder != null ? venue.routeOrder : "") +
       "</div>" +
       '<div class="venue-info">' +
       '<h3 class="venue-name">' +
@@ -1292,36 +1351,43 @@
     var query = state.search.trim().toLowerCase();
     var html = "";
     var visibleCount = 0;
+    var clusterList = clustersForArea(state.area);
 
-    for (var s = 0; s < SECTIONS.length; s++) {
-      var section = SECTIONS[s];
-      var sectionHasVisible = false;
-      var sectionHtml = "";
+    for (var s = 0; s < clusterList.length; s++) {
+      var cluster = clusterList[s];
+      var clusterHasVisible = false;
+      var clusterHtml = "";
+      var clusterPlaces = places
+        .filter(function (venue) {
+          return (venue.cluster || "added-nearby") === cluster.id;
+        })
+        .sort(function (a, b) {
+          return (a.routeOrder || 0) - (b.routeOrder || 0);
+        });
 
-      for (var i = 0; i < places.length; i++) {
-        var venue = places[i];
-        if (venue.section !== section.id) continue;
+      for (var i = 0; i < clusterPlaces.length; i++) {
+        var venue = clusterPlaces[i];
         if (!placeMatchesArea(venue)) continue;
         var visit = getVisit(venue.id);
         if (!placeMatchesSearch(venue, visit, query)) continue;
         if (!placeMatchesFilter(venue, visit)) continue;
-        sectionHasVisible = true;
+        clusterHasVisible = true;
         visibleCount += 1;
-        sectionHtml += cardHtml(venue, visit);
+        clusterHtml += cardHtml(venue, visit);
       }
 
-      if (sectionHasVisible) {
+      if (clusterHasVisible) {
         html +=
-          '<div class="leg-divider" role="heading" aria-level="2">' +
-          escapeHtml(section.label) +
+          '<div class="cluster-divider" role="heading" aria-level="2">' +
+          escapeHtml(cluster.label) +
           "</div>" +
-          sectionHtml;
+          clusterHtml;
       }
     }
 
     if (!visibleCount) {
       html =
-        '<p class="empty-state">No places match this search or filter. Try All, or clear the search.</p>';
+        '<p class="empty-state">No places match this search or filter. Try All areas, or clear the search.</p>';
     }
 
     els.routeList.innerHTML = html;
@@ -1387,6 +1453,7 @@
   }
 
   function openSheet() {
+    populateAddPlaceAreaFields();
     els.sheet.hidden = false;
     els.backdrop.hidden = false;
     document.body.classList.add("sheet-open");
@@ -1428,15 +1495,18 @@
     var address = String(form.address.value || "").trim();
     var type = String(form.type.value || "").trim();
 
+    var selectedArea = normalizeAreaId(String(form.area ? form.area.value : "") || (state.area === "all" ? "covent-garden" : state.area));
+    var selectedCluster = String(form.cluster ? form.cluster.value : "").trim() || "added-nearby";
     var place = {
       id: id,
-      routeNumber: "+",
       name: name,
       address: address,
       type: type,
       phone: phone,
       warmSeed: warm,
-      area: state.area === "all" ? "covent-garden" : state.area
+      area: selectedArea,
+      cluster: selectedCluster,
+      routeOrder: 999
     };
 
     state.customPlaces.push(place);
@@ -1499,21 +1569,39 @@
   }
 
   function buildShareText() {
-    var places = allPlaces();
+    var places = allPlaces()
+      .filter(function (venue) {
+        return placeMatchesArea(venue) && isVisited(getVisit(venue.id));
+      })
+      .sort(function (a, b) {
+        var aa = normalizeAreaId(a.area);
+        var ba = normalizeAreaId(b.area);
+        if (aa !== ba) return aa < ba ? -1 : 1;
+        if ((a.cluster || "") !== (b.cluster || "")) return (a.cluster || "") < (b.cluster || "") ? -1 : 1;
+        return (a.routeOrder || 0) - (b.routeOrder || 0);
+      });
+
+    if (!places.length) return null;
+
     var lines = [];
-    lines.push("Covent Garden Catering — Outreach Walk log");
+    lines.push("Covent Garden Catering — Outreach log");
     lines.push(formatDate());
-    lines.push(AREA_LABELS[state.area] || "Covent Garden");
+    lines.push(areaLabel(state.area));
     lines.push("");
 
-    var count = 0;
+    var currentArea = null;
     for (var i = 0; i < places.length; i++) {
       var venue = places[i];
-      if (!placeMatchesArea(venue)) continue;
       var visit = getVisit(venue.id);
-      if (!isVisited(visit)) continue;
-      count += 1;
+      var areaId = normalizeAreaId(venue.area);
+      if (state.area === "all" && areaId !== currentArea) {
+        currentArea = areaId;
+        lines.push("— " + areaLabel(areaId) + " —");
+        lines.push("");
+      }
       lines.push("• " + venue.name);
+      lines.push("  Area: " + areaLabel(areaId));
+      lines.push("  Cluster: " + clusterLabel(venue.cluster));
       lines.push("  Outcome: " + (OUTCOME_LABELS[visit.outcome] || visit.outcome));
       lines.push("  Contact: " + (visit.person || "—"));
       lines.push("  Role: " + (visit.role || "—"));
@@ -1523,11 +1611,10 @@
       lines.push("");
     }
 
-    if (!count) return null;
     lines.push(
       cloudReady
-        ? "Shared from the Outreach Walk tracker. Data is saved in Supabase and on the device used for the walk."
-        : "Shared from the Outreach Walk tracker. Data was saved on the device used for the walk."
+        ? "Shared from the Outreach tracker. Data is saved in Supabase and on the device used."
+        : "Shared from the Outreach tracker. Data was saved on the device used."
     );
     return lines.join("\n");
   }
@@ -1577,6 +1664,112 @@
     onSaveVisit(form);
   }
 
+  
+  function loadSelectedArea() {
+    var saved = null;
+    try {
+      saved = localStorage.getItem(STORAGE_AREA);
+    } catch (err) {
+      saved = null;
+    }
+    if (saved === "all") {
+      state.area = "all";
+      return;
+    }
+    var normalized = normalizeAreaId(saved || "covent-garden");
+    var known = AREAS.some(function (a) { return a.id === normalized; });
+    state.area = known ? normalized : "covent-garden";
+  }
+
+  function persistSelectedArea() {
+    try {
+      localStorage.setItem(STORAGE_AREA, state.area);
+    } catch (err) {
+      /* ignore */
+    }
+  }
+
+  function renderAreaTabs() {
+    if (!els.areaTabsMount) return;
+    var html = "";
+    for (var i = 0; i < AREAS.length; i++) {
+      var area = AREAS[i];
+      var active = state.area === area.id;
+      html +=
+        '<button type="button" class="area-tab' +
+        (active ? " is-active" : "") +
+        '" data-area="' +
+        escapeHtml(area.id) +
+        '" aria-pressed="' +
+        (active ? "true" : "false") +
+        '">' +
+        escapeHtml(area.label) +
+        "</button>";
+    }
+    var allActive = state.area === "all";
+    html +=
+      '<button type="button" class="area-tab' +
+      (allActive ? " is-active" : "") +
+      '" data-area="all" aria-pressed="' +
+      (allActive ? "true" : "false") +
+      '">All areas</button>';
+    els.areaTabsMount.innerHTML = html;
+    els.areaTabs = Array.prototype.slice.call(els.areaTabsMount.querySelectorAll(".area-tab"));
+    els.areaTabs.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var next = btn.getAttribute("data-area") || "covent-garden";
+        state.area = next === "all" ? "all" : normalizeAreaId(next);
+        persistSelectedArea();
+        renderAreaTabs();
+        populateAddPlaceAreaFields();
+        render();
+      });
+    });
+  }
+
+  function populateAddPlaceAreaFields() {
+    var areaSelect = document.getElementById("add-area");
+    var clusterSelect = document.getElementById("add-cluster");
+    if (!areaSelect || !clusterSelect) return;
+
+    var areaHtml = "";
+    for (var i = 0; i < AREAS.length; i++) {
+      var area = AREAS[i];
+      var selected =
+        (state.area !== "all" && state.area === area.id) ||
+        (state.area === "all" && i === 0);
+      areaHtml +=
+        '<option value="' +
+        escapeHtml(area.id) +
+        '"' +
+        (selected ? " selected" : "") +
+        ">" +
+        escapeHtml(area.label) +
+        "</option>";
+    }
+    areaSelect.innerHTML = areaHtml;
+
+    function fillClusters() {
+      var areaId = normalizeAreaId(areaSelect.value);
+      var opts = '<option value="added-nearby">Added nearby (default)</option>';
+      for (var c = 0; c < CLUSTERS.length; c++) {
+        var cluster = CLUSTERS[c];
+        if (!cluster.area || cluster.area !== areaId) continue;
+        if (cluster.id === "added-nearby") continue;
+        opts +=
+          '<option value="' +
+          escapeHtml(cluster.id) +
+          '">' +
+          escapeHtml(cluster.label) +
+          "</option>";
+      }
+      clusterSelect.innerHTML = opts;
+    }
+
+    areaSelect.onchange = fillClusters;
+    fillClusters();
+  }
+
   function bind() {
     els.copyIntro.addEventListener("click", function () {
       copyText(RECEPTION_INTRO).then(function (ok) {
@@ -1593,18 +1786,6 @@
       btn.addEventListener("click", function () {
         state.filter = btn.getAttribute("data-filter") || "all";
         els.filters.forEach(function (b) {
-          var active = b === btn;
-          b.classList.toggle("is-active", active);
-          b.setAttribute("aria-pressed", active ? "true" : "false");
-        });
-        render();
-      });
-    });
-
-    els.walkTabs.forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        state.area = btn.getAttribute("data-area") || "covent-garden";
-        els.walkTabs.forEach(function (b) {
           var active = b === btn;
           b.classList.toggle("is-active", active);
           b.setAttribute("aria-pressed", active ? "true" : "false");
@@ -1639,8 +1820,8 @@
     els.statFollowup = document.getElementById("stat-followup");
     els.search = document.getElementById("search-input");
     els.filters = Array.prototype.slice.call(document.querySelectorAll(".filter-btn"));
-    els.walkTabs = Array.prototype.slice.call(document.querySelectorAll(".walk-tab"));
-    els.walkLocation = document.getElementById("walk-location");
+    els.areaTabsMount = document.getElementById("area-tabs");
+    els.areaLocation = document.getElementById("area-location");
     els.copyIntro = document.getElementById("copy-intro-btn");
     els.shareBtn = document.getElementById("share-log-btn");
     els.addBtn = document.getElementById("add-place-btn");
@@ -1656,6 +1837,9 @@
     setWalkDate();
     initSupabase();
     loadState();
+    loadSelectedArea();
+    renderAreaTabs();
+    populateAddPlaceAreaFields();
     bind();
     render();
     updateSaveNotice();

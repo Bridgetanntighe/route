@@ -18,7 +18,7 @@
     <p class="page-meta">
       <time id="walk-date" datetime=""></time>
       <span aria-hidden="true">·</span>
-      <span id="walk-location">Covent Garden</span>
+      <span id="area-location">Covent Garden</span>
     </p>
   </header>
 
@@ -42,11 +42,8 @@
   </section>
 
   <div class="sticky-controls" id="sticky-controls">
-    <div class="walk-tabs" role="group" aria-label="Choose walk">
-      <button type="button" class="walk-tab is-active" data-area="covent-garden" aria-pressed="true">Covent Garden</button>
-      <button type="button" class="walk-tab" data-area="st-pauls" aria-pressed="false">St Paul’s / Cheapside</button>
-      <button type="button" class="walk-tab" data-area="all" aria-pressed="false">Both walks</button>
-    </div>
+    <p class="area-label" id="area-chooser-label">Choose area</p>
+    <div class="area-tabs" id="area-tabs" role="group" aria-labelledby="area-chooser-label"></div>
     <label class="search-label" for="search-input">Search places</label>
     <input
       type="search"
@@ -112,6 +109,14 @@
       <div class="field">
         <label for="add-name">Company or venue name <span class="req">required</span></label>
         <input type="text" id="add-name" name="name" required autocomplete="organization">
+      </div>
+      <div class="field">
+        <label for="add-area">Area <span class="req">required</span></label>
+        <select id="add-area" name="area" required></select>
+      </div>
+      <div class="field">
+        <label for="add-cluster">Cluster <span class="req">optional</span></label>
+        <select id="add-cluster" name="cluster"></select>
       </div>
       <div class="field">
         <label for="add-address">Address or building</label>
