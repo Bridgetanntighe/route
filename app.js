@@ -23,14 +23,24 @@
   };
 
   var SECTIONS = [
-    { id: "leg-a", label: "Leg A — Bow Street · 9:00am", legClass: "leg-a" },
-    { id: "leg-b", label: "Leg B — Slingsby Place & St Martin's Lane · 9:35am", legClass: "leg-b" },
-    { id: "leg-c", label: "Leg C — Long Acre & Parker Street · 10:25am", legClass: "leg-c" },
-    { id: "leg-d", label: "Leg D — Holborn cluster · 11:05am", legClass: "leg-d" },
-    { id: "leg-e", label: "Leg E — Short's Gardens & Kingsway · 12:00pm", legClass: "leg-e" },
-    { id: "bonus", label: "Bonus — On the way back to base", legClass: "bonus" },
-    { id: "added", label: "Added nearby", legClass: "added" }
+    { id: "leg-a", area: "covent-garden", label: "Leg A — Bow Street · 9:00am", legClass: "leg-a" },
+    { id: "leg-b", area: "covent-garden", label: "Leg B — Slingsby Place & St Martin's Lane · 9:35am", legClass: "leg-b" },
+    { id: "leg-c", area: "covent-garden", label: "Leg C — Long Acre & Parker Street · 10:25am", legClass: "leg-c" },
+    { id: "leg-d", area: "covent-garden", label: "Leg D — Holborn cluster · 11:05am", legClass: "leg-d" },
+    { id: "leg-e", area: "covent-garden", label: "Leg E — Short's Gardens & Kingsway · 12:00pm", legClass: "leg-e" },
+    { id: "bonus", area: "covent-garden", label: "Bonus — On the way back to base", legClass: "bonus" },
+    { id: "leg-f", area: "st-pauls", label: "Leg F — Fleet Street & Ludgate · start at St Paul's", legClass: "leg-f" },
+    { id: "leg-g", area: "st-pauls", label: "Leg G — St Paul's & Cheapside", legClass: "leg-g" },
+    { id: "leg-h", area: "st-pauls", label: "Leg H — Smithfield & Farringdon", legClass: "leg-h" },
+    { id: "leg-i", area: "st-pauls", label: "Leg I — Clerkenwell bonus", legClass: "leg-i" },
+    { id: "added", area: "all", label: "Added nearby", legClass: "added" }
   ];
+
+  var AREA_LABELS = {
+    "covent-garden": "Covent Garden",
+    "st-pauls": "St Paul's / Cheapside",
+    all: "Both walks"
+  };
 
   /** Original route venues — preserve all company, address, phone, maps, and sales-angle data. */
   var VENUES = [
@@ -327,7 +337,229 @@
       phoneLabel: "+44 20 7470 5615",
       mapsQuery: "7 Henrietta Street, London WC2E 8PS",
       angle:
-        "Brief drop on the way back. Leave menu + business card. \"Catering from The Market for client meetings — next-day delivery.\""
+        "Brief drop on the way back. Leave menu + business card. \"Catering from The Market for client meetings — next-day delivery.\"",
+      area: "covent-garden"
+    },
+
+    /* Walk B — St Paul's / Cheapside / Farringdon (mid-size, reception-accessible) */
+    {
+      id: "bell-yard-kysen",
+      section: "leg-f",
+      routeNumber: 1,
+      area: "st-pauls",
+      name: "Bell Yard Kysen Communications",
+      type: "Legal / Litigation PR Agency",
+      address: "21 Fleet Street, EC4Y 1AA",
+      walk: "5 min from St Paul's",
+      score: 9,
+      tags: [{ className: "tag-new", text: "High fit · mid-size specialist" }],
+      phone: "+44 20 7936 2021",
+      phoneHref: "+442079362021",
+      phoneLabel: "+44 20 7936 2021",
+      mapsQuery: "21 Fleet Street, London EC4Y 1AA",
+      angle:
+        "Specialist legal PR team — lots of client meetings. \"Hi — we're Covent Garden Catering from The Market. We deliver boardroom lunches and grazing boards for professional services teams, next-day for local offices. Who organises catering for client meetings here?\""
+    },
+    {
+      id: "fortis-consulting",
+      section: "leg-f",
+      routeNumber: 2,
+      area: "st-pauls",
+      name: "Fortis Consulting London",
+      type: "Boutique Business Consultancy",
+      address: "Office 7, 35–37 Ludgate Hill, EC4M 7JN",
+      walk: "2 min",
+      score: 7,
+      tags: [{ className: "tag-new", text: "Small team · same building as other suites" }],
+      phone: "+44 20 7193 6953",
+      phoneHref: "+442071936953",
+      phoneLabel: "+44 20 7193 6953",
+      mapsQuery: "35-37 Ludgate Hill, London EC4M 7JN",
+      angle:
+        "Multi-suite building on Ludgate Hill — ask at reception for Fortis. \"Premium working lunches and client meeting boards from Covent Garden — could I leave a menu for whoever books catering?\""
+    },
+    {
+      id: "tate-associates",
+      section: "leg-f",
+      routeNumber: 3,
+      area: "st-pauls",
+      name: "Tate & Associates",
+      type: "Recruitment Consultancy",
+      address: "35–37 Ludgate Hill, EC4M 7JN",
+      walk: "Same building as Fortis",
+      score: 7,
+      tags: [
+        { className: "tag-new", text: "Recruitment · team lunches" },
+        { className: "tag-multi", text: "2 stops, 1 building" }
+      ],
+      phone: "+44 20 7236 7766",
+      phoneHref: "+442072367766",
+      phoneLabel: "+44 20 7236 7766",
+      mapsQuery: "35-37 Ludgate Hill, London EC4M 7JN",
+      angle:
+        "Recruitment teams host interviews and client lunches. \"Hi — Covent Garden Catering. We do breakfast boards and working lunches for City offices, next-day delivery. Could I leave a menu for your office manager?\""
+    },
+    {
+      id: "richard-nelson-llp",
+      section: "leg-f",
+      routeNumber: 4,
+      area: "st-pauls",
+      name: "Richard Nelson LLP",
+      type: "Law Firm (national, City office)",
+      address: "20 Old Bailey, EC4M 1AN",
+      walk: "3 min",
+      score: 8,
+      tags: [{ className: "tag-new", text: "Accessible City law office" }],
+      phone: "+44 20 7160 9777",
+      phoneHref: "+442071609777",
+      phoneLabel: "+44 20 7160 9777",
+      mapsQuery: "20 Old Bailey, London EC4M 1AN",
+      angle:
+        "Boardroom only: \"Premium boardroom platters and working lunches for client meetings — sourced properly, next-day from Covent Garden. Could I leave a menu for your EA or office manager?\""
+    },
+    {
+      id: "raymond-saul",
+      section: "leg-g",
+      routeNumber: 5,
+      area: "st-pauls",
+      name: "Raymond Saul Solicitors",
+      type: "Boutique City Law Firm",
+      address: "3rd Floor, Mermaid House, 2 Puddle Dock, EC4V 3DS",
+      walk: "6 min via river side",
+      score: 8,
+      tags: [{ className: "tag-new", text: "Boutique · personal service culture" }],
+      phone: "+44 20 7480 7865",
+      phoneHref: "+442074807865",
+      phoneLabel: "+44 20 7480 7865",
+      mapsQuery: "Mermaid House, 2 Puddle Dock, London EC4V 3DS",
+      angle:
+        "Boutique firm — easier to reach a decision-maker. \"Hi — we're Covent Garden Catering. We deliver premium catering for client meetings and team days. Who usually organises food here?\""
+    },
+    {
+      id: "russell-bedford",
+      section: "leg-g",
+      routeNumber: 6,
+      area: "st-pauls",
+      name: "Russell Bedford International",
+      type: "Accountancy / Advisory Network HQ",
+      address: "Paternoster House, 65 St Paul's Churchyard, EC4M 8AB",
+      walk: "4 min · manned building reception",
+      score: 7,
+      tags: [{ className: "tag-new", text: "Paternoster House" }],
+      phone: "+44 20 7410 0339",
+      phoneHref: "+442074100339",
+      phoneLabel: "+44 20 7410 0339",
+      mapsQuery: "Paternoster House, 65 St Paul's Churchyard, London EC4M 8AB",
+      angle:
+        "Ask at Paternoster House reception for Russell Bedford. \"Boardroom lunches and working platters for professional services — next-day delivery from Covent Garden. Could I leave a menu?\""
+    },
+    {
+      id: "proxima-cheapside",
+      section: "leg-g",
+      routeNumber: 7,
+      area: "st-pauls",
+      name: "Proxima",
+      type: "Procurement & Supply Chain Consultancy",
+      address: "107 Cheapside, EC2V 6DN",
+      walk: "5 min toward Bank (avoid bank towers)",
+      score: 7,
+      tags: [{ className: "tag-new", text: "Larger team — still ask for office manager" }],
+      phone: "+44 20 3465 4500",
+      phoneHref: "+442034654500",
+      phoneLabel: "+44 20 3465 4500",
+      mapsQuery: "107 Cheapside, London EC2V 6DN",
+      angle:
+        "Larger consultancy — aim for reception → office manager. \"Hi — Covent Garden Catering. We deliver breakfasts, working lunches and grazing boards for City offices. Who books catering for team days or client meetings?\""
+    },
+    {
+      id: "big-little-ldn",
+      section: "leg-h",
+      routeNumber: 8,
+      area: "st-pauls",
+      name: "BIG little LDN",
+      type: "Boutique PR & Marketing Agency",
+      address: "1st Floor, Abbey House, 74–76 St John Street, EC1M 4DZ",
+      walk: "8 min toward Farringdon",
+      score: 9,
+      tags: [{ className: "tag-new", text: "Top fit · small agency culture" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "74-76 St John Street, London EC1M 4DZ",
+      angle:
+        "Small agency — ask for Emma's team / office manager by name if offered. \"Hi — we're Covent Garden Catering from The Market. We do team breakfasts and client meeting boards for creative agencies. Could I leave a menu and take an email for the digital version?\""
+    },
+    {
+      id: "smithfield-agency",
+      section: "leg-h",
+      routeNumber: 9,
+      area: "st-pauls",
+      name: "Smithfield Agency",
+      type: "Independent Media Planning Agency",
+      address: "22 St James's Walk, EC1R 0AP",
+      walk: "5 min · ~20 people",
+      score: 9,
+      tags: [{ className: "tag-new", text: "Top fit · mid-size media agency" }],
+      phone: "+44 20 7257 2600",
+      phoneHref: "+442072572600",
+      phoneLabel: "+44 20 7257 2600",
+      mapsQuery: "22 St James's Walk, London EC1R 0AP",
+      angle:
+        "Perfect size. \"Hi — Covent Garden Catering. We deliver premium office catering for agency teams — breakfast boards and working lunches, next-day. Who looks after catering here?\""
+    },
+    {
+      id: "sec-newgate",
+      section: "leg-h",
+      routeNumber: 10,
+      area: "st-pauls",
+      name: "SEC Newgate UK",
+      type: "Strategic Communications / Public Affairs",
+      address: "14 Greville Street, EC1N 8SB",
+      walk: "4 min · Farringdon",
+      score: 8,
+      tags: [{ className: "tag-new", text: "Comms HQ · meeting-heavy" }],
+      phone: "+44 20 3757 6767",
+      phoneHref: "+442037576767",
+      phoneLabel: "+44 20 3757 6767",
+      mapsQuery: "14 Greville Street, London EC1N 8SB",
+      angle:
+        "Meeting-heavy comms firm. \"Hi — we're Covent Garden Catering. Premium boardroom catering and team lunches from The Market, next-day for local offices. Who organises catering for client meetings?\""
+    },
+    {
+      id: "flame-pr",
+      section: "leg-i",
+      routeNumber: 11,
+      area: "st-pauls",
+      name: "Flame PR",
+      type: "Full-Service Marketing Agency",
+      address: "37 Pear Tree Street, EC1V 3AG",
+      walk: "8 min north · Clerkenwell",
+      score: 8,
+      tags: [{ className: "tag-new", text: "Bonus stop if time" }],
+      phone: "+44 20 3357 9740",
+      phoneHref: "+442033579740",
+      phoneLabel: "+44 20 3357 9740",
+      mapsQuery: "37 Pear Tree Street, London EC1V 3AG",
+      angle:
+        "\"Hi — Covent Garden Catering. We deliver breakfast boards and working lunches for marketing teams. Could I leave a menu for your office manager?\""
+    },
+    {
+      id: "words-pixels",
+      section: "leg-i",
+      routeNumber: 12,
+      area: "st-pauls",
+      name: "Words+Pixels",
+      type: "Award-Winning PR Agency (~25 people)",
+      address: "Ground Floor, Silverlight House, 6–8 Standard Place, EC2A 3BE",
+      walk: "10 min · only if energy left",
+      score: 9,
+      tags: [{ className: "tag-new", text: "Top fit · ground-floor PR" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "Silverlight House, 6-8 Standard Place, London EC2A 3BE",
+      angle:
+        "Ground-floor PR agency — good chance of speaking to someone. \"Hi — Covent Garden Catering from The Market. We do client meeting boards and team lunches for PR agencies. Could I leave a menu and grab an email for the digital version?\""
     }
   ];
 
@@ -335,7 +567,8 @@
     visits: {},
     customPlaces: [],
     search: "",
-    filter: "all"
+    filter: "all",
+    area: "covent-garden"
   };
 
   var els = {};
@@ -452,7 +685,8 @@
       address: row.address || "",
       type: row.type || "",
       phone: row.phone || "",
-      warmSeed: !!row.warm_seed
+      warmSeed: !!row.warm_seed,
+      area: row.area || "covent-garden"
     };
   }
 
@@ -658,13 +892,22 @@
   }
 
   function allPlaces() {
-    var list = VENUES.slice();
+    var list = [];
+    for (var v = 0; v < VENUES.length; v++) {
+      var seed = VENUES[v];
+      list.push(
+        Object.assign({}, seed, {
+          area: seed.area || "covent-garden"
+        })
+      );
+    }
     for (var i = 0; i < state.customPlaces.length; i++) {
       var p = state.customPlaces[i];
       list.push({
         id: p.id,
         section: "added",
         routeNumber: p.routeNumber || "+",
+        area: p.area || state.area || "covent-garden",
         name: p.name || "Untitled place",
         type: p.type || "",
         address: p.address || "",
@@ -681,6 +924,12 @@
       });
     }
     return list;
+  }
+
+  function placeMatchesArea(venue) {
+    if (state.area === "all") return true;
+    var area = venue.area || "covent-garden";
+    return area === state.area;
   }
 
   function placeMatchesSearch(venue, visit, query) {
@@ -772,6 +1021,7 @@
     var followUps = 0;
 
     for (var i = 0; i < places.length; i++) {
+      if (!placeMatchesArea(places[i])) continue;
       var visit = getVisit(places[i].id);
       if (!isVisited(visit)) toVisit += 1;
       if (visit.outcome === "good_conversation") good += 1;
@@ -781,6 +1031,12 @@
     els.statToVisit.textContent = String(toVisit);
     els.statGood.textContent = String(good);
     els.statFollowup.textContent = String(followUps);
+    updateWalkLocation();
+  }
+
+  function updateWalkLocation() {
+    if (!els.walkLocation) return;
+    els.walkLocation.textContent = AREA_LABELS[state.area] || "Covent Garden";
   }
 
   function outcomeOptionsHtml(selected) {
@@ -1045,6 +1301,7 @@
       for (var i = 0; i < places.length; i++) {
         var venue = places[i];
         if (venue.section !== section.id) continue;
+        if (!placeMatchesArea(venue)) continue;
         var visit = getVisit(venue.id);
         if (!placeMatchesSearch(venue, visit, query)) continue;
         if (!placeMatchesFilter(venue, visit)) continue;
@@ -1178,7 +1435,8 @@
       address: address,
       type: type,
       phone: phone,
-      warmSeed: warm
+      warmSeed: warm,
+      area: state.area === "all" ? "covent-garden" : state.area
     };
 
     state.customPlaces.push(place);
@@ -1245,12 +1503,13 @@
     var lines = [];
     lines.push("Covent Garden Catering — Outreach Walk log");
     lines.push(formatDate());
-    lines.push("Covent Garden");
+    lines.push(AREA_LABELS[state.area] || "Covent Garden");
     lines.push("");
 
     var count = 0;
     for (var i = 0; i < places.length; i++) {
       var venue = places[i];
+      if (!placeMatchesArea(venue)) continue;
       var visit = getVisit(venue.id);
       if (!isVisited(visit)) continue;
       count += 1;
@@ -1342,6 +1601,18 @@
       });
     });
 
+    els.walkTabs.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.area = btn.getAttribute("data-area") || "covent-garden";
+        els.walkTabs.forEach(function (b) {
+          var active = b === btn;
+          b.classList.toggle("is-active", active);
+          b.setAttribute("aria-pressed", active ? "true" : "false");
+        });
+        render();
+      });
+    });
+
     els.routeList.addEventListener("click", onRouteClick);
     els.routeList.addEventListener("submit", onRouteSubmit);
 
@@ -1368,6 +1639,8 @@
     els.statFollowup = document.getElementById("stat-followup");
     els.search = document.getElementById("search-input");
     els.filters = Array.prototype.slice.call(document.querySelectorAll(".filter-btn"));
+    els.walkTabs = Array.prototype.slice.call(document.querySelectorAll(".walk-tab"));
+    els.walkLocation = document.getElementById("walk-location");
     els.copyIntro = document.getElementById("copy-intro-btn");
     els.shareBtn = document.getElementById("share-log-btn");
     els.addBtn = document.getElementById("add-place-btn");

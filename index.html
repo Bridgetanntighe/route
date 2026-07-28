@@ -18,7 +18,7 @@
     <p class="page-meta">
       <time id="walk-date" datetime=""></time>
       <span aria-hidden="true">·</span>
-      <span>Covent Garden</span>
+      <span id="walk-location">Covent Garden</span>
     </p>
   </header>
 
@@ -42,6 +42,11 @@
   </section>
 
   <div class="sticky-controls" id="sticky-controls">
+    <div class="walk-tabs" role="group" aria-label="Choose walk">
+      <button type="button" class="walk-tab is-active" data-area="covent-garden" aria-pressed="true">Covent Garden</button>
+      <button type="button" class="walk-tab" data-area="st-pauls" aria-pressed="false">St Paul’s / Cheapside</button>
+      <button type="button" class="walk-tab" data-area="all" aria-pressed="false">Both walks</button>
+    </div>
     <label class="search-label" for="search-input">Search places</label>
     <input
       type="search"
