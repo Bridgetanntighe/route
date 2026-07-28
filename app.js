@@ -973,7 +973,12 @@
   async function cloudUpsertVisit(id, visit) {
     if (!sb) return false;
     try {
-      var res = await sb.from("outreach_visits").upsert(visitToRow(id, visit));
+      var row = visitToRow(id, visit);
+      var res = await sb.from("outreach_visits").upsert(row);
+      if (res.error && /linkedin/i.test(res.error.message || "")) {
+        delete row.linkedin;
+        res = await sb.from("outreach_visits").upsert(row);
+      }
       if (res.error) {
         console.warn(res.error);
         if (/schema cache|does not exist|Could not find the table/i.test(res.error.message || "")) {
