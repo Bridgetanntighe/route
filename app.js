@@ -1898,16 +1898,27 @@
     els.areaTabsMount.innerHTML = html;
     els.areaTabs = Array.prototype.slice.call(els.areaTabsMount.querySelectorAll(".area-tab"));
     els.areaTabs.forEach(function (btn) {
-      btn.addEventListener("click", function () {
+      btn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
         var next = btn.getAttribute("data-area") || "covent-garden";
         state.area = next === "all" ? "all" : normalizeAreaId(next);
         persistSelectedArea();
+        closeAreaChooser();
         renderAreaTabs();
         populateAddPlaceAreaFields();
         render();
-        if (els.areaCollapse) els.areaCollapse.open = false;
       });
     });
+  }
+
+  function closeAreaChooser() {
+    if (!els.areaCollapse) return;
+    els.areaCollapse.open = false;
+    // iOS Safari can leave <details> open if closed mid-click; re-close after paint.
+    window.setTimeout(function () {
+      if (els.areaCollapse) els.areaCollapse.open = false;
+    }, 0);
   }
 
   function populateAddPlaceAreaFields() {
@@ -1987,6 +1998,15 @@
       if (event.key === "Escape" && !els.sheet.hidden) {
         closeSheet();
       }
+      if (event.key === "Escape" && els.areaCollapse && els.areaCollapse.open) {
+        closeAreaChooser();
+      }
+    });
+
+    document.addEventListener("click", function (event) {
+      if (!els.areaCollapse || !els.areaCollapse.open) return;
+      if (els.areaCollapse.contains(event.target)) return;
+      closeAreaChooser();
     });
   }
 

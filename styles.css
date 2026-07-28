@@ -223,14 +223,20 @@ a {
 }
 
 .area-collapse > summary::after {
-  content: "+";
+  content: "";
+  width: 0.55em;
+  height: 0.55em;
   margin-left: auto;
-  font-size: 18px;
-  color: var(--muted);
+  flex-shrink: 0;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg);
+  transition: transform 0.15s ease;
 }
 
 .area-collapse[open] > summary::after {
-  content: "–";
+  transform: rotate(225deg);
+  margin-top: 0.25em;
 }
 
 .area-collapse-label {
