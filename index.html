@@ -38,7 +38,7 @@
   </section>
 
   <section class="goal" aria-label="Today’s goal">
-    <p>Get the right person’s name and email. The leaflet opens the door; the follow-up builds the lead.</p>
+    <p>Get a name and email. Leaflet opens the door; follow-up builds the lead.</p>
   </section>
 
   <div class="sticky-controls" id="sticky-controls">
@@ -62,44 +62,45 @@
   </div>
 
   <main id="main-content" class="main">
-    <section class="intro-panel" aria-labelledby="intro-heading">
-      <h2 id="intro-heading" class="panel-heading">Reception introduction</h2>
-      <blockquote class="intro-quote" id="reception-intro">
-        Hi, we’re Covent Garden Catering, based just nearby in the Market. We provide office breakfasts, meeting platters and team lunches. We’re introducing ourselves to a few local offices today and I wanted to leave a leaflet — who would be the best person to pass it on to?
-      </blockquote>
+    <details class="script-details intro-collapse">
+      <summary>Reception script — tap if you need it</summary>
+      <div class="intro-collapse-body">
+        <p class="intro-stage-heading">At reception</p>
+        <blockquote class="intro-quote" id="reception-intro">
+          Hi, we’re Covent Garden Catering, based just nearby in the Market. We provide office breakfasts, meeting platters and team lunches. We’re introducing ourselves to a few local offices today and I wanted to leave a leaflet — who would be the best person to pass it on to?
+        </blockquote>
 
-      <h3 class="intro-stage-heading">Once they give you a name</h3>
-      <blockquote class="intro-quote intro-quote-stage" id="reception-stage-two">
-        Perfect, thank you. We’re also offering complimentary delivery on a first platter order over £100 for local offices we’re visiting. Could I take their full name and a suitable email address so we can follow up with them directly?
-      </blockquote>
+        <p class="intro-stage-heading">Once they give a name</p>
+        <blockquote class="intro-quote intro-quote-stage" id="reception-stage-two">
+          Perfect, thank you. We’re also offering complimentary delivery on a first platter order over £100 for local offices we’re visiting. Could I take their full name and a suitable email address so we can follow up with them directly?
+        </blockquote>
 
-      <p class="intro-tip" id="reception-fallback">
-        If they cannot share an email, record the person’s full name and role, who you spoke to at reception or security, and anything useful they mention about the office or other locations they manage.
-      </p>
+        <p class="intro-tip" id="reception-fallback">
+          No email? Note full name, role, who you spoke to, and anything useful about the office.
+        </p>
 
-      <button type="button" class="btn btn-secondary" id="copy-intro-btn">Copy full script</button>
+        <details class="script-details nested-details">
+          <summary>Speaking to the Office Manager?</summary>
+          <blockquote class="intro-quote" id="decision-maker-script"></blockquote>
+        </details>
 
-      <details class="script-details">
-        <summary>Speaking to the Office Manager directly?</summary>
-        <blockquote class="intro-quote" id="decision-maker-script"></blockquote>
-      </details>
+        <div class="offer-box" id="offer-box" hidden></div>
 
-      <div class="offer-box" id="offer-box" hidden></div>
-
-      <details class="script-details">
-        <summary>If they ask why us</summary>
-        <ul class="selling-points">
-          <li>Halal meats as standard</li>
-          <li>Vegetarian options available</li>
-          <li>Dietary requirements confirmed before payment</li>
-        </ul>
-      </details>
-    </section>
+        <details class="script-details nested-details">
+          <summary>If they ask why us</summary>
+          <ul class="selling-points">
+            <li>Halal meats as standard</li>
+            <li>Vegetarian options available</li>
+            <li>Dietary requirements confirmed before payment</li>
+          </ul>
+        </details>
+      </div>
+    </details>
 
     <div id="route-list" class="route-list" aria-live="polite"></div>
 
     <p class="save-notice" role="note" id="save-notice">
-      Saving to the cloud when online. Notes also stay on this phone as a backup.
+      Saves on this phone. Syncs to the cloud when available.
     </p>
 
     <footer class="site-footer">
@@ -178,11 +179,11 @@
       </div>
       <div class="field">
         <label for="add-notes">Quick notes</label>
-        <textarea id="add-notes" name="notes" rows="3" placeholder="What they said, catering used, best follow-up time…"></textarea>
+        <textarea id="add-notes" name="notes" rows="2" placeholder="What they said, best follow-up…"></textarea>
       </div>
       <label class="check">
         <input type="checkbox" id="add-warm" name="warm">
-        <span>Mark as a warm lead</span>
+        <span>Warm lead</span>
       </label>
       <label class="check">
         <input type="checkbox" id="add-followup" name="followUp">

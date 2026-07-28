@@ -51,11 +51,6 @@
     return day + " " + month + " " + parts[0];
   }
 
-  function getFullScript() {
-    var script = RECEPTION_INTRO_MAIN + "\n\n" + RECEPTION_INTRO_STAGE_TWO;
-    return script;
-  }
-
   function getDecisionMakerScript() {
     var text = DECISION_MAKER_INTRO_BASE;
     if (isOfferActive()) {
@@ -87,12 +82,7 @@
       "</p>" +
       '<p class="offer-detail">Book by ' +
       escapeHtml(formatOfferDeadline(CURRENT_OFFER.bookingDeadline)) +
-      " for " +
-      escapeHtml(CURRENT_OFFER.deliveryPeriod) +
-      ".</p>" +
-      '<p class="offer-note">' +
-      escapeHtml(CURRENT_OFFER.radiusNote) +
-      "</p>";
+      ".</p>";
   }
 
   function renderDecisionMakerCopy() {
@@ -178,8 +168,8 @@
       walk: "2 min walk",
       score: 10,
       tags: [
-        { className: "tag-warm", text: "Warm — Jessica Smith in DB" },
-        { className: "tag-multi", text: "+The Gate (same building)" }
+        { className: "tag-warm", text: "Warm — Jessica Smith" },
+        { className: "tag-multi", text: "+The Gate same building" }
       ],
       phone: "+44 20 3026 6000",
       phoneHref: "+442030266000",
@@ -193,7 +183,7 @@
         }
       ],
       angle:
-        "Warm lead — ask for Jessica Smith by name. Mention you are neighbours at The Market (2 mins). Same building as The Gate, so you can cover both after. Focus: agency group boardroom boards and team lunches."
+        "Ask for Jessica Smith. Neighbours from The Market — boardroom boards & team lunches. Then The Gate."
     },
     {
       id: "the-gate-london",
@@ -205,13 +195,13 @@
       address: "34 Bow St, WC2E 7AU",
       walk: "Same building as MSQ",
       score: 9,
-      tags: [{ className: "tag-new", text: "New find" }],
+      tags: [],
       phone: "+44 20 7927 3555",
       phoneHref: "+442079273555",
       phoneLabel: "+44 20 7927 3555",
       mapsQuery: "34 Bow St, London WC2E 7AU",
       angle:
-        "Same building as MSQ — ask specifically for The Gate’s floor / Office Manager so reception does not send you back to MSQ. Creative agency: pitch client presentation boards and team lunches."
+        "Ask for The Gate’s floor / office manager (not MSQ). Client presentation boards & team lunches."
     },
     {
       id: "kearney-consulting",
@@ -223,13 +213,13 @@
       address: "The Adelphi, 1–11 John Adam St, WC2N 6HT",
       walk: "4 min",
       score: 10,
-      tags: [{ className: "tag-new", text: "New find" }],
+      tags: [],
       phone: "+44 20 7468 8000",
       phoneHref: "+442074688000",
       phoneLabel: "+44 20 7468 8000",
       mapsQuery: "The Adelphi, 1 John Adam St, London WC2N 6HT",
       angle:
-        "Global consultancy at The Adelphi — expect formal reception. Ask who books catering for client meetings (often EA/PA to partners). Pitch polished boardroom platters, not casual team food."
+        "Formal reception — ask EA/PA who books client meeting catering. Boardroom platters."
     },
     {
       id: "pha-group",
@@ -241,13 +231,13 @@
       address: "11 Slingsby Pl, WC2E 9AB",
       walk: "5 min",
       score: 9,
-      tags: [{ className: "tag-new", text: "New find · 5★ Google" }],
+      tags: [],
       phone: "+44 20 7025 1350",
       phoneHref: "+442070251350",
       phoneLabel: "+44 20 7025 1350",
       mapsQuery: "11 Slingsby Place, London WC2E 9AB",
       angle:
-        "PR agency on Slingsby Place, round the corner from The Market. Ask for whoever handles team food / office management. Good fit for breakfasts before media days and working lunches around campaigns."
+        "Ask office manager. Breakfasts before media days & campaign lunches."
     },
     {
       id: "rooster-marketing",
@@ -259,13 +249,13 @@
       address: "60 St Martin's Ln, WC2N 4JS",
       walk: "5 min",
       score: 9,
-      tags: [{ className: "tag-new", text: "New find · 5★ Google" }],
+      tags: [],
       phone: "+44 20 3621 6644",
       phoneHref: "+442036216644",
       phoneLabel: "+44 20 3621 6644",
       mapsQuery: "60 St Martin's Lane, London WC2N 4JS",
       angle:
-        "Boutique marketing agency on St Martin’s Lane — smaller team, often easier to reach a decision-maker. Ask for the office manager or whoever runs team lunches and client catch-ups."
+        "Ask office manager. Team lunches & client catch-ups."
     },
     {
       id: "carnival-film",
@@ -277,13 +267,13 @@
       address: "101 St Martin's Ln, WC2N 4AZ",
       walk: "7 min",
       score: 8,
-      tags: [{ className: "tag-new", text: "New find" }],
+      tags: [],
       phone: "+44 20 3618 6600",
       phoneHref: "+442036186600",
       phoneLabel: "+44 20 3618 6600",
       mapsQuery: "101 St Martin's Lane, London WC2N 4AZ",
       angle:
-        "TV/film production — ask for production coordinator or office manager. Angle: shoot-day platters and production-office lunches with next-day delivery when schedules move fast."
+        "Ask production coordinator / office manager. Shoot-day platters; next-day when schedules move."
     },
     {
       id: "covent-garden-recruitment",
@@ -295,13 +285,13 @@
       address: "3rd Floor, 9 Irving St, WC2H 7AH",
       walk: "7 min",
       score: 8,
-      tags: [{ className: "tag-new", text: "New find · 4.8★ Google" }],
+      tags: [],
       phone: "+44 20 3675 8800",
       phoneHref: "+442036758800",
       phoneLabel: "+44 20 3675 8800",
       mapsQuery: "9 Irving Street, London WC2H 7AH",
       angle:
-        "Recruitment agency, 3rd floor on Irving Street — literal neighbours. Ask for office manager. Pitch interview-day breakfasts and client meeting platters; mention dietary options for mixed candidate groups."
+        "Ask office manager. Interview breakfasts & client meeting platters."
     },
     {
       id: "me-and-you-curious",
@@ -313,16 +303,13 @@
       address: "39 Long Acre, WC2E 9LG",
       walk: "5 min · Two companies, one building",
       score: 9,
-      tags: [
-        { className: "tag-new", text: "New finds" },
-        { className: "tag-multi", text: "2 stops, 1 building" }
-      ],
+      tags: [{ className: "tag-multi", text: "2 stops, 1 building" }],
       phone: "+44 20 3397 9111",
       phoneHref: "+442033979111",
       phoneLabel: "Curious PR: +44 20 3397 9111",
       mapsQuery: "39 Long Acre, London WC2E 9LG",
       angle:
-        "Two companies, one building — ask reception for both. Me and You: production boards / shoot-day platters. Curious PR: client meeting catering. Leave a leaflet for each if possible."
+        "Ask for both companies. Me and You: shoot boards. Curious PR: client meetings. Leaflet each if possible."
     },
     {
       id: "pb-creative",
@@ -334,13 +321,13 @@
       address: "40–42 Parker St, WC2B 5PQ",
       walk: "7 min",
       score: 8,
-      tags: [{ className: "tag-new", text: "New find" }],
+      tags: [],
       phone: "+44 20 7836 3067",
       phoneHref: "+442078363067",
       phoneLabel: "+44 20 7836 3067",
       mapsQuery: "40 Parker Street, London WC2B 5PQ",
       angle:
-        "Design/creative agency on Parker Street. Ask for whoever looks after the studio team. Pitch creative-team lunches and client review boards rather than formal boardroom only."
+        "Ask studio manager. Creative-team lunches & client review boards."
     },
     {
       id: "kindred-agency",
@@ -352,13 +339,13 @@
       address: "17 Macklin St, WC2B 5NR",
       walk: "8 min",
       score: 9,
-      tags: [{ className: "tag-warm", text: "Warm — previously contacted · hello@wearekindred.com" }],
+      tags: [{ className: "tag-warm", text: "Warm — hello@wearekindred.com" }],
       phone: "+44 20 4524 5900",
       phoneHref: "+442045245900",
       phoneLabel: "+44 20 4524 5900",
       mapsQuery: "17 Macklin Street, London WC2B 5NR",
       angle:
-        "Warm — previously emailed hello@wearekindred.com. Reference that email. Ask for office manager or studio manager for a quick hello and to leave the leaflet with the right person."
+        "Warm — mention hello@wearekindred.com. Ask office / studio manager."
     },
     {
       id: "academy-films",
@@ -370,13 +357,13 @@
       address: "16 W Central St, WC1A 1JJ",
       walk: "6 min",
       score: 8,
-      tags: [{ className: "tag-new", text: "New find · 4.9★ Google" }],
+      tags: [],
       phone: "+44 20 7395 4155",
       phoneHref: "+442073954155",
       phoneLabel: "+44 20 7395 4155",
       mapsQuery: "16 West Central Street, London WC1A 1JJ",
       angle:
-        "Award-winning film production on West Central Street. Ask for production coordinator or office manager. Angle: shoot-day and team lunch platters for production offices."
+        "Ask production coordinator / office manager. Shoot-day & team lunch platters."
     },
     {
       id: "blick-rothenberg",
@@ -388,13 +375,13 @@
       address: "16 Great Queen St, WC2B 5AH",
       walk: "4 min",
       score: 8,
-      tags: [{ className: "tag-new", text: "New find · 4.4★ Google" }],
+      tags: [],
       phone: "+44 20 7486 0111",
       phoneHref: "+442074860111",
       phoneLabel: "+44 20 7486 0111",
       mapsQuery: "16 Great Queen Street, London WC2B 5AH",
       angle:
-        "Accountancy & advisory (~100–200 staff) — boardroom culture. Ask for EA/PA rather than general reception chat. Pitch client meeting platters and working lunches for partners."
+        "Ask EA/PA. Client meeting platters & partner working lunches."
     },
     {
       id: "collective-london",
@@ -406,13 +393,13 @@
       address: "20 Red Lion St, WC1R 4PS",
       walk: "5 min",
       score: 9,
-      tags: [{ className: "tag-new", text: "New find · 5★ Google" }],
+      tags: [],
       phone: "+44 20 7843 3555",
       phoneHref: "+442078433555",
       phoneLabel: "+44 20 7843 3555",
       mapsQuery: "20 Red Lion Street, London WC1R 4PS",
       angle:
-        "Creative & marketing agency on Red Lion Street. Ask for office manager. Pitch creative-office catering and event/team days; dietary flexibility plays well with mixed creative teams."
+        "Ask office manager. Creative-office catering & team days."
     },
     {
       id: "passion-digital",
@@ -424,13 +411,13 @@
       address: "4th Floor, 137–144 New Oxford St, WC1V 6PL",
       walk: "4 min",
       score: 8,
-      tags: [{ className: "tag-new", text: "New find · 4.8★ Google" }],
+      tags: [],
       phone: "+44 20 3432 1360",
       phoneHref: "+442034321360",
       phoneLabel: "+44 20 3432 1360",
       mapsQuery: "Holborn Tower 137 New Oxford Street London WC1V 6PL",
       angle:
-        "Digital marketing agency in Holborn Tower (New Oxford Street). Ask who looks after team catering. Pitch office breakfasts and campaign/team lunches for a busy digital agency floor."
+        "Ask who handles team catering. Office breakfasts & campaign lunches."
     },
     {
       id: "karma-live",
@@ -442,13 +429,13 @@
       address: "56 Short's Gardens, WC2H 9AN",
       walk: "5 min back toward base",
       score: 9,
-      tags: [{ className: "tag-new", text: "New find · 5★ · 62 reviews" }],
+      tags: [],
       phone: "",
       phoneHref: "",
       phoneLabel: "",
       mapsQuery: "56 Short's Gardens, London WC2H 9AN",
       angle:
-        "Live production / events on Short’s Gardens — heading back toward base. Ask for production manager or operations. Angle: crew and shoot-day breakfast boards and platters."
+        "Ask production / ops. Crew & shoot-day breakfast boards."
     },
     {
       id: "purple-pr",
@@ -460,13 +447,13 @@
       address: "7th Floor, 1 Kingsway, WC2B 4BG",
       walk: "10 min",
       score: 8,
-      tags: [{ className: "tag-new", text: "New find" }],
+      tags: [],
       phone: "+44 20 7439 9888",
       phoneHref: "+442074399888",
       phoneLabel: "+44 20 7439 9888",
       mapsQuery: "1 Kingsway, London WC2B 4BG",
       angle:
-        "PR agency, 7th floor at 1 Kingsway — larger building, so be clear: Purple PR. Ask for office manager. Pitch client meeting and team lunch catering for a PR floor."
+        "Say Purple PR, 7th floor. Ask office manager. Client meetings & team lunches."
     },
     {
       id: "greenwich-consulting",
@@ -484,8 +471,7 @@
       phoneLabel: "+44 20 7470 5615",
       mapsQuery: "7 Henrietta Street, London WC2E 8PS",
       angle:
-        "Bonus stop on Henrietta Street, 3 mins from base. Keep it brief: leave leaflet + card. Ask who books client meeting catering; no long pitch needed if reception is busy.",
-      area: "covent-garden"
+        "Quick stop — leave leaflet. Ask who books client meeting catering."
     },
 
     /* Walk B — St Paul's / Cheapside / Farringdon (mid-size, reception-accessible) */
@@ -499,13 +485,13 @@
       address: "21 Fleet Street, EC4Y 1AA",
       walk: "5 min from St Paul's",
       score: 9,
-      tags: [{ className: "tag-new", text: "High fit · mid-size specialist" }],
+      tags: [],
       phone: "+44 20 7936 2021",
       phoneHref: "+442079362021",
       phoneLabel: "+44 20 7936 2021",
       mapsQuery: "21 Fleet Street, London EC4Y 1AA",
       angle:
-        "Legal/litigation PR on Fleet Street — senior, meeting-heavy. Ask who organises catering for client and counsel meetings. Pitch discreet boardroom lunches for professional services."
+        "Ask who books client/counsel meeting catering. Boardroom lunches."
     },
     {
       id: "fortis-consulting",
@@ -517,13 +503,13 @@
       address: "Office 7, 35–37 Ludgate Hill, EC4M 7JN",
       walk: "2 min",
       score: 7,
-      tags: [{ className: "tag-new", text: "Small team · same building as other suites" }],
+      tags: [],
       phone: "+44 20 7193 6953",
       phoneHref: "+442071936953",
       phoneLabel: "+44 20 7193 6953",
       mapsQuery: "35-37 Ludgate Hill, London EC4M 7JN",
       angle:
-        "Boutique consultancy in a multi-suite Ludgate Hill building — ask reception for Fortis by name. Small team: ask who books client lunches and leave the leaflet for that person."
+        "Ask for Fortis by name. Who books client lunches — leave leaflet."
     },
     {
       id: "tate-associates",
@@ -535,16 +521,13 @@
       address: "35–37 Ludgate Hill, EC4M 7JN",
       walk: "Same building as Fortis",
       score: 7,
-      tags: [
-        { className: "tag-new", text: "Recruitment · team lunches" },
-        { className: "tag-multi", text: "2 stops, 1 building" }
-      ],
+      tags: [{ className: "tag-multi", text: "2 stops, 1 building" }],
       phone: "+44 20 7236 7766",
       phoneHref: "+442072367766",
       phoneLabel: "+44 20 7236 7766",
       mapsQuery: "35-37 Ludgate Hill, London EC4M 7JN",
       angle:
-        "Recruitment consultancy, same Ludgate Hill building as Fortis. Ask for Tate & Associates specifically. Pitch interview breakfasts and client lunch platters for recruiters."
+        "Ask for Tate & Associates. Interview breakfasts & client lunch platters."
     },
     {
       id: "richard-nelson-llp",
@@ -556,13 +539,13 @@
       address: "20 Old Bailey, EC4M 1AN",
       walk: "3 min",
       score: 8,
-      tags: [{ className: "tag-new", text: "Accessible City law office" }],
+      tags: [],
       phone: "+44 20 7160 9777",
       phoneHref: "+442071609777",
       phoneLabel: "+44 20 7160 9777",
       mapsQuery: "20 Old Bailey, London EC4M 1AN",
       angle:
-        "Law firm on Old Bailey — formal City reception. Ask for EA/office manager. Pitch boardroom platters for client meetings; keep tone professional and brief."
+        "Ask EA/office manager. Boardroom platters — keep it brief."
     },
     {
       id: "raymond-saul",
@@ -574,13 +557,13 @@
       address: "3rd Floor, Mermaid House, 2 Puddle Dock, EC4V 3DS",
       walk: "6 min via river side",
       score: 8,
-      tags: [{ className: "tag-new", text: "Boutique · personal service culture" }],
+      tags: [],
       phone: "+44 20 7480 7865",
       phoneHref: "+442074807865",
       phoneLabel: "+44 20 7480 7865",
       mapsQuery: "Mermaid House, 2 Puddle Dock, London EC4V 3DS",
       angle:
-        "Boutique City law firm at Mermaid House / Puddle Dock. Smaller practice — better chance of reaching a decision-maker. Ask who organises client meeting food and leave the leaflet with them."
+        "Ask who organises client meeting food. Leave leaflet with them."
     },
     {
       id: "russell-bedford",
@@ -592,13 +575,13 @@
       address: "Paternoster House, 65 St Paul's Churchyard, EC4M 8AB",
       walk: "4 min · manned building reception",
       score: 7,
-      tags: [{ className: "tag-new", text: "Paternoster House" }],
+      tags: [],
       phone: "+44 20 7410 0339",
       phoneHref: "+442074100339",
       phoneLabel: "+44 20 7410 0339",
       mapsQuery: "Paternoster House, 65 St Paul's Churchyard, London EC4M 8AB",
       angle:
-        "Accountancy network HQ in Paternoster House — use the manned building reception and ask for Russell Bedford. Pitch boardroom / professional services meeting platters."
+        "Building reception → Russell Bedford. Boardroom meeting platters."
     },
     {
       id: "proxima-cheapside",
@@ -610,13 +593,13 @@
       address: "107 Cheapside, EC2V 6DN",
       walk: "5 min toward Bank (avoid bank towers)",
       score: 7,
-      tags: [{ className: "tag-new", text: "Larger team — still ask for office manager" }],
+      tags: [],
       phone: "+44 20 3465 4500",
       phoneHref: "+442034654500",
       phoneLabel: "+44 20 3465 4500",
       mapsQuery: "107 Cheapside, London EC2V 6DN",
       angle:
-        "Larger procurement consultancy at 107 Cheapside — do not wander into bank towers nearby. Aim reception → office manager. Pitch team days and client meeting catering for a consultancy floor."
+        "Reception → office manager (stay at 107 Cheapside). Team days & client meetings."
     },
     {
       id: "big-little-ldn",
@@ -628,7 +611,7 @@
       address: "1st Floor, Abbey House, 74–76 St John Street, EC1M 4DZ",
       walk: "8 min toward Farringdon",
       score: 9,
-      tags: [{ className: "tag-new", text: "Top fit · small agency culture" }],
+      tags: [],
       phone: "",
       phoneHref: "",
       phoneLabel: "",
@@ -641,7 +624,7 @@
         }
       ],
       angle:
-        "Small PR/marketing agency at Abbey House, St John Street — top cultural fit. Ask for the office manager (or Emma Critchley-Lloyd’s team if offered). Pitch team breakfasts and client meeting boards for a lean agency."
+        "Ask office manager or Emma’s team. Team breakfasts & client boards."
     },
     {
       id: "smithfield-agency",
@@ -653,13 +636,13 @@
       address: "22 St James's Walk, EC1R 0AP",
       walk: "5 min · ~20 people",
       score: 9,
-      tags: [{ className: "tag-new", text: "Top fit · mid-size media agency" }],
+      tags: [],
       phone: "+44 20 7257 2600",
       phoneHref: "+442072572600",
       phoneLabel: "+44 20 7257 2600",
       mapsQuery: "22 St James's Walk, London EC1R 0AP",
       angle:
-        "Independent media planning agency (~20 people) on St James’s Walk — ideal size. Ask who looks after catering. Pitch breakfast boards and working lunches for media planning teams."
+        "Ask who looks after catering. Breakfast boards & working lunches."
     },
     {
       id: "sec-newgate",
@@ -671,13 +654,13 @@
       address: "14 Greville Street, EC1N 8SB",
       walk: "4 min · Farringdon",
       score: 8,
-      tags: [{ className: "tag-new", text: "Comms HQ · meeting-heavy" }],
+      tags: [],
       phone: "+44 20 3757 6767",
       phoneHref: "+442037576767",
       phoneLabel: "+44 20 3757 6767",
       mapsQuery: "14 Greville Street, London EC1N 8SB",
       angle:
-        "Strategic communications / public affairs HQ on Greville Street. Meeting-heavy. Ask who organises catering for client and stakeholder meetings. Pitch boardroom catering and team lunches."
+        "Ask who books client/stakeholder meeting catering. Boardroom & team lunches."
     },
     {
       id: "flame-pr",
@@ -689,13 +672,13 @@
       address: "37 Pear Tree Street, EC1V 3AG",
       walk: "8 min north · Clerkenwell",
       score: 8,
-      tags: [{ className: "tag-new", text: "Bonus stop if time" }],
+      tags: [],
       phone: "+44 20 3357 9740",
       phoneHref: "+442033579740",
       phoneLabel: "+44 20 3357 9740",
       mapsQuery: "37 Pear Tree Street, London EC1V 3AG",
       angle:
-        "Full-service marketing agency on Pear Tree Street (Clerkenwell bonus). Ask for office manager. Pitch breakfast boards and working lunches for marketing campaign teams."
+        "Ask office manager. Breakfast boards & campaign working lunches."
     },
     {
       id: "words-pixels",
@@ -707,13 +690,13 @@
       address: "Ground Floor, Silverlight House, 6–8 Standard Place, EC2A 3BE",
       walk: "10 min · only if energy left",
       score: 9,
-      tags: [{ className: "tag-new", text: "Top fit · ground-floor PR" }],
+      tags: [],
       phone: "",
       phoneHref: "",
       phoneLabel: "",
       mapsQuery: "Silverlight House, 6-8 Standard Place, London EC2A 3BE",
       angle:
-        "Ground-floor PR agency at Silverlight House, Standard Place (~25 people) — easier walk-up. Ask for office manager. Pitch client meeting boards and team lunches; leave leaflet at ground floor if possible."
+        "Ground floor — ask office manager. Client meeting boards & team lunches."
     }
   ];
 
@@ -769,11 +752,6 @@
   function isValidEmail(email) {
     if (!email) return true;
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
-
-  function isValidLinkedIn(url) {
-    if (!url) return true;
-    return !!safeLinkedInHref(url);
   }
 
   function firstName(fullName) {
@@ -1305,9 +1283,6 @@
 
   function tagsHtml(venue, visit) {
     var bits = [];
-    if (venue.score != null) {
-      bits.push('<span class="tag tag-score">Score ' + escapeHtml(venue.score) + "</span>");
-    }
     if (venue.walk) {
       bits.push('<span class="tag tag-walk">' + escapeHtml(venue.walk) + "</span>");
     }
@@ -1386,13 +1361,6 @@
     if (visit.email) {
       html += "<p><strong>Email:</strong> " + escapeHtml(visit.email) + "</p>";
     }
-    var linkedinHref = safeLinkedInHref(visit.linkedin);
-    if (linkedinHref) {
-      html +=
-        '<p><strong>LinkedIn:</strong> <a href="' +
-        escapeHtml(linkedinHref) +
-        '" target="_blank" rel="noopener noreferrer">Open profile</a></p>';
-    }
     if (visit.notes) {
       html +=
         '<div class="notes-block"><strong>Notes:</strong><div class="notes-body">' +
@@ -1414,34 +1382,33 @@
 
   function formHtml(venue, visit) {
     var saved = hasSavedVisit(visit) && isVisited(visit);
-    var title = saved ? "Update visit" : "Log visit";
+    var title = saved ? "Update" : "Log visit";
     var notesFields = "";
 
     if (visit.notes) {
       notesFields =
-        '<div class="notes-history">' +
-        '<p class="field-label">Previous notes</p>' +
+        '<details class="notes-history-details">' +
+        "<summary>Previous notes</summary>" +
         '<div class="notes-history-body">' +
         escapeHtml(visit.notes) +
-        "</div></div>" +
+        "</div></details>" +
         '<div class="field">' +
         '<label class="field-label" for="add-notes-' +
         escapeHtml(venue.id) +
-        '">Add more notes</label>' +
+        '">Add note</label>' +
         '<textarea id="add-notes-' +
         escapeHtml(venue.id) +
-        '" name="addNotes" rows="3" placeholder="Add another detail without deleting what’s already saved…"></textarea>' +
-        '<p class="field-hint">New notes are added underneath with the date. Previous notes stay saved.</p>' +
+        '" name="addNotes" rows="2" placeholder="New detail…"></textarea>' +
         "</div>";
     } else {
       notesFields =
         '<div class="field">' +
         '<label class="field-label" for="notes-' +
         escapeHtml(venue.id) +
-        '">Quick notes</label>' +
+        '">Notes</label>' +
         '<textarea id="notes-' +
         escapeHtml(venue.id) +
-        '" name="notes" rows="3" placeholder="What they said, catering used, upcoming meeting, best follow-up time…"></textarea>' +
+        '" name="notes" rows="2" placeholder="What they said, best follow-up…"></textarea>' +
         "</div>";
     }
 
@@ -1458,7 +1425,7 @@
       '<div class="field">' +
       '<label class="field-label" for="outcome-' +
       escapeHtml(venue.id) +
-      '">What happened?</label>' +
+      '">Outcome</label>' +
       '<select id="outcome-' +
       escapeHtml(venue.id) +
       '" name="outcome" required>' +
@@ -1467,51 +1434,41 @@
       '<div class="field">' +
       '<label class="field-label" for="person-' +
       escapeHtml(venue.id) +
-      '">Person spoken to</label>' +
+      '">Name</label>' +
       '<input type="text" id="person-' +
       escapeHtml(venue.id) +
       '" name="person" value="' +
       escapeHtml(visit.person) +
-      '" autocomplete="name">' +
+      '" autocomplete="name" enterkeyhint="next">' +
       "</div>" +
       '<div class="field">' +
       '<label class="field-label" for="role-' +
       escapeHtml(venue.id) +
-      '">Their role</label>' +
+      '">Role</label>' +
       '<input type="text" id="role-' +
       escapeHtml(venue.id) +
-      '" name="role" list="role-suggestions" placeholder="Reception, Office Manager, EA…" value="' +
+      '" name="role" list="role-suggestions" placeholder="Reception, OM, EA…" value="' +
       escapeHtml(visit.role) +
-      '">' +
+      '" enterkeyhint="next">' +
       "</div>" +
       '<div class="field">' +
       '<label class="field-label" for="email-' +
       escapeHtml(venue.id) +
-      '">Email address</label>' +
+      '">Email</label>' +
       '<input type="email" id="email-' +
       escapeHtml(venue.id) +
       '" name="email" inputmode="email" autocomplete="email" value="' +
       escapeHtml(visit.email) +
-      '">' +
-      "</div>" +
-      '<div class="field">' +
-      '<label class="field-label" for="linkedin-' +
-      escapeHtml(venue.id) +
-      '">LinkedIn URL</label>' +
-      '<input type="url" id="linkedin-' +
-      escapeHtml(venue.id) +
-      '" name="linkedin" inputmode="url" placeholder="https://www.linkedin.com/in/…" value="' +
-      escapeHtml(visit.linkedin) +
-      '">' +
+      '" enterkeyhint="done">' +
       "</div>" +
       notesFields +
       '<label class="check"><input type="checkbox" name="warm"' +
       (visit.warm ? " checked" : "") +
-      '><span>Warm lead / worth returning to</span></label>' +
+      '><span>Warm lead</span></label>' +
       '<label class="check"><input type="checkbox" name="followUp"' +
       (visit.followUp ? " checked" : "") +
       '><span>Needs follow-up</span></label>' +
-      '<button type="submit" class="btn btn-primary btn-block">Save visit</button>' +
+      '<button type="submit" class="btn btn-primary btn-block">Save</button>' +
       "</form></div>"
     );
   }
@@ -1526,22 +1483,12 @@
       (warm ? " is-warm" : "") +
       (good ? " is-good" : "");
 
-    var phoneBlock = "";
-    if (venue.phoneLabel && venue.phoneHref) {
-      phoneBlock =
-        '<div class="phone-row"><a href="' +
-        escapeHtml(safeTelHref(venue.phoneHref)) +
-        '">Call ' +
-        escapeHtml(venue.phoneLabel) +
-        "</a></div>";
-    }
-
     var maps = mapsHref(venue.mapsQuery || venue.address || venue.name);
     var mapsBtn = maps
       ? '<a class="btn" href="' +
         escapeHtml(maps) +
-        '" target="_blank" rel="noopener noreferrer">Open in Maps</a>'
-      : '<span class="btn" aria-disabled="true">No map address</span>';
+        '" target="_blank" rel="noopener noreferrer">Maps</a>'
+      : '<span class="btn" aria-disabled="true">No map</span>';
 
     var removeBtn = venue.isCustom
       ? '<button type="button" class="btn btn-danger btn-small btn-block remove-place" data-remove-place="' +
@@ -1575,16 +1522,11 @@
       tagsHtml(venue, visit) +
       "</div></div></div>" +
       '<div class="angle">' +
-      '<p class="angle-label">Tailored angle</p>' +
+      '<p class="angle-label">At the door</p>' +
       '<p class="angle-text">' +
       escapeHtml(venue.angle) +
       "</p></div>" +
       askForHtml(venue) +
-      '<div class="copy-angle-wrap">' +
-      '<button type="button" class="btn btn-secondary btn-small btn-block" data-copy-angle="' +
-      escapeHtml(venue.id) +
-      '">Copy full script + angle</button></div>' +
-      phoneBlock +
       '<div class="card-actions">' +
       (venue.phoneHref
         ? '<a class="btn" href="' + escapeHtml(safeTelHref(venue.phoneHref)) + '">Call</a>'
@@ -1649,7 +1591,8 @@
   function readVisitForm(form) {
     var data = new FormData(form);
     var id = form.getAttribute("data-visit-form");
-    var existing = id ? getVisit(id).notes : "";
+    var existingVisit = id ? getVisit(id) : emptyVisit();
+    var existing = existingVisit.notes;
     var addition = String(data.get("addNotes") || "").trim();
     var firstNotes = String(data.get("notes") || "").trim();
     var notes = existing;
@@ -1664,7 +1607,7 @@
       person: String(data.get("person") || "").trim(),
       role: String(data.get("role") || "").trim(),
       email: String(data.get("email") || "").trim(),
-      linkedin: String(data.get("linkedin") || "").trim(),
+      linkedin: existingVisit.linkedin || "",
       notes: notes,
       warm: !!form.querySelector('[name="warm"]').checked,
       followUp: !!form.querySelector('[name="followUp"]').checked,
@@ -1682,56 +1625,17 @@
       if (emailInput) emailInput.focus();
       return;
     }
-    if (visit.linkedin && !isValidLinkedIn(visit.linkedin)) {
-      showToast("Please enter a valid LinkedIn URL.");
-      var linkedinInput = form.querySelector('[name="linkedin"]');
-      if (linkedinInput) linkedinInput.focus();
-      return;
-    }
-    visit.linkedin = safeLinkedInHref(visit.linkedin) || visit.linkedin;
     state.visits[id] = visit;
     if (!persistVisits()) return;
 
     var cloudOk = await cloudUpsertVisit(id, visit);
     render();
-    showToast(cloudOk ? "Visit saved to the cloud." : "Visit saved on this phone.");
+    showToast(cloudOk ? "Visit saved." : "Saved on this phone.");
     var card = document.querySelector('[data-venue-id="' + id + '"]');
     if (card) {
       var summary = card.querySelector(".visit-summary");
       if (summary) summary.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
-  }
-
-  function onCopyAngle(venueId) {
-    var places = allPlaces();
-    var venue = null;
-    for (var i = 0; i < places.length; i++) {
-      if (places[i].id === venueId) {
-        venue = places[i];
-        break;
-      }
-    }
-    if (!venue) return;
-    var text =
-      getFullScript() +
-      "\n\nTailored angle for " +
-      venue.name +
-      ":\n" +
-      venue.angle;
-    if (venue.askFor && venue.askFor.length) {
-      text += "\n\nAsk for:";
-      for (var a = 0; a < venue.askFor.length; a++) {
-        var contact = venue.askFor[a];
-        text +=
-          "\n• " +
-          contact.name +
-          (contact.role ? " (" + contact.role + ")" : "");
-        if (contact.linkedin) text += "\n  LinkedIn: " + contact.linkedin;
-      }
-    }
-    copyText(text).then(function (ok) {
-      showToast(ok ? "Script and angle copied." : "Could not copy. Please copy manually.");
-    });
   }
 
   function openSheet() {
@@ -1888,7 +1792,7 @@
       lines.push("  Contact: " + (visit.person || "—"));
       lines.push("  Role: " + (visit.role || "—"));
       lines.push("  Email: " + (visit.email || "—"));
-      lines.push("  LinkedIn: " + (visit.linkedin || "—"));
+      if (visit.linkedin) lines.push("  LinkedIn: " + visit.linkedin);
       lines.push("  Notes: " + (visit.notes || "—"));
       lines.push("  Follow-up: " + (visit.followUp ? "Yes" : "No"));
       lines.push("");
@@ -1928,12 +1832,6 @@
   }
 
   function onRouteClick(event) {
-    var copyBtn = event.target.closest("[data-copy-angle]");
-    if (copyBtn) {
-      onCopyAngle(copyBtn.getAttribute("data-copy-angle"));
-      return;
-    }
-
     var removeBtn = event.target.closest("[data-remove-place]");
     if (removeBtn) {
       onRemovePlace(removeBtn.getAttribute("data-remove-place"));
@@ -2054,12 +1952,6 @@
   }
 
   function bind() {
-    els.copyIntro.addEventListener("click", function () {
-      copyText(getFullScript()).then(function (ok) {
-        showToast(ok ? "Full script copied." : "Could not copy. Please copy manually.");
-      });
-    });
-
     els.search.addEventListener("input", function () {
       state.search = els.search.value || "";
       render();
@@ -2105,7 +1997,6 @@
     els.filters = Array.prototype.slice.call(document.querySelectorAll(".filter-btn"));
     els.areaTabsMount = document.getElementById("area-tabs");
     els.areaLocation = document.getElementById("area-location");
-    els.copyIntro = document.getElementById("copy-intro-btn");
     els.shareBtn = document.getElementById("share-log-btn");
     els.addBtn = document.getElementById("add-place-btn");
     els.sheet = document.getElementById("add-place-sheet");
