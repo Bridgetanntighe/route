@@ -1,470 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Today's Walk — Covent Garden Catering</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; background: #f5f3ef; color: #1a1a1a; font-size: 15px; }
-
-  .header { background: #1a1a1a; color: white; padding: 20px 16px 16px; }
-  .header-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #c9a84c; margin-bottom: 6px; }
-  .header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
-  .header p { font-size: 13px; color: #aaa; }
-
-  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 14px 16px; background: #242424; }
-  .stat { text-align: center; }
-  .stat-n { font-size: 22px; font-weight: 700; color: white; }
-  .stat-l { font-size: 10px; color: #888; margin-top: 2px; }
-
-  .rule { background: #c9a84c; color: #1a1a1a; padding: 12px 16px; font-size: 13px; font-weight: 600; }
-
-  .stops { padding: 12px 16px; }
-
-  .stop { background: white; border-radius: 10px; margin-bottom: 10px; overflow: hidden; border: 1px solid #e8e4dc; }
-  .stop-head { padding: 12px 14px; display: flex; align-items: flex-start; gap: 12px; }
-  .num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; margin-top: 2px; }
-  .stop-info { flex: 1; }
-  .stop-name { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
-  .stop-type { font-size: 12px; color: #888; margin-bottom: 4px; }
-  .stop-addr { font-size: 12px; color: #555; }
-  .tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
-  .tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 4px; }
-  .tag-score { background: #e8f5e9; color: #1b5e20; }
-  .tag-walk { background: #e3f2fd; color: #0d47a1; }
-  .tag-warm { background: #fff3e0; color: #bf360c; }
-  .tag-new { background: #f3e5f5; color: #4a148c; }
-  .tag-multi { background: #fce4ec; color: #880e4f; }
-
-  .script { background: #faf8f5; border-top: 1px solid #e8e4dc; padding: 10px 14px; }
-  .script-label { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: #c9a84c; font-weight: 700; margin-bottom: 5px; }
-  .script-text { font-size: 13px; color: #444; line-height: 1.5; }
-
-  .phone-row { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-top: 1px solid #e8e4dc; background: #fafafa; }
-  .phone-row a { font-size: 13px; color: #1565c0; text-decoration: none; font-weight: 500; }
-
-  .map-btn { display: block; text-align: center; padding: 8px 14px; border-top: 1px solid #e8e4dc; font-size: 13px; color: #1a1a1a; text-decoration: none; background: #f5f3ef; font-weight: 600; }
-
-  .leg-divider { padding: 8px 0 6px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #888; }
-
-  .footer { padding: 24px 16px; text-align: center; color: #888; font-size: 12px; }
-  .footer strong { color: #1a1a1a; }
-
-  .tip-box { background: #fff8e8; border-left: 3px solid #c9a84c; padding: 12px 14px; margin: 0 16px 14px; border-radius: 0 8px 8px 0; font-size: 13px; color: #555; line-height: 1.5; }
-  .tip-box strong { color: #1a1a1a; display: block; margin-bottom: 4px; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1a1a1a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Outreach Walk — Covent Garden Catering</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to route</a>
 
-<div class="header">
-  <div class="header-label">Covent Garden Catering — Drop Route</div>
-  <h1>Today's Walk</h1>
-  <p>Start at 17 The Market, WC2E 8RB &nbsp;·&nbsp; ~2.5 hours</p>
-</div>
+  <header class="site-header">
+    <p class="brand-label">Covent Garden Catering</p>
+    <h1 class="page-title">Outreach Walk</h1>
+    <p class="page-meta">
+      <time id="walk-date" datetime=""></time>
+      <span aria-hidden="true">·</span>
+      <span>Covent Garden</span>
+    </p>
+  </header>
 
-<div class="stats">
-  <div class="stat"><div class="stat-n">20</div><div class="stat-l">Stops</div></div>
-  <div class="stat"><div class="stat-n">9</div><div class="stat-l">Score 9–10</div></div>
-  <div class="stat"><div class="stat-n">~2.5h</div><div class="stat-l">Total walk</div></div>
-</div>
+  <section class="stats" aria-label="Live progress">
+    <div class="stat">
+      <div class="stat-n" id="stat-to-visit">0</div>
+      <div class="stat-l">Still to visit</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n" id="stat-good">0</div>
+      <div class="stat-l">Good conversations</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n" id="stat-followup">0</div>
+      <div class="stat-l">Follow-ups required</div>
+    </div>
+  </section>
 
-<div class="rule">🎯 Goal at every door: get the name. Not the sale. The name.</div>
+  <section class="goal" aria-label="Today’s goal">
+    <p>Get the right person’s name and email. The leaflet opens the door; the follow-up builds the lead.</p>
+  </section>
 
-<div class="stops">
-
-  <div class="tip-box">
-    <strong>Before you leave base</strong>
-    Pack: 20 premium menus + 3 sample boxes. Bring a notepad to log names. Follow up by email the same afternoon for every name you collect.
+  <div class="sticky-controls" id="sticky-controls">
+    <label class="search-label" for="search-input">Search places</label>
+    <input
+      type="search"
+      id="search-input"
+      class="search-input"
+      placeholder="Search company, address, contact…"
+      autocomplete="off"
+      enterkeyhint="search"
+    >
+    <div class="filters" role="group" aria-label="Filter places">
+      <button type="button" class="filter-btn is-active" data-filter="all" aria-pressed="true">All</button>
+      <button type="button" class="filter-btn" data-filter="warm" aria-pressed="false">Warm &amp; follow-up</button>
+      <button type="button" class="filter-btn" data-filter="not_visited" aria-pressed="false">Not visited</button>
+      <button type="button" class="filter-btn" data-filter="visited" aria-pressed="false">Visited</button>
+    </div>
   </div>
 
-  <!-- LEG A -->
-  <div class="leg-divider">Leg A — Bow Street &nbsp;·&nbsp; 9:00am</div>
+  <main id="main-content" class="main">
+    <section class="intro-panel" aria-labelledby="intro-heading">
+      <h2 id="intro-heading" class="panel-heading">Reception introduction</h2>
+      <blockquote class="intro-quote" id="reception-intro">
+        Hi, we’re Covent Garden Catering from The Market nearby. We deliver breakfast, working lunches and grazing boards to local offices. I’m dropping off our menu — who usually organises catering for meetings or team days? Could I take their first name and email so I can send the digital menu too?
+      </blockquote>
+      <p class="intro-tip">
+        If they will not share an email, ask for the person’s name and whether you can mention reception when you follow up.
+      </p>
+      <button type="button" class="btn btn-secondary" id="copy-intro-btn">Copy introduction</button>
+    </section>
 
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#c9a84c20;color:#c9a84c;border:2px solid #c9a84c60">1</div>
-      <div class="stop-info">
-        <div class="stop-name">MSQ Partners</div>
-        <div class="stop-type">Marketing Agency Group</div>
-        <div class="stop-addr">34 Bow St, WC2E 7AU &nbsp;·&nbsp; 2 min walk</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 10</span>
-          <span class="tag tag-warm">Warm — Jessica Smith in DB</span>
-          <span class="tag tag-multi">+The Gate (same building)</span>
-        </div>
+    <div id="route-list" class="route-list" aria-live="polite"></div>
+
+    <p class="save-notice" role="note">
+      Saved on this phone. Visit notes stay on the device being used. Share the log at the end of the walk so the team has a copy.
+    </p>
+
+    <footer class="site-footer">
+      <strong>Covent Garden Catering by Plattaire &amp; Courtyard Wine Cellars</strong><br>
+      17 The Market, Covent Garden, London WC2E 8RB<br>
+      <a href="mailto:orders@coventgardencatering.com">orders@coventgardencatering.com</a>
+    </footer>
+  </main>
+
+  <div class="bottom-bar" role="toolbar" aria-label="Walk actions">
+    <button type="button" class="btn btn-bottom" id="share-log-btn">Share log</button>
+    <button type="button" class="btn btn-bottom btn-primary" id="add-place-btn">Add place</button>
+  </div>
+
+  <div class="sheet-backdrop" id="sheet-backdrop" hidden></div>
+  <div
+    class="sheet"
+    id="add-place-sheet"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="add-place-title"
+    hidden
+  >
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-header">
+      <h2 id="add-place-title">Add place</h2>
+      <button type="button" class="icon-btn" id="close-sheet-btn" aria-label="Close add place">Close</button>
+    </div>
+    <form id="add-place-form" class="sheet-form" novalidate>
+      <div class="field">
+        <label for="add-name">Company or venue name <span class="req">required</span></label>
+        <input type="text" id="add-name" name="name" required autocomplete="organization">
       </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">Ask for Jessica Smith by name. "Hi — we're your neighbours at The Market, literally 2 mins away. Premium office catering — boardroom boards and team lunches, next-day delivery. I have a menu and a small sample for Jessica."</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442030266000">📞 +44 20 3026 6000</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=34+Bow+St,+London+WC2E+7AU" target="_blank">Open in Maps ↗</a>
-  </div>
-
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#c9a84c20;color:#c9a84c;border:2px solid #c9a84c60">2</div>
-      <div class="stop-info">
-        <div class="stop-name">The Gate London</div>
-        <div class="stop-type">Creative / Integrated Agency</div>
-        <div class="stop-addr">34 Bow St, WC2E 7AU &nbsp;·&nbsp; Same building as MSQ</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 9</span>
-          <span class="tag tag-new">New find</span>
-        </div>
+      <div class="field">
+        <label for="add-address">Address or building</label>
+        <input type="text" id="add-address" name="address" autocomplete="street-address">
       </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">Same building — ask for the Office Manager at The Gate's floor. "Premium catering from The Market — team lunches and client meeting boards, next-day delivery. Could I leave a menu?"</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442079273555">📞 +44 20 7927 3555</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=34+Bow+St,+London+WC2E+7AU" target="_blank">Open in Maps ↗</a>
-  </div>
-
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#c9a84c20;color:#c9a84c;border:2px solid #c9a84c60">3</div>
-      <div class="stop-info">
-        <div class="stop-name">Kearney Consulting</div>
-        <div class="stop-type">Global Management Consultancy</div>
-        <div class="stop-addr">The Adelphi, 1–11 John Adam St, WC2N 6HT &nbsp;·&nbsp; 4 min</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 10</span>
-          <span class="tag tag-new">New find</span>
-        </div>
+      <div class="field">
+        <label for="add-type">Business type</label>
+        <input type="text" id="add-type" name="type" placeholder="e.g. Creative agency">
       </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">"Hi — we're Covent Garden Catering, delivering premium boardroom platters and working lunches from The Market next door. Who handles catering for client meetings here? Could I leave a menu for them?"</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442074688000">📞 +44 20 7468 8000</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=The+Adelphi,+1+John+Adam+St,+London+WC2N+6HT" target="_blank">Open in Maps ↗</a>
-  </div>
-
-  <!-- LEG B -->
-  <div class="leg-divider">Leg B — Slingsby Place &amp; St Martin's Lane &nbsp;·&nbsp; 9:35am</div>
-
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#4a9e6f20;color:#4a9e6f;border:2px solid #4a9e6f60">4</div>
-      <div class="stop-info">
-        <div class="stop-name">The PHA Group</div>
-        <div class="stop-type">PR &amp; Communications Agency</div>
-        <div class="stop-addr">11 Slingsby Pl, WC2E 9AB &nbsp;·&nbsp; 5 min</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 9</span>
-          <span class="tag tag-new">New find · 5★ Google</span>
-        </div>
+      <div class="field">
+        <label for="add-phone">Main phone number</label>
+        <input type="tel" id="add-phone" name="phone" autocomplete="tel" inputmode="tel">
       </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">"Hi — we're your neighbours from The Market, just round the corner. Premium office catering — team breakfasts and working lunches, halal-friendly, next-day delivery. Could I leave a menu for whoever handles your team food?"</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442070251350">📞 +44 20 7025 1350</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=11+Slingsby+Place,+London+WC2E+9AB" target="_blank">Open in Maps ↗</a>
-  </div>
-
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#4a9e6f20;color:#4a9e6f;border:2px solid #4a9e6f60">5</div>
-      <div class="stop-info">
-        <div class="stop-name">Rooster Marketing</div>
-        <div class="stop-type">Boutique Marketing Agency</div>
-        <div class="stop-addr">60 St Martin's Ln, WC2N 4JS &nbsp;·&nbsp; 5 min</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 9</span>
-          <span class="tag tag-new">New find · 5★ Google</span>
-        </div>
+      <div class="field">
+        <label for="add-person">Person spoken to</label>
+        <input type="text" id="add-person" name="person" autocomplete="name">
       </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">"Hi — Covent Garden Catering here. We deliver premium breakfast boards and team lunches from The Market nearby. We've brought a small sample — do you have a minute? Would love to leave this for the team."</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442036216644">📞 +44 20 3621 6644</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=60+St+Martin%27s+Lane,+London+WC2N+4JS" target="_blank">Open in Maps ↗</a>
-  </div>
-
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#4a9e6f20;color:#4a9e6f;border:2px solid #4a9e6f60">6</div>
-      <div class="stop-info">
-        <div class="stop-name">Carnival Film &amp; Television</div>
-        <div class="stop-type">TV / Film Production Company</div>
-        <div class="stop-addr">101 St Martin's Ln, WC2N 4AZ &nbsp;·&nbsp; 7 min</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 8</span>
-          <span class="tag tag-new">New find</span>
-        </div>
+      <div class="field">
+        <label for="add-role">Their role</label>
+        <input type="text" id="add-role" name="role" list="role-suggestions" placeholder="Reception, Office Manager…">
       </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">"Hi — we cater for production offices and shoot days — premium platters and boards delivered next day from Covent Garden. Could I leave a menu for your production coordinator or office manager?"</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442036186600">📞 +44 20 3618 6600</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=101+St+Martin%27s+Lane,+London+WC2N+4AZ" target="_blank">Open in Maps ↗</a>
-  </div>
-
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#4a9e6f20;color:#4a9e6f;border:2px solid #4a9e6f60">7</div>
-      <div class="stop-info">
-        <div class="stop-name">Covent Garden Recruitment</div>
-        <div class="stop-type">Recruitment Agency</div>
-        <div class="stop-addr">3rd Floor, 9 Irving St, WC2H 7AH &nbsp;·&nbsp; 7 min</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 8</span>
-          <span class="tag tag-new">New find · 4.8★ Google</span>
-        </div>
+      <div class="field">
+        <label for="add-email">Email address</label>
+        <input type="email" id="add-email" name="email" autocomplete="email" inputmode="email">
       </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">"Hi — we're Covent Garden Catering from The Market. You're literally neighbours! We do team breakfasts and client meeting platters — halal-friendly, next-day delivery. Could I leave a menu for your office manager?"</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442036758800">📞 +44 20 3675 8800</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=9+Irving+Street,+London+WC2H+7AH" target="_blank">Open in Maps ↗</a>
-  </div>
-
-  <!-- LEG C -->
-  <div class="leg-divider">Leg C — Long Acre &amp; Parker Street &nbsp;·&nbsp; 10:25am</div>
-
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#4a7fb520;color:#4a7fb5;border:2px solid #4a7fb560">8</div>
-      <div class="stop-info">
-        <div class="stop-name">Me and You Productions + Curious PR</div>
-        <div class="stop-type">Production Co + PR Agency</div>
-        <div class="stop-addr">39 Long Acre, WC2E 9LG &nbsp;·&nbsp; 5 min &nbsp;·&nbsp; Two companies, one building</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 9</span>
-          <span class="tag tag-new">New finds</span>
-          <span class="tag tag-multi">2 stops, 1 building</span>
-        </div>
+      <div class="field">
+        <label for="add-outcome">What happened?</label>
+        <select id="add-outcome" name="outcome">
+          <option value="not_visited">Not visited</option>
+          <option value="good_conversation">Good conversation</option>
+          <option value="leaflet_left">Leaflet left</option>
+          <option value="reception_only">Reception only</option>
+          <option value="could_not_get_in">Could not get in</option>
+          <option value="not_suitable">Not suitable</option>
+        </select>
       </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">Ask for both companies at reception. Production: "We supply catering for production offices — boards and shoot-day platters, next-day delivery from Covent Garden." PR (Curious PR): "Premium catering for client meetings and team lunches."</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442033979111">📞 Curious PR: +44 20 3397 9111</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=39+Long+Acre,+London+WC2E+9LG" target="_blank">Open in Maps ↗</a>
-  </div>
-
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#4a7fb520;color:#4a7fb5;border:2px solid #4a7fb560">9</div>
-      <div class="stop-info">
-        <div class="stop-name">PB Creative</div>
-        <div class="stop-type">Design / Creative Agency</div>
-        <div class="stop-addr">40–42 Parker St, WC2B 5PQ &nbsp;·&nbsp; 7 min</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 8</span>
-          <span class="tag tag-new">New find</span>
-        </div>
+      <div class="field">
+        <label for="add-notes">Quick notes</label>
+        <textarea id="add-notes" name="notes" rows="3" placeholder="What they said, catering used, best follow-up time…"></textarea>
       </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">"Hi — Covent Garden Catering. Premium office catering for creative teams — next-day delivery from The Market in Covent Garden. Could I leave a menu for whoever looks after your team?"</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442078363067">📞 +44 20 7836 3067</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=40+Parker+Street,+London+WC2B+5PQ" target="_blank">Open in Maps ↗</a>
+      <label class="check">
+        <input type="checkbox" id="add-warm" name="warm">
+        <span>Mark as a warm lead</span>
+      </label>
+      <label class="check">
+        <input type="checkbox" id="add-followup" name="followUp">
+        <span>Needs follow-up</span>
+      </label>
+      <button type="submit" class="btn btn-primary btn-block">Save place</button>
+    </form>
   </div>
 
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#4a7fb520;color:#4a7fb5;border:2px solid #4a7fb560">10</div>
-      <div class="stop-info">
-        <div class="stop-name">Kindred Agency</div>
-        <div class="stop-type">Creative Agency</div>
-        <div class="stop-addr">17 Macklin St, WC2B 5NR &nbsp;·&nbsp; 8 min</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 9</span>
-          <span class="tag tag-warm">Warm — in DB</span>
-        </div>
-      </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">"Hi — I emailed hello@wearekindred.com earlier this week. We're the catering service from The Market just nearby. Is the office manager or studio manager around for a quick hello?"</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442045245900">📞 +44 20 4524 5900</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=17+Macklin+Street,+London+WC2B+5NR" target="_blank">Open in Maps ↗</a>
-  </div>
+  <datalist id="role-suggestions">
+    <option value="Reception"></option>
+    <option value="Office Manager"></option>
+    <option value="EA"></option>
+    <option value="PA"></option>
+    <option value="Studio Manager"></option>
+    <option value="Operations Manager"></option>
+    <option value="Production Coordinator"></option>
+  </datalist>
 
-  <!-- LEG D -->
-  <div class="leg-divider">Leg D — Holborn cluster &nbsp;·&nbsp; 11:05am</div>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#9b6bb520;color:#9b6bb5;border:2px solid #9b6bb560">11</div>
-      <div class="stop-info">
-        <div class="stop-name">Academy Films</div>
-        <div class="stop-type">Award-Winning Film Production</div>
-        <div class="stop-addr">16 W Central St, WC1A 1JJ &nbsp;·&nbsp; 6 min</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 8</span>
-          <span class="tag tag-new">New find · 4.9★ Google</span>
-        </div>
-      </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">"Hi — we do premium catering for production offices — boards and platters for shoot days and team lunches. We're just down the road at The Market in Covent Garden. Is the production coordinator or office manager in?"</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442073954155">📞 +44 20 7395 4155</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=16+West+Central+Street,+London+WC1A+1JJ" target="_blank">Open in Maps ↗</a>
-  </div>
-
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#9b6bb520;color:#9b6bb5;border:2px solid #9b6bb560">12</div>
-      <div class="stop-info">
-        <div class="stop-name">Blick Rothenberg</div>
-        <div class="stop-type">Accountancy &amp; Advisory (100–200 staff)</div>
-        <div class="stop-addr">16 Great Queen St, WC2B 5AH &nbsp;·&nbsp; 4 min</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 8</span>
-          <span class="tag tag-new">New find · 4.4★ Google</span>
-        </div>
-      </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">Boardroom only: "Premium boardroom platters and working lunches for client meetings — sourced properly, next-day delivery from Covent Garden. Could I leave a menu for your EA or PA?"</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442074860111">📞 +44 20 7486 0111</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=16+Great+Queen+Street,+London+WC2B+5AH" target="_blank">Open in Maps ↗</a>
-  </div>
-
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#9b6bb520;color:#9b6bb5;border:2px solid #9b6bb560">13</div>
-      <div class="stop-info">
-        <div class="stop-name">Collective London</div>
-        <div class="stop-type">Creative &amp; Marketing Agency</div>
-        <div class="stop-addr">20 Red Lion St, WC1R 4PS &nbsp;·&nbsp; 5 min</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 9</span>
-          <span class="tag tag-new">New find · 5★ Google</span>
-        </div>
-      </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">"Hi — we're your neighbours from The Market in Covent Garden. Premium catering for creative offices and event days — halal-friendly, next-day delivery. Could I leave a menu and a small sample?"</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442078433555">📞 +44 20 7843 3555</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=20+Red+Lion+Street,+London+WC1R+4PS" target="_blank">Open in Maps ↗</a>
-  </div>
-
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#9b6bb520;color:#9b6bb5;border:2px solid #9b6bb560">14</div>
-      <div class="stop-info">
-        <div class="stop-name">Passion Digital</div>
-        <div class="stop-type">Digital Marketing Agency</div>
-        <div class="stop-addr">4th Floor, 137–144 New Oxford St, WC1V 6PL &nbsp;·&nbsp; 4 min</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 8</span>
-          <span class="tag tag-new">New find · 4.8★ Google</span>
-        </div>
-      </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">"Hi — we're Covent Garden Catering, delivering premium office breakfasts and lunches from The Market in Covent Garden. Could I leave a menu for whoever looks after your team catering?"</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442034321360">📞 +44 20 3432 1360</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=Holborn+Tower+137+New+Oxford+Street+London+WC1V+6PL" target="_blank">Open in Maps ↗</a>
-  </div>
-
-  <!-- LEG E -->
-  <div class="leg-divider">Leg E — Short's Gardens &amp; Kingsway &nbsp;·&nbsp; 12:00pm</div>
-
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#c05a3a20;color:#c05a3a;border:2px solid #c05a3a60">15</div>
-      <div class="stop-info">
-        <div class="stop-name">Karma (Live Production)</div>
-        <div class="stop-type">Video &amp; Live Events Production</div>
-        <div class="stop-addr">56 Short's Gardens, WC2H 9AN &nbsp;·&nbsp; 5 min back toward base</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 9</span>
-          <span class="tag tag-new">New find · 5★ · 62 reviews</span>
-        </div>
-      </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">"Hi — we supply premium platters and breakfast boards for production days and shoot crews — sourced properly, next-day delivery from The Market in Covent Garden. Is there a production manager or operations person I could speak to?"</div>
-    </div>
-    <a class="map-btn" href="https://maps.google.com/?q=56+Short%27s+Gardens,+London+WC2H+9AN" target="_blank">Open in Maps ↗</a>
-  </div>
-
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#c05a3a20;color:#c05a3a;border:2px solid #c05a3a60">16</div>
-      <div class="stop-info">
-        <div class="stop-name">Purple PR Westminster</div>
-        <div class="stop-type">PR Agency</div>
-        <div class="stop-addr">7th Floor, 1 Kingsway, WC2B 4BG &nbsp;·&nbsp; 10 min</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 8</span>
-          <span class="tag tag-new">New find</span>
-        </div>
-      </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">"Premium office catering for client meetings and team lunches — next-day delivery from Covent Garden. Could I leave a menu for your office manager?"</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442074399888">📞 +44 20 7439 9888</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=1+Kingsway,+London+WC2B+4BG" target="_blank">Open in Maps ↗</a>
-  </div>
-
-  <!-- BONUS STOPS -->
-  <div class="leg-divider">Bonus — On the way back to base</div>
-
-  <div class="stop">
-    <div class="stop-head">
-      <div class="num" style="background:#88888820;color:#555;border:2px solid #88888840">17</div>
-      <div class="stop-info">
-        <div class="stop-name">Greenwich Consulting</div>
-        <div class="stop-type">Consulting Firm</div>
-        <div class="stop-addr">7 Henrietta St, WC2E 8PS &nbsp;·&nbsp; 3 min from base</div>
-        <div class="tags">
-          <span class="tag tag-score">Score 7</span>
-        </div>
-      </div>
-    </div>
-    <div class="script">
-      <div class="script-label">What to say</div>
-      <div class="script-text">Brief drop on the way back. Leave menu + business card. "Catering from The Market for client meetings — next-day delivery."</div>
-    </div>
-    <div class="phone-row"><a href="tel:+442074705615">📞 +44 20 7470 5615</a></div>
-    <a class="map-btn" href="https://maps.google.com/?q=7+Henrietta+Street,+London+WC2E+8PS" target="_blank">Open in Maps ↗</a>
-  </div>
-
-</div>
-
-<div class="tip-box">
-  <strong>After every stop — log this</strong>
-  Company name · Person you spoke to (or reception name) · Left menu Y/N · Left sample Y/N · Follow up needed Y/N. Send follow-up emails same afternoon with: "I stopped by earlier today — wanted to make sure the menu reached you."
-</div>
-
-<div class="footer">
-  <strong>Covent Garden Catering by Plattaire &amp; Courtyard Wine Cellars</strong><br>
-  17 The Market, Covent Garden, London WC2E 8RB<br>
-  orders@coventgardencatering.com
-</div>
-
+  <script src="app.js" defer></script>
 </body>
 </html>
