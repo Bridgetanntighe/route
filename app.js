@@ -1254,8 +1254,9 @@
   }
 
   function updateAreaLocation() {
-    if (!els.areaLocation) return;
-    els.areaLocation.textContent = areaLabel(state.area);
+    var label = areaLabel(state.area);
+    if (els.areaLocation) els.areaLocation.textContent = label;
+    if (els.areaChooserCurrent) els.areaChooserCurrent.textContent = label;
   }
 
   function outcomeOptionsHtml(selected) {
@@ -1898,6 +1899,7 @@
         renderAreaTabs();
         populateAddPlaceAreaFields();
         render();
+        if (els.areaCollapse) els.areaCollapse.open = false;
       });
     });
   }
@@ -1990,6 +1992,8 @@
     els.search = document.getElementById("search-input");
     els.filters = Array.prototype.slice.call(document.querySelectorAll(".filter-btn"));
     els.areaTabsMount = document.getElementById("area-tabs");
+    els.areaCollapse = document.getElementById("area-collapse");
+    els.areaChooserCurrent = document.getElementById("area-chooser-current");
     els.areaLocation = document.getElementById("area-location");
     els.shareBtn = document.getElementById("share-log-btn");
     els.addBtn = document.getElementById("add-place-btn");

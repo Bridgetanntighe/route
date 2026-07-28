@@ -42,8 +42,13 @@
   </section>
 
   <div class="sticky-controls" id="sticky-controls">
-    <p class="area-label" id="area-chooser-label">Choose area</p>
-    <div class="area-tabs" id="area-tabs" role="group" aria-labelledby="area-chooser-label"></div>
+    <details class="area-collapse" id="area-collapse">
+      <summary id="area-chooser-summary">
+        <span class="area-collapse-label">Area</span>
+        <span class="area-collapse-current" id="area-chooser-current">Covent Garden</span>
+      </summary>
+      <div class="area-tabs" id="area-tabs" role="group" aria-label="Choose area"></div>
+    </details>
     <label class="search-label" for="search-input">Search places</label>
     <input
       type="search"
