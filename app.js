@@ -186,7 +186,7 @@
       phoneLabel: "+44 20 3026 6000",
       mapsQuery: "34 Bow St, London WC2E 7AU",
       angle:
-        "Ask for Jessica Smith by name. \"Hi — we're your neighbours at The Market, literally 2 mins away. Premium office catering — boardroom boards and team lunches, next-day delivery. I've brought a menu for Jessica.\""
+        "Warm lead — ask for Jessica Smith by name. Mention you are neighbours at The Market (2 mins). Same building as The Gate, so you can cover both after. Focus: agency group boardroom boards and team lunches."
     },
     {
       id: "the-gate-london",
@@ -204,7 +204,7 @@
       phoneLabel: "+44 20 7927 3555",
       mapsQuery: "34 Bow St, London WC2E 7AU",
       angle:
-        "Same building — ask for the Office Manager at The Gate's floor. \"Premium catering from The Market — team lunches and client meeting boards, next-day delivery. Could I leave a menu?\""
+        "Same building as MSQ — ask specifically for The Gate’s floor / Office Manager so reception does not send you back to MSQ. Creative agency: pitch client presentation boards and team lunches."
     },
     {
       id: "kearney-consulting",
@@ -222,7 +222,7 @@
       phoneLabel: "+44 20 7468 8000",
       mapsQuery: "The Adelphi, 1 John Adam St, London WC2N 6HT",
       angle:
-        "\"Hi — we're Covent Garden Catering, delivering premium boardroom platters and working lunches from The Market next door. Who handles catering for client meetings here? Could I leave a menu for them?\""
+        "Global consultancy at The Adelphi — expect formal reception. Ask who books catering for client meetings (often EA/PA to partners). Pitch polished boardroom platters, not casual team food."
     },
     {
       id: "pha-group",
@@ -240,7 +240,7 @@
       phoneLabel: "+44 20 7025 1350",
       mapsQuery: "11 Slingsby Place, London WC2E 9AB",
       angle:
-        "\"Hi — we're your neighbours from The Market, just round the corner. Premium office catering — team breakfasts and working lunches, halal-friendly, next-day delivery. Could I leave a menu for whoever handles your team food?\""
+        "PR agency on Slingsby Place, round the corner from The Market. Ask for whoever handles team food / office management. Good fit for breakfasts before media days and working lunches around campaigns."
     },
     {
       id: "rooster-marketing",
@@ -258,7 +258,7 @@
       phoneLabel: "+44 20 3621 6644",
       mapsQuery: "60 St Martin's Lane, London WC2N 4JS",
       angle:
-        "\"Hi — Covent Garden Catering here. We deliver premium breakfast boards and team lunches from The Market nearby. Could I leave a menu for the team?\""
+        "Boutique marketing agency on St Martin’s Lane — smaller team, often easier to reach a decision-maker. Ask for the office manager or whoever runs team lunches and client catch-ups."
     },
     {
       id: "carnival-film",
@@ -276,7 +276,7 @@
       phoneLabel: "+44 20 3618 6600",
       mapsQuery: "101 St Martin's Lane, London WC2N 4AZ",
       angle:
-        "\"Hi — we cater for production offices and shoot days — premium platters and boards delivered next day from Covent Garden. Could I leave a menu for your production coordinator or office manager?\""
+        "TV/film production — ask for production coordinator or office manager. Angle: shoot-day platters and production-office lunches with next-day delivery when schedules move fast."
     },
     {
       id: "covent-garden-recruitment",
@@ -294,7 +294,7 @@
       phoneLabel: "+44 20 3675 8800",
       mapsQuery: "9 Irving Street, London WC2H 7AH",
       angle:
-        "\"Hi — we're Covent Garden Catering from The Market. You're literally neighbours! We do team breakfasts and client meeting platters — halal-friendly, next-day delivery. Could I leave a menu for your office manager?\""
+        "Recruitment agency, 3rd floor on Irving Street — literal neighbours. Ask for office manager. Pitch interview-day breakfasts and client meeting platters; mention dietary options for mixed candidate groups."
     },
     {
       id: "me-and-you-curious",
@@ -315,7 +315,7 @@
       phoneLabel: "Curious PR: +44 20 3397 9111",
       mapsQuery: "39 Long Acre, London WC2E 9LG",
       angle:
-        "Ask for both companies at reception. Production: \"We supply catering for production offices — boards and shoot-day platters, next-day delivery from Covent Garden.\" PR (Curious PR): \"Premium catering for client meetings and team lunches.\""
+        "Two companies, one building — ask reception for both. Me and You: production boards / shoot-day platters. Curious PR: client meeting catering. Leave a leaflet for each if possible."
     },
     {
       id: "pb-creative",
@@ -333,7 +333,7 @@
       phoneLabel: "+44 20 7836 3067",
       mapsQuery: "40 Parker Street, London WC2B 5PQ",
       angle:
-        "\"Hi — Covent Garden Catering. Premium office catering for creative teams — next-day delivery from The Market in Covent Garden. Could I leave a menu for whoever looks after your team?\""
+        "Design/creative agency on Parker Street. Ask for whoever looks after the studio team. Pitch creative-team lunches and client review boards rather than formal boardroom only."
     },
     {
       id: "kindred-agency",
@@ -351,7 +351,7 @@
       phoneLabel: "+44 20 4524 5900",
       mapsQuery: "17 Macklin Street, London WC2B 5NR",
       angle:
-        "\"Hi — I emailed hello@wearekindred.com earlier this week. We're the catering service from The Market just nearby. Is the office manager or studio manager around for a quick hello?\""
+        "Warm — previously emailed hello@wearekindred.com. Reference that email. Ask for office manager or studio manager for a quick hello and to leave the leaflet with the right person."
     },
     {
       id: "academy-films",
@@ -369,7 +369,7 @@
       phoneLabel: "+44 20 7395 4155",
       mapsQuery: "16 West Central Street, London WC1A 1JJ",
       angle:
-        "\"Hi — we do premium catering for production offices — boards and platters for shoot days and team lunches. We're just down the road at The Market in Covent Garden. Is the production coordinator or office manager in?\""
+        "Award-winning film production on West Central Street. Ask for production coordinator or office manager. Angle: shoot-day and team lunch platters for production offices."
     },
     {
       id: "blick-rothenberg",
@@ -387,7 +387,7 @@
       phoneLabel: "+44 20 7486 0111",
       mapsQuery: "16 Great Queen Street, London WC2B 5AH",
       angle:
-        "Boardroom only: \"Premium boardroom platters and working lunches for client meetings — sourced properly, next-day delivery from Covent Garden. Could I leave a menu for your EA or PA?\""
+        "Accountancy & advisory (~100–200 staff) — boardroom culture. Ask for EA/PA rather than general reception chat. Pitch client meeting platters and working lunches for partners."
     },
     {
       id: "collective-london",
@@ -405,7 +405,7 @@
       phoneLabel: "+44 20 7843 3555",
       mapsQuery: "20 Red Lion Street, London WC1R 4PS",
       angle:
-        "\"Hi — we're your neighbours from The Market in Covent Garden. Premium catering for creative offices and event days — halal-friendly, next-day delivery. Could I leave a menu?\""
+        "Creative & marketing agency on Red Lion Street. Ask for office manager. Pitch creative-office catering and event/team days; dietary flexibility plays well with mixed creative teams."
     },
     {
       id: "passion-digital",
@@ -423,7 +423,7 @@
       phoneLabel: "+44 20 3432 1360",
       mapsQuery: "Holborn Tower 137 New Oxford Street London WC1V 6PL",
       angle:
-        "\"Hi — we're Covent Garden Catering, delivering premium office breakfasts and lunches from The Market in Covent Garden. Could I leave a menu for whoever looks after your team catering?\""
+        "Digital marketing agency in Holborn Tower (New Oxford Street). Ask who looks after team catering. Pitch office breakfasts and campaign/team lunches for a busy digital agency floor."
     },
     {
       id: "karma-live",
@@ -441,7 +441,7 @@
       phoneLabel: "",
       mapsQuery: "56 Short's Gardens, London WC2H 9AN",
       angle:
-        "\"Hi — we supply premium platters and breakfast boards for production days and shoot crews — sourced properly, next-day delivery from The Market in Covent Garden. Is there a production manager or operations person I could speak to?\""
+        "Live production / events on Short’s Gardens — heading back toward base. Ask for production manager or operations. Angle: crew and shoot-day breakfast boards and platters."
     },
     {
       id: "purple-pr",
@@ -459,7 +459,7 @@
       phoneLabel: "+44 20 7439 9888",
       mapsQuery: "1 Kingsway, London WC2B 4BG",
       angle:
-        "\"Premium office catering for client meetings and team lunches — next-day delivery from Covent Garden. Could I leave a menu for your office manager?\""
+        "PR agency, 7th floor at 1 Kingsway — larger building, so be clear: Purple PR. Ask for office manager. Pitch client meeting and team lunch catering for a PR floor."
     },
     {
       id: "greenwich-consulting",
@@ -477,7 +477,7 @@
       phoneLabel: "+44 20 7470 5615",
       mapsQuery: "7 Henrietta Street, London WC2E 8PS",
       angle:
-        "Brief drop on the way back. Leave menu + business card. \"Catering from The Market for client meetings — next-day delivery.\"",
+        "Bonus stop on Henrietta Street, 3 mins from base. Keep it brief: leave leaflet + card. Ask who books client meeting catering; no long pitch needed if reception is busy.",
       area: "covent-garden"
     },
 
@@ -498,7 +498,7 @@
       phoneLabel: "+44 20 7936 2021",
       mapsQuery: "21 Fleet Street, London EC4Y 1AA",
       angle:
-        "Specialist legal PR team — lots of client meetings. \"Hi — we're Covent Garden Catering from The Market. We deliver boardroom lunches and grazing boards for professional services teams, next-day for local offices. Who organises catering for client meetings here?\""
+        "Legal/litigation PR on Fleet Street — senior, meeting-heavy. Ask who organises catering for client and counsel meetings. Pitch discreet boardroom lunches for professional services."
     },
     {
       id: "fortis-consulting",
@@ -516,7 +516,7 @@
       phoneLabel: "+44 20 7193 6953",
       mapsQuery: "35-37 Ludgate Hill, London EC4M 7JN",
       angle:
-        "Multi-suite building on Ludgate Hill — ask at reception for Fortis. \"Premium working lunches and client meeting boards from Covent Garden — could I leave a menu for whoever books catering?\""
+        "Boutique consultancy in a multi-suite Ludgate Hill building — ask reception for Fortis by name. Small team: ask who books client lunches and leave the leaflet for that person."
     },
     {
       id: "tate-associates",
@@ -537,7 +537,7 @@
       phoneLabel: "+44 20 7236 7766",
       mapsQuery: "35-37 Ludgate Hill, London EC4M 7JN",
       angle:
-        "Recruitment teams host interviews and client lunches. \"Hi — Covent Garden Catering. We do breakfast boards and working lunches for City offices, next-day delivery. Could I leave a menu for your office manager?\""
+        "Recruitment consultancy, same Ludgate Hill building as Fortis. Ask for Tate & Associates specifically. Pitch interview breakfasts and client lunch platters for recruiters."
     },
     {
       id: "richard-nelson-llp",
@@ -555,7 +555,7 @@
       phoneLabel: "+44 20 7160 9777",
       mapsQuery: "20 Old Bailey, London EC4M 1AN",
       angle:
-        "Boardroom only: \"Premium boardroom platters and working lunches for client meetings — sourced properly, next-day from Covent Garden. Could I leave a menu for your EA or office manager?\""
+        "Law firm on Old Bailey — formal City reception. Ask for EA/office manager. Pitch boardroom platters for client meetings; keep tone professional and brief."
     },
     {
       id: "raymond-saul",
@@ -573,7 +573,7 @@
       phoneLabel: "+44 20 7480 7865",
       mapsQuery: "Mermaid House, 2 Puddle Dock, London EC4V 3DS",
       angle:
-        "Boutique firm — easier to reach a decision-maker. \"Hi — we're Covent Garden Catering. We deliver premium catering for client meetings and team days. Who usually organises food here?\""
+        "Boutique City law firm at Mermaid House / Puddle Dock. Smaller practice — better chance of reaching a decision-maker. Ask who organises client meeting food and leave the leaflet with them."
     },
     {
       id: "russell-bedford",
@@ -591,7 +591,7 @@
       phoneLabel: "+44 20 7410 0339",
       mapsQuery: "Paternoster House, 65 St Paul's Churchyard, London EC4M 8AB",
       angle:
-        "Ask at Paternoster House reception for Russell Bedford. \"Boardroom lunches and working platters for professional services — next-day delivery from Covent Garden. Could I leave a menu?\""
+        "Accountancy network HQ in Paternoster House — use the manned building reception and ask for Russell Bedford. Pitch boardroom / professional services meeting platters."
     },
     {
       id: "proxima-cheapside",
@@ -609,7 +609,7 @@
       phoneLabel: "+44 20 3465 4500",
       mapsQuery: "107 Cheapside, London EC2V 6DN",
       angle:
-        "Larger consultancy — aim for reception → office manager. \"Hi — Covent Garden Catering. We deliver breakfasts, working lunches and grazing boards for City offices. Who books catering for team days or client meetings?\""
+        "Larger procurement consultancy at 107 Cheapside — do not wander into bank towers nearby. Aim reception → office manager. Pitch team days and client meeting catering for a consultancy floor."
     },
     {
       id: "big-little-ldn",
@@ -627,7 +627,7 @@
       phoneLabel: "",
       mapsQuery: "74-76 St John Street, London EC1M 4DZ",
       angle:
-        "Small agency — ask for Emma's team / office manager by name if offered. \"Hi — we're Covent Garden Catering from The Market. We do team breakfasts and client meeting boards for creative agencies. Could I leave a leaflet and take a full name and email so we can follow up directly?\""
+        "Small PR/marketing agency at Abbey House, St John Street — top cultural fit. Ask for the office manager (or Emma’s team if offered). Pitch team breakfasts and client meeting boards for a lean agency."
     },
     {
       id: "smithfield-agency",
@@ -645,7 +645,7 @@
       phoneLabel: "+44 20 7257 2600",
       mapsQuery: "22 St James's Walk, London EC1R 0AP",
       angle:
-        "Perfect size. \"Hi — Covent Garden Catering. We deliver premium office catering for agency teams — breakfast boards and working lunches, next-day. Who looks after catering here?\""
+        "Independent media planning agency (~20 people) on St James’s Walk — ideal size. Ask who looks after catering. Pitch breakfast boards and working lunches for media planning teams."
     },
     {
       id: "sec-newgate",
@@ -663,7 +663,7 @@
       phoneLabel: "+44 20 3757 6767",
       mapsQuery: "14 Greville Street, London EC1N 8SB",
       angle:
-        "Meeting-heavy comms firm. \"Hi — we're Covent Garden Catering. Premium boardroom catering and team lunches from The Market, next-day for local offices. Who organises catering for client meetings?\""
+        "Strategic communications / public affairs HQ on Greville Street. Meeting-heavy. Ask who organises catering for client and stakeholder meetings. Pitch boardroom catering and team lunches."
     },
     {
       id: "flame-pr",
@@ -681,7 +681,7 @@
       phoneLabel: "+44 20 3357 9740",
       mapsQuery: "37 Pear Tree Street, London EC1V 3AG",
       angle:
-        "\"Hi — Covent Garden Catering. We deliver breakfast boards and working lunches for marketing teams. Could I leave a menu for your office manager?\""
+        "Full-service marketing agency on Pear Tree Street (Clerkenwell bonus). Ask for office manager. Pitch breakfast boards and working lunches for marketing campaign teams."
     },
     {
       id: "words-pixels",
@@ -699,7 +699,7 @@
       phoneLabel: "",
       mapsQuery: "Silverlight House, 6-8 Standard Place, London EC2A 3BE",
       angle:
-        "Ground-floor PR agency — good chance of speaking to someone. \"Hi — Covent Garden Catering from The Market. We do client meeting boards and team lunches for PR agencies. Could I leave a leaflet and grab a full name and email so we can follow up directly?\""
+        "Ground-floor PR agency at Silverlight House, Standard Place (~25 people) — easier walk-up. Ask for office manager. Pitch client meeting boards and team lunches; leave leaflet at ground floor if possible."
     }
   ];
 
