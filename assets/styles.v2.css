@@ -362,6 +362,30 @@ a { color: #1e4f8c; }
   color: var(--muted);
 }
 
+.route-panel {
+  margin: 8px 0 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+.route-panel-line {
+  margin: 0 0 4px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #4a4540;
+}
+
+.route-panel-line:last-of-type {
+  margin-bottom: 10px;
+}
+
+.route-panel-btn {
+  text-decoration: none;
+}
+
 .search-label {
   position: absolute;
   width: 1px; height: 1px;

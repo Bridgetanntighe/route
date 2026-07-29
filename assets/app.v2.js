@@ -85,7 +85,7 @@
   ];
 
   var CLUSTERS = [
-    { id: "additional-leaflet-targets-29-july", area: "covent-garden",      label: "Additional leaflet targets \u2014 added 29 July", tone: "added" },
+    { id: "additional-leaflet-targets-29-july", area: "covent-garden",      label: "New leaflet loop \u2014 follow 1\u20138", tone: "added" },
     { id: "new-targets-29-july",   area: "covent-garden",      label: "New targets \u2014 added 29 July",              tone: "bonus" },
     { id: "bow-street",            area: "covent-garden",      label: "Bow Street cluster",                           tone: "leg-a" },
     { id: "slingsby-st-martins",   area: "covent-garden",      label: "Slingsby Place & St Martin\u2019s Lane cluster",tone: "leg-b" },
@@ -1633,6 +1633,18 @@
     );
   }
 
+  function clusterIntroHtml(cluster) {
+    if (!cluster || cluster.id !== "additional-leaflet-targets-29-july") return "";
+    return (
+      '<div class="route-panel" role="note" aria-label="Leaflet loop route summary">' +
+        '<p class="route-panel-line"><strong>Start and finish:</strong> 17 The Market</p>' +
+        '<p class="route-panel-line">1.6 miles \u00b7 approximately 36 minutes walking</p>' +
+        '<p class="route-panel-line">Allow 90\u2013120 minutes with conversations</p>' +
+        '<a class="btn btn-secondary btn-small route-panel-btn" href="https://www.google.com/maps/dir/?api=1&origin=17%20The%20Market%2C%20Covent%20Garden%2C%20London%20WC2E%208RB&destination=17%20The%20Market%2C%20Covent%20Garden%2C%20London%20WC2E%208RB&travelmode=walking&waypoints=32%20Rose%20Street%2C%20London%20WC2E%209ET%7C1st%20Floor%2C%2077%20St%20Martin%27s%20Lane%2C%20London%20WC2N%204AA%7C117%20Shaftesbury%20Avenue%2C%20London%20WC2H%208AF%7C1st%20Floor%2C%2039%20Earlham%20Street%2C%20London%20WC2H%209LT%7C11-13%20Neal%27s%20Yard%2C%20London%20WC2H%209DP%7CGarden%20Studios%2C%2011-15%20Betterton%20Street%2C%20London%20WC2H%209BP%7C65%20Drury%20Lane%2C%20London%20WC2B%205SP%7CWellington%20House%2C%20125%20Strand%2C%20London%20WC2R%200AP" target="_blank" rel="noopener noreferrer">Open full walking route</a>' +
+      "</div>"
+    );
+  }
+
   // ── Render ────────────────────────────────────────────────────────────────────
 
   function render() {
@@ -1678,7 +1690,9 @@
       if (clusterVisible) {
         html +=
           '<div class="cluster-divider" role="heading" aria-level="2">' +
-          escapeHtml(cluster.label) + "</div>" + clusterHtml;
+          escapeHtml(cluster.label) + "</div>" +
+          clusterIntroHtml(cluster) +
+          clusterHtml;
       }
     }
 
