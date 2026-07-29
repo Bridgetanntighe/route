@@ -6,18 +6,18 @@
   <meta name="theme-color" content="#1a1a1a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Outreach Walk — Covent Garden Catering</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Office Outreach — Covent Garden Catering</title>
+  <link rel="stylesheet" href="assets/styles.v2.css">
 </head>
 <body>
-  <a class="skip-link" href="#main-content">Skip to route</a>
+  <a class="skip-link" href="#main-content">Skip to offices</a>
+
+  <div id="boot-error" class="boot-error" hidden role="alert"></div>
 
   <header class="site-header">
     <p class="brand-label">Covent Garden Catering</p>
-    <h1 class="page-title">Outreach Walk</h1>
+    <h1 class="page-title">Office Outreach</h1>
     <p class="page-meta">
-      <time id="walk-date" datetime=""></time>
-      <span aria-hidden="true">·</span>
       <span id="area-location">Covent Garden</span>
     </p>
   </header>
@@ -35,10 +35,6 @@
       <div class="stat-n" id="stat-followup">0</div>
       <div class="stat-l">Follow-ups required</div>
     </div>
-  </section>
-
-  <section class="goal" aria-label="Today’s goal">
-    <p>Get a name and email. Leaflet opens the door; follow-up builds the lead.</p>
   </section>
 
   <div class="sticky-controls" id="sticky-controls">
@@ -87,7 +83,7 @@
         </blockquote>
 
         <p class="intro-tip" id="reception-fallback">
-          No email? Note full name, role, who you spoke to, and anything useful about the office.
+          No email? Note full name, who you spoke to, and anything useful about the office.
         </p>
 
         <details class="script-details nested-details">
@@ -100,8 +96,8 @@
         <details class="script-details nested-details">
           <summary>If they ask why us</summary>
           <ul class="selling-points">
-            <li>Halal meats as standard</li>
-            <li>Vegetarian options available</li>
+            <li>Breakfast, lunch and drinks from one local catering partner</li>
+            <li>Morning and timed office delivery</li>
             <li>Dietary requirements confirmed before payment</li>
           </ul>
         </details>
@@ -111,7 +107,7 @@
     <div id="route-list" class="route-list" aria-live="polite"></div>
 
     <p class="save-notice" role="note" id="save-notice">
-      Saves on this phone. Syncs to the cloud when available.
+      Saves on this phone. Cloud sync when signed in.
     </p>
 
     <footer class="site-footer">
@@ -121,7 +117,7 @@
     </footer>
   </main>
 
-  <div class="bottom-bar" role="toolbar" aria-label="Walk actions">
+  <div class="bottom-bar" role="toolbar" aria-label="Outreach actions">
     <button type="button" class="btn btn-bottom btn-primary" id="add-place-btn">Add place</button>
   </div>
 
@@ -141,81 +137,47 @@
     </div>
     <form id="add-place-form" class="sheet-form" novalidate>
       <div class="field">
-        <label for="add-name">Company or venue name <span class="req">required</span></label>
+        <label for="add-name">Company name <span class="req">required</span></label>
         <input type="text" id="add-name" name="name" required autocomplete="organization">
       </div>
-      <div class="field">
+      <div class="field" id="add-area-field" hidden>
         <label for="add-area">Area <span class="req">required</span></label>
-        <select id="add-area" name="area" required></select>
-      </div>
-      <div class="field">
-        <label for="add-cluster">Cluster <span class="req">optional</span></label>
-        <select id="add-cluster" name="cluster"></select>
+        <select id="add-area" name="area"></select>
       </div>
       <div class="field">
         <label for="add-address">Address or building</label>
         <input type="text" id="add-address" name="address" autocomplete="street-address">
       </div>
       <div class="field">
-        <label for="add-type">Business type</label>
-        <input type="text" id="add-type" name="type" placeholder="e.g. Creative agency">
-      </div>
-      <div class="field">
-        <label for="add-phone">Main phone number</label>
-        <input type="tel" id="add-phone" name="phone" autocomplete="tel" inputmode="tel">
-      </div>
-      <div class="field">
-        <label for="add-person">Person spoken to</label>
-        <input type="text" id="add-person" name="person" autocomplete="name">
-      </div>
-      <div class="field">
-        <label for="add-role">Their role</label>
-        <input type="text" id="add-role" name="role" list="role-suggestions" placeholder="Reception, Office Manager…">
-      </div>
-      <div class="field">
-        <label for="add-email">Email address</label>
-        <input type="email" id="add-email" name="email" autocomplete="email" inputmode="email">
-      </div>
-      <div class="field">
-        <label for="add-outcome">What happened?</label>
+        <label for="add-outcome">Outcome</label>
         <select id="add-outcome" name="outcome">
-          <option value="not_visited">Not visited</option>
           <option value="good_conversation">Good conversation</option>
-          <option value="leaflet_left">Leaflet left</option>
+          <option value="leaflet_left" selected>Leaflet left</option>
           <option value="reception_only">Reception only</option>
           <option value="could_not_get_in">Could not get in</option>
           <option value="not_suitable">Not suitable</option>
         </select>
       </div>
       <div class="field">
-        <label for="add-notes">Quick notes</label>
-        <textarea id="add-notes" name="notes" rows="2" placeholder="What they said, best follow-up…"></textarea>
+        <label for="add-person">Name</label>
+        <input type="text" id="add-person" name="person" autocomplete="name">
       </div>
-      <label class="check">
-        <input type="checkbox" id="add-warm" name="warm">
-        <span>Warm lead</span>
-      </label>
-      <label class="check">
-        <input type="checkbox" id="add-followup" name="followUp">
-        <span>Needs follow-up</span>
-      </label>
+      <div class="field">
+        <label for="add-email">Email</label>
+        <input type="email" id="add-email" name="email" autocomplete="email" inputmode="email">
+      </div>
+      <div class="field">
+        <label for="add-notes">Note</label>
+        <textarea id="add-notes" name="notes" rows="2" placeholder="What they said…"></textarea>
+      </div>
       <button type="submit" class="btn btn-primary btn-block">Save place</button>
     </form>
   </div>
 
-  <datalist id="role-suggestions">
-    <option value="Reception"></option>
-    <option value="Office Manager"></option>
-    <option value="EA"></option>
-    <option value="PA"></option>
-    <option value="Studio Manager"></option>
-    <option value="Operations Manager"></option>
-    <option value="Production Coordinator"></option>
-  </datalist>
-
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="app.js" defer></script>
+  <script src="outreach-core.js"></script>
+  <script src="assets/app.v2.js" defer></script>
 </body>
 </html>

@@ -19,6 +19,7 @@
   var STORAGE_PLACES  = "cgc-outreach-v1-places";
   var STORAGE_AREA    = "cgc-outreach-v1-selected-area";
   var STORAGE_PENDING = "cgc-outreach-v1-pending";
+  var STORAGE_LOCAL   = "cgc-outreach-v1-prefer-local";
 
   // ── Supabase ─────────────────────────────────────────────────────────────────
 
@@ -112,7 +113,7 @@
       walk: "2 min walk",
       score: 10,
       tags: [
-        { className: "tag-warm", text: "Known contact \u2014 Jessica Smith" },
+        { className: "tag-known", text: "Known contact \u2014 Jessica Smith" },
         { className: "tag-multi", text: "+The Gate same building" }
       ],
       phone: "+44 20 3026 6000",
@@ -835,6 +836,7 @@
     if (skipBtn) {
       skipBtn.onclick = function () {
         cloudReady = false;
+        try { localStorage.setItem(STORAGE_LOCAL, "1"); } catch (e) { /* ignore */ }
         gate.hidden = true;
         updateSaveNotice();
       };
@@ -891,6 +893,7 @@
     return sb.auth.getSession().then(function (res) {
       var session = res && res.data && res.data.session;
       if (session && session.user) {
+        try { localStorage.removeItem(STORAGE_LOCAL); } catch (e) { /* ignore */ }
         hideAuthGate();
         return checkMembership(session.user).then(function () {
           updateSaveNotice();
@@ -903,7 +906,15 @@
           }
         });
       } else {
-        showAuthGate();
+        var preferLocal = false;
+        try { preferLocal = localStorage.getItem(STORAGE_LOCAL) === "1"; } catch (e) { /* ignore */ }
+        if (preferLocal) {
+          cloudReady = false;
+          hideAuthGate();
+          updateSaveNotice();
+        } else {
+          showAuthGate();
+        }
       }
     }).catch(function () { cloudReady = false; });
   }
@@ -917,16 +928,17 @@
       ? "Syncing to cloud when online. Also saved on this phone."
       : (sb ? "Saved on this phone. Sign in to sync across phones." : "Saved on this phone (no cloud).");
 
-    var existing = el.querySelector(".sign-out-btn");
-    if (existing) existing.remove();
+    // Remove previous action buttons
+    var oldBtns = el.querySelectorAll("button");
+    for (var i = 0; i < oldBtns.length; i++) oldBtns[i].remove();
 
     if (currentUser && cloudReady) {
-      var btn = document.createElement("button");
-      btn.type      = "button";
-      btn.className = "sign-out-btn btn btn-ghost btn-small";
-      btn.style.marginTop = "8px";
-      btn.textContent = "Sign out";
-      btn.addEventListener("click", function () {
+      var outBtn = document.createElement("button");
+      outBtn.type = "button";
+      outBtn.className = "btn btn-ghost btn-small";
+      outBtn.textContent = "Sign out";
+      outBtn.style.marginLeft = "8px";
+      outBtn.addEventListener("click", function () {
         if (!sb) return;
         sb.auth.signOut().then(function () {
           currentUser = null;
@@ -935,7 +947,18 @@
           showAuthGate();
         });
       });
-      el.appendChild(btn);
+      el.appendChild(outBtn);
+    } else if (sb && !cloudReady) {
+      var inBtn = document.createElement("button");
+      inBtn.type = "button";
+      inBtn.className = "btn btn-ghost btn-small";
+      inBtn.textContent = "Sign in";
+      inBtn.style.marginLeft = "8px";
+      inBtn.addEventListener("click", function () {
+        try { localStorage.removeItem(STORAGE_LOCAL); } catch (e) { /* ignore */ }
+        showAuthGate();
+      });
+      el.appendChild(inBtn);
     }
   }
 
@@ -1288,6 +1311,9 @@
     if (!venue || !venue.askFor || !venue.askFor.length) return "";
     var c = venue.askFor[0];
     if (!c || !c.name) return "";
+    // Avoid duplicating a name already present in the at-the-door instruction.
+    var angle = String(venue.angle || "").toLowerCase();
+    if (angle && angle.indexOf(String(c.name).toLowerCase()) !== -1) return "";
     return '<p class="compact-ask-for">Ask for <strong>' + escapeHtml(c.name) + "</strong>" +
       (c.role ? " \u00b7 " + escapeHtml(c.role) : "") + "</p>";
   }
