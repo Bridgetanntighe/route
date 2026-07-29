@@ -1190,31 +1190,6 @@
     }, 2800);
   }
 
-  async function copyText(text) {
-    try {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        await navigator.clipboard.writeText(text);
-        return true;
-      }
-    } catch (err) {
-      /* fall through */
-    }
-    try {
-      var ta = document.createElement("textarea");
-      ta.value = text;
-      ta.setAttribute("readonly", "");
-      ta.style.position = "fixed";
-      ta.style.left = "-9999px";
-      document.body.appendChild(ta);
-      ta.select();
-      var ok = document.execCommand("copy");
-      document.body.removeChild(ta);
-      return ok;
-    } catch (err2) {
-      return false;
-    }
-  }
-
   function formatDate() {
     var now = new Date();
     var opts = { weekday: "long", day: "numeric", month: "long", year: "numeric" };
@@ -1773,83 +1748,6 @@
     showToast("Added place removed.");
   }
 
-  function buildShareText() {
-    var places = allPlaces()
-      .filter(function (venue) {
-        return placeMatchesArea(venue) && isVisited(getVisit(venue.id));
-      })
-      .sort(function (a, b) {
-        var aa = normalizeAreaId(a.area);
-        var ba = normalizeAreaId(b.area);
-        if (aa !== ba) return aa < ba ? -1 : 1;
-        if ((a.cluster || "") !== (b.cluster || "")) return (a.cluster || "") < (b.cluster || "") ? -1 : 1;
-        return (a.routeOrder || 0) - (b.routeOrder || 0);
-      });
-
-    if (!places.length) return null;
-
-    var lines = [];
-    lines.push("Covent Garden Catering — Outreach log");
-    lines.push(formatDate());
-    lines.push(areaLabel(state.area));
-    lines.push("");
-
-    var currentArea = null;
-    for (var i = 0; i < places.length; i++) {
-      var venue = places[i];
-      var visit = getVisit(venue.id);
-      var areaId = normalizeAreaId(venue.area);
-      if (state.area === "all" && areaId !== currentArea) {
-        currentArea = areaId;
-        lines.push("— " + areaLabel(areaId) + " —");
-        lines.push("");
-      }
-      lines.push("• " + venue.name);
-      lines.push("  Area: " + areaLabel(areaId));
-      lines.push("  Cluster: " + clusterLabel(venue.cluster));
-      lines.push("  Outcome: " + (OUTCOME_LABELS[visit.outcome] || visit.outcome));
-      lines.push("  Contact: " + (visit.person || "—"));
-      lines.push("  Role: " + (visit.role || "—"));
-      lines.push("  Email: " + (visit.email || "—"));
-      if (visit.linkedin) lines.push("  LinkedIn: " + visit.linkedin);
-      lines.push("  Notes: " + (visit.notes || "—"));
-      lines.push("  Follow-up: " + (visit.followUp ? "Yes" : "No"));
-      lines.push("");
-    }
-
-    lines.push(
-      cloudReady
-        ? "Shared from the Outreach tracker. Data is saved in Supabase and on the device used."
-        : "Shared from the Outreach tracker. Data was saved on the device used."
-    );
-    return lines.join("\n");
-  }
-
-  async function onShareLog() {
-    var text = buildShareText();
-    if (!text) {
-      showToast("No visits recorded yet. Log a visit first, then share.");
-      return;
-    }
-
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "Covent Garden Catering — Outreach Walk log",
-          text: text
-        });
-        showToast("Log shared.");
-        return;
-      } catch (err) {
-        if (err && err.name === "AbortError") return;
-        /* fall through to clipboard */
-      }
-    }
-
-    var ok = await copyText(text);
-    showToast(ok ? "Visit log copied. Paste it into WhatsApp, Messages or email." : "Could not share or copy the log.");
-  }
-
   function onRouteClick(event) {
     var removeBtn = event.target.closest("[data-remove-place]");
     if (removeBtn) {
@@ -2015,10 +1913,6 @@
     els.routeList.addEventListener("click", onRouteClick);
     els.routeList.addEventListener("submit", onRouteSubmit);
 
-    els.shareBtn.addEventListener("click", function () {
-      onShareLog();
-    });
-
     els.addBtn.addEventListener("click", openSheet);
     els.closeSheet.addEventListener("click", closeSheet);
     els.backdrop.addEventListener("click", closeSheet);
@@ -2052,7 +1946,6 @@
     els.controlsCurrent = document.getElementById("controls-current");
     els.controlsHint = document.getElementById("controls-hint");
     els.areaLocation = document.getElementById("area-location");
-    els.shareBtn = document.getElementById("share-log-btn");
     els.addBtn = document.getElementById("add-place-btn");
     els.sheet = document.getElementById("add-place-sheet");
     els.backdrop = document.getElementById("sheet-backdrop");
