@@ -85,6 +85,7 @@
   ];
 
   var CLUSTERS = [
+    { id: "additional-leaflet-targets-29-july", area: "covent-garden",      label: "Additional leaflet targets \u2014 added 29 July", tone: "added" },
     { id: "new-targets-29-july",   area: "covent-garden",      label: "New targets \u2014 added 29 July",              tone: "bonus" },
     { id: "bow-street",            area: "covent-garden",      label: "Bow Street cluster",                           tone: "leg-a" },
     { id: "slingsby-st-martins",   area: "covent-garden",      label: "Slingsby Place & St Martin\u2019s Lane cluster",tone: "leg-b" },
@@ -103,6 +104,150 @@
 
   /** Venue seed data — IDs must stay stable for saved visits. */
   var VENUES = [
+    {
+      id: "society-london-theatre-uk-theatre",
+      area: "covent-garden",
+      cluster: "additional-leaflet-targets-29-july",
+      routeOrder: 1,
+      name: "Society of London Theatre / UK Theatre",
+      type: "Theatre / Industry Office",
+      address: "32 Rose Street, London WC2E 9ET",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW \u2014 NOT ON OLD ROUTE" }],
+      phone: "+44 20 7557 6700",
+      phoneHref: "+442075576700",
+      phoneLabel: "+44 20 7557 6700",
+      mapsQuery: "32 Rose Street, London WC2E 9ET",
+      angle:
+        "Ask for the office or events manager. Office meetings, training and industry events."
+    },
+    {
+      id: "production-resource-group",
+      area: "covent-garden",
+      cluster: "additional-leaflet-targets-29-july",
+      routeOrder: 2,
+      name: "Production Resource Group",
+      type: "Live Production",
+      address: "1st Floor, 77 St Martin\u2019s Lane, London WC2N 4AA",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW \u2014 NOT ON OLD ROUTE" }],
+      phone: "+44 20 7632 1500",
+      phoneHref: "+442076321500",
+      phoneLabel: "+44 20 7632 1500",
+      mapsQuery: "1st Floor, 77 St Martin's Lane, London WC2N 4AA",
+      angle:
+        "Ask for the production or office coordinator. Live-production schedules, project meetings and team working sessions."
+    },
+    {
+      id: "aka-shaftesbury-avenue",
+      area: "covent-garden",
+      cluster: "additional-leaflet-targets-29-july",
+      routeOrder: 3,
+      name: "AKA",
+      type: "Creative Marketing Agency",
+      address: "117 Shaftesbury Avenue, London WC2H 8AF",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW \u2014 NOT ON OLD ROUTE" }],
+      phone: "+44 20 7836 4747",
+      phoneHref: "+442078364747",
+      phoneLabel: "+44 20 7836 4747",
+      mapsQuery: "117 Shaftesbury Avenue, London WC2H 8AF",
+      angle:
+        "Ask for the office manager. Client meetings, campaign working lunches and tidy meeting platters."
+    },
+    {
+      id: "liquid-violet",
+      area: "covent-garden",
+      cluster: "additional-leaflet-targets-29-july",
+      routeOrder: 4,
+      name: "Liquid Violet",
+      type: "Recording Studio",
+      address: "1st Floor, 39 Earlham Street, London WC2H 9LT",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW \u2014 NOT ON OLD ROUTE" }],
+      phone: "+44 20 3959 0770",
+      phoneHref: "+442039590770",
+      phoneLabel: "+44 20 3959 0770",
+      mapsQuery: "1st Floor, 39 Earlham Street, London WC2H 9LT",
+      angle:
+        "Ask for the studio or production manager. Recording sessions, visiting talent and food arriving at the promised time."
+    },
+    {
+      id: "storm-post-production",
+      area: "covent-garden",
+      cluster: "additional-leaflet-targets-29-july",
+      routeOrder: 5,
+      name: "Storm Post Production",
+      type: "Post Production",
+      address: "11\u201313 Neal\u2019s Yard, London WC2H 9DP",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW \u2014 NOT ON OLD ROUTE" }],
+      phone: "+44 20 7520 5000",
+      phoneHref: "+442075205000",
+      phoneLabel: "+44 20 7520 5000",
+      mapsQuery: "11-13 Neal's Yard, London WC2H 9DP",
+      angle:
+        "Ask for the studio manager or client-services team. Long edit days, client reviews, changing schedules and clear dietary labelling."
+    },
+    {
+      id: "commercials-unlimited",
+      area: "covent-garden",
+      cluster: "additional-leaflet-targets-29-july",
+      routeOrder: 6,
+      name: "Commercials Unlimited",
+      type: "Production / Post Production",
+      address: "Garden Studios, 11\u201315 Betterton Street, London WC2H 9BP",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW \u2014 NOT ON OLD ROUTE" }],
+      phone: "+44 20 7470 8791",
+      phoneHref: "+442074708791",
+      phoneLabel: "+44 20 7470 8791",
+      mapsQuery: "Garden Studios, 11-15 Betterton Street, London WC2H 9BP",
+      angle:
+        "Ask for the production or office manager. Production days, client sessions and changing schedules."
+    },
+    {
+      id: "lw-theatres-head-office",
+      area: "covent-garden",
+      cluster: "additional-leaflet-targets-29-july",
+      routeOrder: 7,
+      name: "LW Theatres Head Office",
+      type: "Head Office",
+      address: "65 Drury Lane, London WC2B 5SP",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW \u2014 NOT ON OLD ROUTE" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "65 Drury Lane, London WC2B 5SP",
+      angle:
+        "Ask for the office manager. Head-office meetings and team lunches."
+    },
+    {
+      id: "dewynters",
+      area: "covent-garden",
+      cluster: "additional-leaflet-targets-29-july",
+      routeOrder: 8,
+      name: "Dewynters",
+      type: "Live Entertainment Creative Agency",
+      address: "Wellington House, 125 Strand, London WC2R 0AP",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW \u2014 NOT ON OLD ROUTE" }],
+      phone: "+44 20 7321 0488",
+      phoneHref: "+442073210488",
+      phoneLabel: "+44 20 7321 0488",
+      mapsQuery: "Wellington House, 125 Strand, London WC2R 0AP",
+      angle:
+        "Ask for the office manager or EA. Client meetings, campaign work and team lunches."
+    },
     {
       id: "prosek-partners",
       area: "covent-garden",
