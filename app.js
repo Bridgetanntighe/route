@@ -1253,10 +1253,28 @@
     updateAreaLocation();
   }
 
+  function filterLabel(filterId) {
+    if (filterId === "warm") return "Warm & follow-up";
+    if (filterId === "not_visited") return "Not visited";
+    if (filterId === "visited") return "Visited";
+    return "All";
+  }
+
   function updateAreaLocation() {
     var label = areaLabel(state.area);
     if (els.areaLocation) els.areaLocation.textContent = label;
-    if (els.areaChooserCurrent) els.areaChooserCurrent.textContent = label;
+    if (els.controlsCurrent) els.controlsCurrent.textContent = label;
+    if (els.controlsHint) {
+      var query = (state.search || "").trim();
+      var filter = filterLabel(state.filter || "all");
+      if (query) {
+        els.controlsHint.textContent = "Search: “" + query + "” · " + filter;
+      } else if (state.filter && state.filter !== "all") {
+        els.controlsHint.textContent = filter + " · Tap for search";
+      } else {
+        els.controlsHint.textContent = "Search & filters";
+      }
+    }
   }
 
   function outcomeOptionsHtml(selected) {
@@ -1904,7 +1922,7 @@
         var next = btn.getAttribute("data-area") || "covent-garden";
         state.area = next === "all" ? "all" : normalizeAreaId(next);
         persistSelectedArea();
-        closeAreaChooser();
+        closeControlsPanel();
         renderAreaTabs();
         populateAddPlaceAreaFields();
         render();
@@ -1912,12 +1930,12 @@
     });
   }
 
-  function closeAreaChooser() {
-    if (!els.areaCollapse) return;
-    els.areaCollapse.open = false;
+  function closeControlsPanel() {
+    if (!els.controlsCollapse) return;
+    els.controlsCollapse.open = false;
     // iOS Safari can leave <details> open if closed mid-click; re-close after paint.
     window.setTimeout(function () {
-      if (els.areaCollapse) els.areaCollapse.open = false;
+      if (els.controlsCollapse) els.controlsCollapse.open = false;
     }, 0);
   }
 
@@ -1967,17 +1985,29 @@
   function bind() {
     els.search.addEventListener("input", function () {
       state.search = els.search.value || "";
+      updateAreaLocation();
       render();
     });
 
+    els.search.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        closeControlsPanel();
+        if (typeof els.search.blur === "function") els.search.blur();
+      }
+    });
+
     els.filters.forEach(function (btn) {
-      btn.addEventListener("click", function () {
+      btn.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
         state.filter = btn.getAttribute("data-filter") || "all";
         els.filters.forEach(function (b) {
           var active = b === btn;
           b.classList.toggle("is-active", active);
           b.setAttribute("aria-pressed", active ? "true" : "false");
         });
+        closeControlsPanel();
         render();
       });
     });
@@ -1998,15 +2028,15 @@
       if (event.key === "Escape" && !els.sheet.hidden) {
         closeSheet();
       }
-      if (event.key === "Escape" && els.areaCollapse && els.areaCollapse.open) {
-        closeAreaChooser();
+      if (event.key === "Escape" && els.controlsCollapse && els.controlsCollapse.open) {
+        closeControlsPanel();
       }
     });
 
     document.addEventListener("click", function (event) {
-      if (!els.areaCollapse || !els.areaCollapse.open) return;
-      if (els.areaCollapse.contains(event.target)) return;
-      closeAreaChooser();
+      if (!els.controlsCollapse || !els.controlsCollapse.open) return;
+      if (els.controlsCollapse.contains(event.target)) return;
+      closeControlsPanel();
     });
   }
 
@@ -2018,8 +2048,9 @@
     els.search = document.getElementById("search-input");
     els.filters = Array.prototype.slice.call(document.querySelectorAll(".filter-btn"));
     els.areaTabsMount = document.getElementById("area-tabs");
-    els.areaCollapse = document.getElementById("area-collapse");
-    els.areaChooserCurrent = document.getElementById("area-chooser-current");
+    els.controlsCollapse = document.getElementById("controls-collapse");
+    els.controlsCurrent = document.getElementById("controls-current");
+    els.controlsHint = document.getElementById("controls-hint");
     els.areaLocation = document.getElementById("area-location");
     els.shareBtn = document.getElementById("share-log-btn");
     els.addBtn = document.getElementById("add-place-btn");

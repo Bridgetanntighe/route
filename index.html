@@ -42,28 +42,34 @@
   </section>
 
   <div class="sticky-controls" id="sticky-controls">
-    <details class="area-collapse" id="area-collapse">
-      <summary id="area-chooser-summary" aria-label="Choose area">
-        <span class="area-collapse-label">Area</span>
-        <span class="area-collapse-current" id="area-chooser-current">Covent Garden</span>
+    <details class="controls-collapse" id="controls-collapse">
+      <summary id="controls-summary" aria-label="Area, search and filters">
+        <span class="controls-collapse-label">Area</span>
+        <span class="controls-collapse-text">
+          <span class="controls-collapse-current" id="controls-current">Covent Garden</span>
+          <span class="controls-collapse-hint" id="controls-hint">Search &amp; filters</span>
+        </span>
       </summary>
-      <div class="area-tabs" id="area-tabs" role="group" aria-label="Area options"></div>
+      <div class="controls-collapse-body">
+        <p class="controls-section-label" id="area-chooser-label">Choose area</p>
+        <div class="area-tabs" id="area-tabs" role="group" aria-labelledby="area-chooser-label"></div>
+        <label class="search-label" for="search-input">Search places</label>
+        <input
+          type="search"
+          id="search-input"
+          class="search-input"
+          placeholder="Search company, address, contact…"
+          autocomplete="off"
+          enterkeyhint="search"
+        >
+        <div class="filters" role="group" aria-label="Filter places">
+          <button type="button" class="filter-btn is-active" data-filter="all" aria-pressed="true">All</button>
+          <button type="button" class="filter-btn" data-filter="warm" aria-pressed="false">Warm &amp; follow-up</button>
+          <button type="button" class="filter-btn" data-filter="not_visited" aria-pressed="false">Not visited</button>
+          <button type="button" class="filter-btn" data-filter="visited" aria-pressed="false">Visited</button>
+        </div>
+      </div>
     </details>
-    <label class="search-label" for="search-input">Search places</label>
-    <input
-      type="search"
-      id="search-input"
-      class="search-input"
-      placeholder="Search company, address, contact…"
-      autocomplete="off"
-      enterkeyhint="search"
-    >
-    <div class="filters" role="group" aria-label="Filter places">
-      <button type="button" class="filter-btn is-active" data-filter="all" aria-pressed="true">All</button>
-      <button type="button" class="filter-btn" data-filter="warm" aria-pressed="false">Warm &amp; follow-up</button>
-      <button type="button" class="filter-btn" data-filter="not_visited" aria-pressed="false">Not visited</button>
-      <button type="button" class="filter-btn" data-filter="visited" aria-pressed="false">Visited</button>
-    </div>
   </div>
 
   <main id="main-content" class="main">
