@@ -1141,6 +1141,7 @@
 
   var els        = {};
   var toastTimer = null;
+  var scrollToTopOnNextRender = false;
 
   // ── Utility helpers ───────────────────────────────────────────────────────────
 
@@ -2008,7 +2009,12 @@
     }
 
     updateStats();
-    window.scrollTo(0, savedY);
+    if (scrollToTopOnNextRender) {
+      scrollToTopOnNextRender = false;
+      window.scrollTo(0, 0);
+    } else {
+      window.scrollTo(0, savedY);
+    }
   }
 
   // ── Visit event handlers ──────────────────────────────────────────────────────
@@ -2257,6 +2263,7 @@
           var next    = btn.getAttribute("data-area") || "covent-garden";
           state.area  = next === "all" ? "all" : Core.normalizeAreaId(next);
           persistSelectedArea();
+          scrollToTopOnNextRender = true;
           closeControlsPanel();
           renderAreaTabs();
           render();
