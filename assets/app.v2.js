@@ -93,12 +93,19 @@
     { id: "holborn",               area: "covent-garden",      label: "Holborn cluster",                              tone: "leg-d" },
     { id: "shorts-gardens-kingsway",area:"covent-garden",      label: "Short\u2019s Gardens & Kingsway cluster",      tone: "leg-e" },
     { id: "return-to-base",        area: "covent-garden",      label: "Near base cluster",                            tone: "bonus" },
+    { id: "st-pauls-new-farringdon-clerkenwell", area: "st-pauls-cheapside", label: "St Paul\u2019s New Drop-Offs \u2014 Farringdon & Clerkenwell", tone: "added" },
+    { id: "st-pauls-new-hatton-production",      area: "st-pauls-cheapside", label: "St Paul\u2019s New Drop-Offs \u2014 Hatton Wall & Production Studios", tone: "added" },
     { id: "fleet-street-ludgate",  area: "st-pauls-cheapside", label: "Fleet Street & Ludgate cluster",               tone: "leg-f" },
     { id: "st-pauls-cheapside",    area: "st-pauls-cheapside", label: "St Paul\u2019s & Cheapside cluster",           tone: "leg-g" },
     { id: "smithfield-farringdon", area: "st-pauls-cheapside", label: "Smithfield & Farringdon cluster",              tone: "leg-h" },
     { id: "clerkenwell",           area: "st-pauls-cheapside", label: "Clerkenwell cluster",                          tone: "leg-i" },
     { id: "added-nearby",          area: null,                 label: "Added nearby",                                 tone: "added" }
   ];
+
+  var ST_PAULS_NEW_DROPOFF_CLUSTERS = {
+    "st-pauls-new-farringdon-clerkenwell": true,
+    "st-pauls-new-hatton-production": true
+  };
 
   // ── Venues (verbatim from /tmp/venues-block.js) ───────────────────────────────
 
@@ -917,6 +924,208 @@
       mapsQuery: "Silverlight House, 6-8 Standard Place, London EC2A 3BE",
       angle:
         "Ground floor \u2014 ask office manager. Client meeting boards & team lunches."
+    },
+
+    /* NEW DROP-OFFS \u2014 NOT VISITED (St Paul\u2019s) \u2014 separate from prior visited clusters */
+    {
+      id: "seventy-two-point-farringdon",
+      area: "st-pauls-cheapside",
+      cluster: "st-pauls-new-farringdon-clerkenwell",
+      routeOrder: 1,
+      name: "72Point",
+      type: "Media / Content Agency",
+      address: "21 Farringdon Road, London, EC1M 3HA",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW DROP-OFF \u2014 NOT VISITED" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "21 Farringdon Road, London EC1M 3HA",
+      angle: "Ask for the operations manager."
+    },
+    {
+      id: "mnc-britton-street",
+      area: "st-pauls-cheapside",
+      cluster: "st-pauls-new-farringdon-clerkenwell",
+      routeOrder: 2,
+      name: "MNC",
+      type: "Office / Creative Business",
+      address: "30 Britton Street, London, EC1M 5UH",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW DROP-OFF \u2014 NOT VISITED" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "30 Britton Street, London EC1M 5UH",
+      angle: "Ask for the office manager."
+    },
+    {
+      id: "kota-clerkenwell-road",
+      area: "st-pauls-cheapside",
+      cluster: "st-pauls-new-farringdon-clerkenwell",
+      routeOrder: 3,
+      name: "KOTA",
+      type: "Design / Creative Agency",
+      address: "1\u20135 Clerkenwell Road, London, EC1M 5PA",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW DROP-OFF \u2014 NOT VISITED" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "1-5 Clerkenwell Road, London EC1M 5PA",
+      angle: "Ask for the office or operations manager."
+    },
+    {
+      id: "rogue-films-reset-great-sutton",
+      area: "st-pauls-cheapside",
+      cluster: "st-pauls-new-farringdon-clerkenwell",
+      routeOrder: 4,
+      name: "Rogue Films + RESET",
+      type: "Production / Creative Studios",
+      address: "19\u201320 Great Sutton Street, London, EC1V 0DR",
+      walk: "",
+      score: null,
+      tags: [
+        { className: "tag-new", text: "NEW DROP-OFF \u2014 NOT VISITED" },
+        { className: "tag-multi", text: "2 companies, 1 building" }
+      ],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "19-20 Great Sutton Street, London EC1V 0DR",
+      angle:
+        "One stop for both Rogue Films and RESET. Ask for the production coordinator or office manager. Leave leaflets for both companies."
+    },
+    {
+      id: "ami-clerkenwell-green",
+      area: "st-pauls-cheapside",
+      cluster: "st-pauls-new-farringdon-clerkenwell",
+      routeOrder: 5,
+      name: "AMI",
+      type: "Office / Creative Business",
+      address: "3rd Floor, Cornwell House, 21 Clerkenwell Green, London, EC1R 0DX",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW DROP-OFF \u2014 NOT VISITED" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "Cornwell House, 21 Clerkenwell Green, London EC1R 0DX",
+      angle: "3rd Floor, Cornwell House. Ask for the office manager."
+    },
+    {
+      id: "frank-pr-spreckley-pr-hatton-wall",
+      area: "st-pauls-cheapside",
+      cluster: "st-pauls-new-hatton-production",
+      routeOrder: 1,
+      name: "Frank PR + Spreckley PR",
+      type: "PR Agencies",
+      address: "5\u20139 Hatton Wall, London, EC1N 8HX",
+      walk: "",
+      score: null,
+      tags: [
+        { className: "tag-new", text: "NEW DROP-OFF \u2014 NOT VISITED" },
+        { className: "tag-multi", text: "2 companies, 1 building" }
+      ],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "5-9 Hatton Wall, London EC1N 8HX",
+      angle:
+        "One stop for both. Frank PR is on the 4th Floor \u2014 entrance is the first door after the Hat & Tun pub. Spreckley PR is also in this building. Ask for the office or operations manager. Leave leaflets for both."
+    },
+    {
+      id: "ukie-black-bull-yard",
+      area: "st-pauls-cheapside",
+      cluster: "st-pauls-new-hatton-production",
+      routeOrder: 2,
+      name: "Ukie",
+      type: "Games Industry Trade Body",
+      address: "18a Black Bull Yard, 24\u201328 Hatton Wall, London, EC1N 8JH",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW DROP-OFF \u2014 NOT VISITED" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "18a Black Bull Yard, 24-28 Hatton Wall, London EC1N 8JH",
+      angle:
+        "Ask for the office or events manager. They host meetings and events and provide catering for office bookings."
+    },
+    {
+      id: "forge-entertainment-zeppelin",
+      area: "st-pauls-cheapside",
+      cluster: "st-pauls-new-hatton-production",
+      routeOrder: 3,
+      name: "The Forge Entertainment",
+      type: "TV / Entertainment Production",
+      address: "2nd Floor, The Zeppelin Building, 59\u201361 Farringdon Road, London, EC1M 3JB",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW DROP-OFF \u2014 NOT VISITED" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "The Zeppelin Building, 59-61 Farringdon Road, London EC1M 3JB",
+      angle: "2nd Floor, The Zeppelin Building. Ask for Annelise, Head of Operations."
+    },
+    {
+      id: "nineteen-twenty-vfx-farringdon",
+      area: "st-pauls-cheapside",
+      cluster: "st-pauls-new-hatton-production",
+      routeOrder: 4,
+      name: "1920 VFX",
+      type: "VFX Studio",
+      address: "1st Floor, 109\u2013111 Farringdon Road, London, EC1R 3BW",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW DROP-OFF \u2014 NOT VISITED" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "109-111 Farringdon Road, London EC1R 3BW",
+      angle: "1st Floor. Ask for the production manager or production desk."
+    },
+    {
+      id: "piano-works-found-mainframe-purple",
+      area: "st-pauls-cheapside",
+      cluster: "st-pauls-new-hatton-production",
+      routeOrder: 5,
+      name: "The Piano Works \u2014 Found Studio, Mainframe and Purple Creative",
+      type: "Production / Creative Studios",
+      address: "113\u2013117 Farringdon Road, London, EC1R 3BX",
+      walk: "",
+      score: null,
+      tags: [
+        { className: "tag-new", text: "NEW DROP-OFF \u2014 NOT VISITED" },
+        { className: "tag-multi", text: "3 companies, 1 building" }
+      ],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "113-117 Farringdon Road, London EC1R 3BX",
+      angle:
+        "One physical stop \u2014 take leaflets for all three companies inside. Found Studio \u2014 Unit 4; Mainframe \u2014 Studio 10; Purple Creative \u2014 Third Floor. Ask for the studio, production or office manager."
+    },
+    {
+      id: "mount-pleasant-studio",
+      area: "st-pauls-cheapside",
+      cluster: "st-pauls-new-hatton-production",
+      routeOrder: 6,
+      name: "Mount Pleasant Studio",
+      type: "Studio",
+      address: "51\u201353 Mount Pleasant, London, WC1X 0AE",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW DROP-OFF \u2014 NOT VISITED" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "51-53 Mount Pleasant, London WC1X 0AE",
+      angle: "Ask for Simon, the studio contact."
     }
   ];
 
@@ -1633,39 +1842,93 @@
     );
   }
 
-  function clusterRouteUrl(places) {
+  function clusterRouteUrl(places, areaId) {
     if (!places || !places.length) return "";
-    var origin = "17 The Market, Covent Garden, London WC2E 8RB";
     var stops = places.map(function (place) {
       return place.mapsQuery || place.address || place.name;
     }).filter(Boolean);
     if (!stops.length) return "";
+
+    var resolvedArea = areaId || (places[0] && places[0].area) || "";
+    var isStPauls = resolvedArea === "st-pauls-cheapside";
+
+    // St Paul's routes: first listed place is origin, last is destination.
+    // Never prepend Courtyard / 17 The Market.
+    if (isStPauls) {
+      var origin = stops[0];
+      var destination = stops[stops.length - 1];
+      var middle = stops.slice(1, -1);
+      var stPaulsUrl =
+        "https://www.google.com/maps/dir/?api=1&origin=" +
+        encodeURIComponent(origin) +
+        "&destination=" +
+        encodeURIComponent(destination) +
+        "&travelmode=walking";
+      if (middle.length) {
+        stPaulsUrl +=
+          "&waypoints=" +
+          middle.map(function (stop) { return encodeURIComponent(stop); }).join("%7C");
+      }
+      return stPaulsUrl;
+    }
+
+    // Covent Garden (and other areas): keep Market as start/finish hub.
+    var marketOrigin = "17 The Market, Covent Garden, London WC2E 8RB";
     return (
       "https://www.google.com/maps/dir/?api=1&origin=" +
-      encodeURIComponent(origin) +
+      encodeURIComponent(marketOrigin) +
       "&destination=" +
-      encodeURIComponent(origin) +
+      encodeURIComponent(marketOrigin) +
       "&travelmode=walking&waypoints=" +
       stops.map(function (stop) { return encodeURIComponent(stop); }).join("%7C")
     );
   }
 
   function clusterIntroHtml(cluster, places) {
-    if (!cluster) return "";
-    var routeUrl = clusterRouteUrl(places);
+    if (!cluster || !places || !places.length) return "";
+    var routeUrl = clusterRouteUrl(places, cluster.area);
     if (!routeUrl) return "";
+    var isStPauls = cluster.area === "st-pauls-cheapside";
+    var isNewDropOff = !!ST_PAULS_NEW_DROPOFF_CLUSTERS[cluster.id];
+    var startLabel = places[0].name || places[0].address || "First stop";
+    var endLabel =
+      places[places.length - 1].name ||
+      places[places.length - 1].address ||
+      "Last stop";
+    var stopCount = places.length;
+
+    var bodyLines;
+    if (isStPauls) {
+      bodyLines =
+        (isNewDropOff
+          ? '<p class="route-panel-line"><strong>NEW DROP-OFFS \u2014 NOT VISITED</strong></p>'
+          : "") +
+        '<p class="route-panel-line"><strong>Start:</strong> ' + escapeHtml(startLabel) + "</p>" +
+        '<p class="route-panel-line"><strong>Finish:</strong> ' + escapeHtml(endLabel) + "</p>" +
+        '<p class="route-panel-line">' +
+          stopCount + " stop" + (stopCount === 1 ? "" : "s") +
+          " \u00b7 open in Google Maps in listed order</p>";
+    } else if (cluster.id === "additional-leaflet-targets-29-july") {
+      bodyLines =
+        '<p class="route-panel-line"><strong>Start and finish:</strong> 17 The Market</p>' +
+        '<p class="route-panel-line">1.6 miles \u00b7 approximately 36 minutes walking</p>' +
+        '<p class="route-panel-line">Allow 90\u2013120 minutes with conversations</p>';
+    } else {
+      bodyLines =
+        '<p class="route-panel-line"><strong>Start and finish:</strong> 17 The Market</p>' +
+        '<p class="route-panel-line">Open this cluster in Google Maps in stop order.</p>';
+    }
+
+    var btnLabel =
+      cluster.id === "additional-leaflet-targets-29-july" || isNewDropOff
+        ? "Open full walking route"
+        : "Open cluster route";
+
     return (
       '<div class="route-panel" role="note" aria-label="Cluster walking route">' +
-        (
-          cluster.id === "additional-leaflet-targets-29-july"
-            ? '<p class="route-panel-line"><strong>Start and finish:</strong> 17 The Market</p>' +
-              '<p class="route-panel-line">1.6 miles \u00b7 approximately 36 minutes walking</p>' +
-              '<p class="route-panel-line">Allow 90\u2013120 minutes with conversations</p>'
-            : '<p class="route-panel-line"><strong>Start and finish:</strong> 17 The Market</p>' +
-              '<p class="route-panel-line">Open this cluster in Google Maps in stop order.</p>'
-        ) +
+        bodyLines +
         '<a class="btn btn-secondary btn-small route-panel-btn" href="' + escapeHtml(routeUrl) + '" target="_blank" rel="noopener noreferrer">' +
-          (cluster.id === "additional-leaflet-targets-29-july" ? "Open full walking route" : "Open cluster route") +
+          btnLabel +
         "</a>" +
       "</div>"
     );
@@ -1690,6 +1953,7 @@
     var html        = "";
     var visibleCount= 0;
     var clusterList = clustersForArea(state.area);
+    var showedNewDropOffsBanner = false;
 
     for (var s = 0; s < clusterList.length; s++) {
       var cluster         = clusterList[s];
@@ -1714,6 +1978,12 @@
       }
 
       if (clusterVisible) {
+        if (ST_PAULS_NEW_DROPOFF_CLUSTERS[cluster.id] && !showedNewDropOffsBanner) {
+          showedNewDropOffsBanner = true;
+          html +=
+            '<div class="cluster-divider cluster-divider-section" role="heading" aria-level="2">' +
+            "NEW DROP-OFFS \u2014 NOT VISITED</div>";
+        }
         html +=
           '<div class="cluster-divider" role="heading" aria-level="2">' +
           escapeHtml(cluster.label) + "</div>" +

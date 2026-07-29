@@ -362,6 +362,14 @@ a { color: #1e4f8c; }
   color: var(--muted);
 }
 
+.cluster-divider-section {
+  margin-top: 16px;
+  margin-bottom: 6px;
+  padding: 8px 2px 4px;
+  color: var(--charcoal);
+  border-top: 1px solid var(--border);
+}
+
 .route-panel {
   margin: 8px 0 14px;
   padding: 12px 14px;
