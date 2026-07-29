@@ -1268,7 +1268,7 @@
       var query = (state.search || "").trim();
       var filter = filterLabel(state.filter || "all");
       if (query) {
-        els.controlsHint.textContent = "Search: “" + query + "” · " + filter;
+        els.controlsHint.textContent = 'Search: "' + query + '" · ' + filter;
       } else if (state.filter && state.filter !== "all") {
         els.controlsHint.textContent = filter + " · Tap for search";
       } else {
