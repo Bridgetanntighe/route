@@ -35,11 +35,10 @@
 
   var CURRENT_OFFER = {
     active:         true,
-    title:          "Local office welcome",
-    minimumSpend:   100,
-    bookingDeadline:"2026-08-14",
-    deliveryPeriod: "any available August delivery date",
-    wording:        "Complimentary delivery on your first platter order of \u00a3100+",
+    title:          "Local office offer",
+    bookingDeadline:"2026-08-07",
+    wording:        "Free local delivery",
+    detail:         "On all office orders placed by 7 August 2026.",
     radiusNote:     "Within the normal delivery radius and subject to availability."
   };
 
@@ -70,9 +69,10 @@
   function getDecisionMakerScript() {
     var text = DECISION_MAKER_INTRO_BASE;
     if (isOfferActive()) {
-      text += " As part of our local office welcome, we\u2019re offering complimentary delivery " +
-        "on your first platter order over \u00a3" + CURRENT_OFFER.minimumSpend +
-        " when booked by " + formatOfferDeadline(CURRENT_OFFER.bookingDeadline) + ".";
+      text +=
+        " We\u2019re offering free local delivery on all office orders placed by " +
+        formatOfferDeadline(CURRENT_OFFER.bookingDeadline) +
+        ".";
     }
     return text;
   }
@@ -1207,7 +1207,7 @@
     mount.innerHTML =
       '<p class="offer-eyebrow">' + escapeHtml(CURRENT_OFFER.title) + "</p>" +
       '<p class="offer-main">'   + escapeHtml(CURRENT_OFFER.wording) + "</p>" +
-      '<p class="offer-detail">Book by ' + escapeHtml(formatOfferDeadline(CURRENT_OFFER.bookingDeadline)) + ".</p>";
+      '<p class="offer-detail">' + escapeHtml(CURRENT_OFFER.detail || "") + "</p>";
   }
 
   function renderDecisionMakerCopy() {
