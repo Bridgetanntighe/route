@@ -889,34 +889,13 @@
   }
 
   function initAuth() {
-    if (!sb) { cloudReady = false; return Promise.resolve(); }
-    return sb.auth.getSession().then(function (res) {
-      var session = res && res.data && res.data.session;
-      if (session && session.user) {
-        try { localStorage.removeItem(STORAGE_LOCAL); } catch (e) { /* ignore */ }
-        hideAuthGate();
-        return checkMembership(session.user).then(function () {
-          updateSaveNotice();
-          if (cloudReady) {
-            return loadFromCloud().then(function () {
-              retryPending();
-              render();
-              showToast("Cloud notes loaded.");
-            });
-          }
-        });
-      } else {
-        var preferLocal = false;
-        try { preferLocal = localStorage.getItem(STORAGE_LOCAL) === "1"; } catch (e) { /* ignore */ }
-        if (preferLocal) {
-          cloudReady = false;
-          hideAuthGate();
-          updateSaveNotice();
-        } else {
-          showAuthGate();
-        }
-      }
-    }).catch(function () { cloudReady = false; });
+    // Login gate disabled for now — phone-local saves only.
+    // Cloud sync stays off until member auth is re-enabled intentionally.
+    cloudReady = false;
+    currentUser = null;
+    hideAuthGate();
+    updateSaveNotice();
+    return Promise.resolve();
   }
 
   // ── Save notice ───────────────────────────────────────────────────────────────
@@ -924,42 +903,9 @@
   function updateSaveNotice() {
     var el = document.getElementById("save-notice");
     if (!el) return;
-    el.textContent = cloudReady
-      ? "Syncing to cloud when online. Also saved on this phone."
-      : (sb ? "Saved on this phone. Sign in to sync across phones." : "Saved on this phone (no cloud).");
-
-    // Remove previous action buttons
+    el.textContent = "Saved on this phone.";
     var oldBtns = el.querySelectorAll("button");
     for (var i = 0; i < oldBtns.length; i++) oldBtns[i].remove();
-
-    if (currentUser && cloudReady) {
-      var outBtn = document.createElement("button");
-      outBtn.type = "button";
-      outBtn.className = "btn btn-ghost btn-small";
-      outBtn.textContent = "Sign out";
-      outBtn.style.marginLeft = "8px";
-      outBtn.addEventListener("click", function () {
-        if (!sb) return;
-        sb.auth.signOut().then(function () {
-          currentUser = null;
-          cloudReady  = false;
-          updateSaveNotice();
-          showAuthGate();
-        });
-      });
-      el.appendChild(outBtn);
-    } else if (sb && !cloudReady) {
-      var inBtn = document.createElement("button");
-      inBtn.type = "button";
-      inBtn.className = "btn btn-ghost btn-small";
-      inBtn.textContent = "Sign in";
-      inBtn.style.marginLeft = "8px";
-      inBtn.addEventListener("click", function () {
-        try { localStorage.removeItem(STORAGE_LOCAL); } catch (e) { /* ignore */ }
-        showAuthGate();
-      });
-      el.appendChild(inBtn);
-    }
   }
 
   // ── Cloud helpers ─────────────────────────────────────────────────────────────
