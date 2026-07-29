@@ -1226,26 +1226,7 @@
     try {
       if (window.supabase && typeof window.supabase.createClient === "function") {
         sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-          auth: { persistSession: true, detectSessionInUrl: true }
-        });
-        sb.auth.onAuthStateChange(function (event, session) {
-          if (event === "SIGNED_IN" && session && session.user) {
-            hideAuthGate();
-            checkMembership(session.user).then(function () {
-              updateSaveNotice();
-              if (cloudReady) {
-                loadFromCloud().then(function () {
-                  retryPending();
-                  render();
-                  showToast("Cloud notes loaded.");
-                });
-              }
-            });
-          } else if (event === "SIGNED_OUT") {
-            currentUser = null;
-            cloudReady  = false;
-            updateSaveNotice();
-          }
+          auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
         });
       }
     } catch (err) {
@@ -1253,116 +1234,49 @@
     }
   }
 
-  // ── Auth gate ─────────────────────────────────────────────────────────────────
-
-  function ensureAuthGate() {
-    var existing = document.getElementById("auth-gate");
-    if (existing) return existing;
-    var div = document.createElement("div");
-    div.id = "auth-gate";
-    div.setAttribute("role", "dialog");
-    div.setAttribute("aria-modal", "true");
-    div.setAttribute("aria-label", "Sign in to sync");
-    div.hidden = true;
-    div.innerHTML =
-      '<div class="auth-gate-inner">' +
-        '<p class="auth-gate-brand">Covent Garden Catering</p>' +
-        '<h2 class="auth-gate-title">Team outreach</h2>' +
-        '<p class="auth-gate-sub">Sign in to sync visits across phones.</p>' +
-        '<form id="auth-form" novalidate>' +
-          '<label class="field-label" for="auth-email">Email address</label>' +
-          '<input type="email" id="auth-email" name="email" inputmode="email" ' +
-            'autocomplete="email" placeholder="you@example.com" class="auth-email-input">' +
-          '<button type="submit" class="btn btn-primary btn-block" style="margin-top:10px">' +
-            'Send magic link</button>' +
-        '</form>' +
-        '<p id="auth-msg" class="auth-msg" aria-live="polite"></p>' +
-        '<button type="button" id="auth-skip" class="btn btn-ghost btn-block" style="margin-top:8px">' +
-          'Continue on this phone (local only)</button>' +
-      '</div>';
-    document.body.appendChild(div);
-    return div;
-  }
-
-  function showAuthGate() {
-    var gate = ensureAuthGate();
-    gate.hidden = false;
-
-    var form = document.getElementById("auth-form");
-    if (form) {
-      form.onsubmit = function (e) {
-        e.preventDefault();
-        var emailInput = document.getElementById("auth-email");
-        var email = String((emailInput && emailInput.value) || "").trim();
-        if (!email) return;
-        sendMagicLink(email);
-      };
-    }
-
-    var skipBtn = document.getElementById("auth-skip");
-    if (skipBtn) {
-      skipBtn.onclick = function () {
-        cloudReady = false;
-        try { localStorage.setItem(STORAGE_LOCAL, "1"); } catch (e) { /* ignore */ }
-        gate.hidden = true;
-        updateSaveNotice();
-      };
-    }
-
-    var emailInput = document.getElementById("auth-email");
-    if (emailInput) setTimeout(function () { emailInput.focus(); }, 60);
-  }
-
   function hideAuthGate() {
     var gate = document.getElementById("auth-gate");
     if (gate) gate.hidden = true;
   }
 
-  function showAuthMsg(msg) {
-    var el = document.getElementById("auth-msg");
-    if (el) el.textContent = msg;
-  }
-
-  function sendMagicLink(email) {
-    if (!sb) return;
-    showAuthMsg("Sending\u2026");
-    sb.auth.signInWithOtp({
-      email: email,
-      options: { emailRedirectTo: location.origin + location.pathname }
-    }).then(function (res) {
-      if (res.error) {
-        showAuthMsg("Error: " + res.error.message);
-      } else {
-        showAuthMsg("Magic link sent! Check your email.");
-      }
-    }).catch(function () {
-      showAuthMsg("Could not send link. Check your connection.");
-    });
-  }
-
-  function checkMembership(user) {
-    if (!sb || !user) { cloudReady = false; return Promise.resolve(); }
-    return sb.from("outreach_members").select("user_id").eq("user_id", user.id).maybeSingle()
-      .then(function (res) {
-        if (res.data) {
-          cloudReady  = true;
-          currentUser = user;
-        } else {
-          cloudReady = false;
-          showToast("Not an outreach member. Using local only.");
-        }
-      })
-      .catch(function () { cloudReady = false; });
-  }
-
-  function initAuth() {
-    // Login gate disabled for now — phone-local saves only.
-    // Cloud sync stays off until member auth is re-enabled intentionally.
-    cloudReady = false;
-    currentUser = null;
+  /** Enable shared cloud saves with no sign-in. Phone backup always kept. */
+  function initCloudSync() {
     hideAuthGate();
+    currentUser = null;
     updateSaveNotice();
-    return Promise.resolve();
+    if (!sb) {
+      cloudReady = false;
+      updateSaveNotice();
+      return Promise.resolve();
+    }
+
+    return sb.from("outreach_visits").select("venue_id").limit(1)
+      .then(function (res) {
+        if (res.error) {
+          cloudReady = false;
+          updateSaveNotice();
+          if (cloudErrIsSchema(res.error.message)) {
+            showToast("Cloud tables not set up yet. Saves stay on this phone.");
+          } else {
+            showToast("Cloud unavailable. Saves stay on this phone.");
+          }
+          return false;
+        }
+        cloudReady = true;
+        updateSaveNotice();
+        return loadFromCloud().then(function (ok) {
+          return retryPending().then(function () {
+            render();
+            if (ok) showToast("Cloud notes loaded.");
+            return true;
+          });
+        });
+      })
+      .catch(function () {
+        cloudReady = false;
+        updateSaveNotice();
+        return false;
+      });
   }
 
   // ── Save notice ───────────────────────────────────────────────────────────────
@@ -1370,15 +1284,23 @@
   function updateSaveNotice() {
     var el = document.getElementById("save-notice");
     if (!el) return;
-    el.textContent = "Saved on this phone.";
-    var oldBtns = el.querySelectorAll("button");
-    for (var i = 0; i < oldBtns.length; i++) oldBtns[i].remove();
+    if (cloudReady) {
+      el.textContent =
+        "Saving to the cloud when online. Notes also stay on this phone as a backup.";
+    } else {
+      el.textContent =
+        "Saved on this phone for now. Cloud sync will resume when the connection is available.";
+    }
   }
 
   // ── Cloud helpers ─────────────────────────────────────────────────────────────
 
   function cloudErrIsSchema(msg) {
-    return /schema cache|does not exist|Could not find the table/i.test(msg || "");
+    return /schema cache|does not exist|Could not find the table|Could not find the .+ column/i.test(msg || "");
+  }
+
+  function cloudErrIsMissingColumn(msg) {
+    return /Could not find the .+ column|column .+ does not exist|PGRST204/i.test(msg || "");
   }
 
   function cloudUpsertVisit(id, visit) {
@@ -1386,24 +1308,55 @@
     if (savingIds.has(id)) return Promise.resolve(false);
     savingIds.add(id);
     var row = Core.visitToRow(id, visit);
+
+    function finish(res) {
+      savingIds.delete(id);
+      if (res && res.error) {
+        if (cloudErrIsSchema(res.error.message)) { cloudReady = false; updateSaveNotice(); }
+        addPending(id);
+        return false;
+      }
+      removePending(id);
+      return true;
+    }
+
     return sb.from("outreach_visits").upsert(row, { onConflict: "venue_id" })
       .then(function (res) {
-        savingIds.delete(id);
-        if (res.error) {
-          if (cloudErrIsSchema(res.error.message)) { cloudReady = false; updateSaveNotice(); }
-          addPending(id);
-          return false;
+        // Live schema may not have linkedin yet — retry without it.
+        if (res.error && /linkedin/i.test(res.error.message || "")) {
+          delete row.linkedin;
+          return sb.from("outreach_visits").upsert(row, { onConflict: "venue_id" })
+            .then(finish)
+            .catch(function () { savingIds.delete(id); addPending(id); return false; });
         }
-        removePending(id);
-        return true;
+        return finish(res);
       })
       .catch(function () { savingIds.delete(id); addPending(id); return false; });
+  }
+
+  function legacyPlaceRow(place) {
+    var p = Core.serializePlace ? Core.serializePlace(place) : place;
+    return {
+      id: p.id,
+      name: p.name || "",
+      address: p.address || "",
+      type: p.type || "",
+      phone: p.phone || "",
+      warm_seed: !!(p.warmSeed != null ? p.warmSeed : p.warm_seed)
+    };
   }
 
   function cloudUpsertPlace(place) {
     if (!sb || !cloudReady) return Promise.resolve(false);
     var row = Core.placeToRow(place);
     return sb.from("outreach_places").upsert(row, { onConflict: "id" })
+      .then(function (res) {
+        if (res.error && cloudErrIsMissingColumn(res.error.message)) {
+          // Live schema is older — save the shared fields that exist.
+          return sb.from("outreach_places").upsert(legacyPlaceRow(place), { onConflict: "id" });
+        }
+        return res;
+      })
       .then(function (res) {
         if (res.error) {
           if (cloudErrIsSchema(res.error.message)) { cloudReady = false; updateSaveNotice(); }
@@ -2403,7 +2356,7 @@
       bind();
       updateSaveNotice();
       initSupabase();
-      initAuth();
+      initCloudSync();
     } catch (err) {
       var bootErr = document.getElementById("boot-error");
       if (!bootErr) bootErr = safeGet("boot-error");
