@@ -85,6 +85,7 @@
   ];
 
   var CLUSTERS = [
+    { id: "new-targets-29-july",   area: "covent-garden",      label: "New targets \u2014 added 29 July",              tone: "bonus" },
     { id: "bow-street",            area: "covent-garden",      label: "Bow Street cluster",                           tone: "leg-a" },
     { id: "slingsby-st-martins",   area: "covent-garden",      label: "Slingsby Place & St Martin\u2019s Lane cluster",tone: "leg-b" },
     { id: "long-acre-parker",      area: "covent-garden",      label: "Long Acre & Parker Street cluster",            tone: "leg-c" },
@@ -102,6 +103,117 @@
 
   /** Venue seed data — IDs must stay stable for saved visits. */
   var VENUES = [
+    {
+      id: "prosek-partners",
+      area: "covent-garden",
+      cluster: "new-targets-29-july",
+      routeOrder: 1,
+      name: "Prosek Partners",
+      type: "Communications / PR",
+      address: "14 Upper St Martin\u2019s Lane, WC2H 9FB",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW \u2014 NOT ON OLD ROUTE" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "14 Upper St Martin's Lane, London WC2H 9FB",
+      angle:
+        "Ask for the office / reception manager. Client meeting boards and team lunches."
+    },
+    {
+      id: "adelphoi-music",
+      area: "covent-garden",
+      cluster: "new-targets-29-july",
+      routeOrder: 2,
+      name: "Adelphoi Music",
+      type: "Music / Production",
+      address: "26 Litchfield Street, WC2H 9TZ",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW \u2014 NOT ON OLD ROUTE" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "26 Litchfield Street, London WC2H 9TZ",
+      angle:
+        "Ask for the studio or office manager. Session catering and creative-team boards."
+    },
+    {
+      id: "runway-east-covent-garden",
+      area: "covent-garden",
+      cluster: "new-targets-29-july",
+      routeOrder: 3,
+      name: "Runway East Covent Garden",
+      type: "Flexible Workspace",
+      address: "189 Shaftesbury Avenue, WC2H 8TJ",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW \u2014 NOT ON OLD ROUTE" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "189 Shaftesbury Avenue, London WC2H 8TJ",
+      angle:
+        "Ask for the community or events manager. Member breakfasts and meeting-room catering."
+    },
+    {
+      id: "midas-vfx",
+      area: "covent-garden",
+      cluster: "new-targets-29-july",
+      routeOrder: 4,
+      name: "Midas VFX",
+      type: "VFX Studio",
+      address: "13 Monmouth Street, WC2H 9DA",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW \u2014 NOT ON OLD ROUTE" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "13 Monmouth Street, London WC2H 9DA",
+      angle:
+        "Ask for the studio or production manager. Shoot-day and review-room catering."
+    },
+    {
+      id: "neal-street-productions",
+      area: "covent-garden",
+      cluster: "new-targets-29-july",
+      routeOrder: 5,
+      name: "Neal Street Productions",
+      type: "Film / Theatre Production",
+      address: "26\u201328 Neal Street, WC2H 9QQ",
+      walk: "",
+      score: null,
+      tags: [{ className: "tag-new", text: "NEW \u2014 NOT ON OLD ROUTE" }],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "26-28 Neal Street, London WC2H 9QQ",
+      angle:
+        "Ask for the production or office manager. Production boards and meeting catering."
+    },
+    {
+      id: "cinecentre-london-film-school",
+      area: "covent-garden",
+      cluster: "new-targets-29-july",
+      routeOrder: 6,
+      name: "Cinecentre / London Film School",
+      type: "Film School / Screening",
+      address: "39\u201341 Parker Street, WC2B 5PQ",
+      walk: "",
+      score: null,
+      tags: [
+        { className: "tag-new", text: "NEW \u2014 NOT ON OLD ROUTE" },
+        { className: "tag-multi", text: "Not PB Creative at 40\u201342" }
+      ],
+      phone: "",
+      phoneHref: "",
+      phoneLabel: "",
+      mapsQuery: "39-41 Parker Street, London WC2B 5PQ",
+      angle:
+        "Ask for the office or events manager at 39\u201341 Parker Street \u2014 not PB Creative next door. Screening and course catering."
+    },
     {
       id: "msq-partners",
       area: "covent-garden",
